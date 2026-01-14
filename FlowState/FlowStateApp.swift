@@ -12,7 +12,11 @@ import SwiftData
 struct FlowStateApp: App {
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([
-            Item.self,
+            Exercise.self,
+            WorkoutTemplate.self,
+            TemplateExercise.self,
+            Workout.self,
+            WorkoutEntry.self,
         ])
         let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
 
@@ -23,9 +27,12 @@ struct FlowStateApp: App {
         }
     }()
 
+    @StateObject private var workoutStateManager = WorkoutStateManager()
+    
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .environmentObject(workoutStateManager)
         }
         .modelContainer(sharedModelContainer)
     }
