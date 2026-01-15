@@ -19,49 +19,62 @@ struct AddExerciseToTemplateSheet: View {
     
     var body: some View {
         NavigationStack {
-            List {
-                ForEach(exerciseViewModel.sortedCategories, id: \.self) { category in
-                    if let exercises = exerciseViewModel.exercisesByCategory[category], !exercises.isEmpty {
-                        Section {
-                            ForEach(exercises) { exercise in
-                                ExerciseSelectionRow(
-                                    exercise: exercise,
-                                    isSelected: selectedExercises.contains(exercise.id),
-                                    onToggle: {
-                                        if selectedExercises.contains(exercise.id) {
-                                            selectedExercises.remove(exercise.id)
-                                        } else {
-                                            selectedExercises.insert(exercise.id)
-                                        }
-                                    }
-                                )
-                            }
-                        } header: {
-                            Text(category.rawValue)
+            exerciseList
+                .searchable(text: $exerciseViewModel.searchText, prompt: "Search exercises")
+                .navigationTitle("Add Exercises")
+                .navigationBarTitleDisplayMode(.inline)
+                .toolbar {
+                    ToolbarItem(placement: .cancellationAction) {
+                        Button("Cancel") {
+                            dismiss()
                         }
                     }
-                }
-            }
-            .searchable(text: $exerciseViewModel.searchText, prompt: "Search exercises")
-            .navigationTitle("Add Exercises")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel") {
-                        dismiss()
+                    
+                    ToolbarItem(placement: .confirmationAction) {
+                        Button("Done") {
+                            addSelectedExercises()
+                        }
+                        .disabled(selectedExercises.isEmpty)
                     }
                 }
-                
-                ToolbarItem(placement: .confirmationAction) {
-                    Button("Done") {
-                        addSelectedExercises()
-                    }
-                    .disabled(selectedExercises.isEmpty)
+                .onAppear {
+                    exerciseViewModel.setModelContext(modelContext)
                 }
+        }
+    }
+    
+    private var exerciseList: some View {
+        List {
+            ForEach(exerciseViewModel.sortedCategories, id: \.self) { category in
+                categorySection(for: category)
             }
-            .onAppear {
-                exerciseViewModel.setModelContext(modelContext)
+        }
+    }
+    
+    @ViewBuilder
+    private func categorySection(for category: String) -> some View {
+        if let exercises = exerciseViewModel.exercisesByCategory[category], !exercises.isEmpty {
+            Section {
+                ForEach(exercises) { exercise in
+                    ExerciseSelectionRow(
+                        exercise: exercise,
+                        isSelected: selectedExercises.contains(exercise.id),
+                        onToggle: {
+                            toggleExercise(exercise.id)
+                        }
+                    )
+                }
+            } header: {
+                Text(category)
             }
+        }
+    }
+    
+    private func toggleExercise(_ id: UUID) {
+        if selectedExercises.contains(id) {
+            selectedExercises.remove(id)
+        } else {
+            selectedExercises.insert(id)
         }
     }
     

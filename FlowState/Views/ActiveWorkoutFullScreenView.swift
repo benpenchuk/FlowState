@@ -17,6 +17,7 @@ struct ActiveWorkoutFullScreenView: View {
     @State private var showingCancelAlert = false
     @State private var showingAddExercise = false
     @State private var workoutName: String
+    @State private var showingCompletedTimer: Bool = false
     
     init() {
         let vm = ActiveWorkoutViewModel()
@@ -37,6 +38,28 @@ struct ActiveWorkoutFullScreenView: View {
                             // Timer
                             timerView
                             
+                            // Rest Timer (shown when active)
+                            if workoutState.restTimerViewModel.isRunning || showingCompletedTimer {
+                                RestTimerView(
+                                    viewModel: workoutState.restTimerViewModel,
+                                    onSkip: {
+                                        workoutState.stopRestTimer()
+                                        showingCompletedTimer = false
+                                    }
+                                )
+                                .transition(.move(edge: .top).combined(with: .opacity))
+                                .onChange(of: workoutState.restTimerViewModel.isComplete) { oldValue, newValue in
+                                    if newValue {
+                                        showingCompletedTimer = true
+                                        // Auto-hide after 3 seconds
+                                        DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
+                                            showingCompletedTimer = false
+                                            workoutState.stopRestTimer()
+                                        }
+                                    }
+                                }
+                            }
+                            
                             // Workout name
                             TextField("Workout Name", text: $workoutName)
                                 .font(.title2)
@@ -53,7 +76,15 @@ struct ActiveWorkoutFullScreenView: View {
                                 ForEach(entries) { entry in
                                     ExerciseSectionView(
                                         entry: entry,
-                                        viewModel: viewModel
+                                        viewModel: viewModel,
+                                        onSetCompleted: {
+                                            // Get default rest duration from user settings (default 90s)
+                                            // If timer is already running, restart it (restart on each set completion)
+                                            let defaultRestDuration = 90
+                                            showingCompletedTimer = false // Reset completion state
+                                            workoutState.restTimerViewModel.stop() // Stop current timer
+                                            workoutState.startRestTimer(duration: defaultRestDuration)
+                                        }
                                     )
                                 }
                             } else {
@@ -122,6 +153,15 @@ struct ActiveWorkoutFullScreenView: View {
                     }
                     .sheet(isPresented: $showingAddExercise) {
                         AddExerciseToWorkoutSheet(viewModel: viewModel)
+                    }
+                    .overlay(alignment: .center) {
+                        // PR Notification
+                        if let pr = viewModel.detectedPR {
+                            PRNotificationView(pr: pr)
+                                .transition(.scale.combined(with: .opacity))
+                                .zIndex(1000)
+                                .animation(.spring(response: 0.4, dampingFraction: 0.6), value: viewModel.detectedPR?.id)
+                        }
                     }
                 }
             } else {

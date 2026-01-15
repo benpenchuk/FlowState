@@ -15,9 +15,14 @@ final class WorkoutStateManager: ObservableObject {
     @Published var activeWorkout: Workout? = nil
     @Published var isWorkoutFullScreen: Bool = false
     @Published var elapsedTime: TimeInterval = 0
+    @Published var restTimerViewModel: RestTimerViewModel
     
     private var modelContext: ModelContext?
     nonisolated(unsafe) private var timer: Timer?
+    
+    init() {
+        self.restTimerViewModel = RestTimerViewModel(defaultDuration: 90)
+    }
     
     func setModelContext(_ context: ModelContext) {
         self.modelContext = context
@@ -76,6 +81,7 @@ final class WorkoutStateManager: ObservableObject {
               let workout = activeWorkout else { return }
         
         workout.completedAt = Date()
+        restTimerViewModel.stop()
         
         do {
             try modelContext.save()
@@ -92,6 +98,7 @@ final class WorkoutStateManager: ObservableObject {
               let workout = activeWorkout else { return }
         
         modelContext.delete(workout)
+        restTimerViewModel.stop()
         
         do {
             try modelContext.save()
@@ -101,6 +108,14 @@ final class WorkoutStateManager: ObservableObject {
         } catch {
             print("Error canceling workout: \(error)")
         }
+    }
+    
+    func startRestTimer(duration: Int? = nil) {
+        restTimerViewModel.start(duration: duration)
+    }
+    
+    func stopRestTimer() {
+        restTimerViewModel.stop()
     }
     
     private func startTimer() {

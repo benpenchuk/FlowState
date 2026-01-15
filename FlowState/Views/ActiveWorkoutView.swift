@@ -143,6 +143,7 @@ struct ActiveWorkoutView: View {
 struct ExerciseSectionView: View {
     let entry: WorkoutEntry
     @ObservedObject var viewModel: ActiveWorkoutViewModel
+    var onSetCompleted: (() -> Void)? = nil
     
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -157,6 +158,8 @@ struct ExerciseSectionView: View {
                 SetRowView(
                     set: set,
                     onUpdate: { updatedSet, reps, weight, isCompleted in
+                        // Check if we're transitioning from incomplete to complete
+                        let wasCompleted = updatedSet.isCompleted
                         viewModel.updateSet(
                             in: entry,
                             set: updatedSet,
@@ -164,6 +167,10 @@ struct ExerciseSectionView: View {
                             weight: weight,
                             isCompleted: isCompleted
                         )
+                        // Trigger rest timer if set transitioned from incomplete to complete
+                        if !wasCompleted && isCompleted {
+                            onSetCompleted?()
+                        }
                     },
                     onDelete: {
                         viewModel.removeSet(from: entry, set: set)

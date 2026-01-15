@@ -13,12 +13,16 @@ import Combine
 final class ActiveWorkoutViewModel: ObservableObject {
     @Published var activeWorkout: Workout?
     @Published var elapsedTime: TimeInterval = 0
+    @Published var detectedPR: PersonalRecord? = nil // PR detected when set is completed
     
     private var modelContext: ModelContext?
     private var timer: Timer?
+    private var progressViewModel: ProgressViewModel?
     
     func setModelContext(_ context: ModelContext) {
         self.modelContext = context
+        progressViewModel = ProgressViewModel()
+        progressViewModel?.setModelContext(context)
         loadActiveWorkout()
         startTimer()
     }
@@ -239,6 +243,7 @@ final class ActiveWorkoutViewModel: ObservableObject {
         
         var sets = entry.getSets()
         if let index = sets.firstIndex(where: { $0.id == set.id }) {
+            let wasCompleted = sets[index].isCompleted
             sets[index].reps = reps
             sets[index].weight = weight
             sets[index].isCompleted = isCompleted
@@ -246,6 +251,22 @@ final class ActiveWorkoutViewModel: ObservableObject {
             
             do {
                 try modelContext.save()
+                
+                // Check for PR if set was just completed
+                if !wasCompleted && isCompleted, let exercise = entry.exercise {
+                    if let newPR = progressViewModel?.detectNewPR(
+                        exercise: exercise,
+                        weight: weight,
+                        reps: reps,
+                        workout: activeWorkout
+                    ) {
+                        detectedPR = newPR
+                        // Clear PR notification after 3 seconds
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) { [weak self] in
+                            self?.detectedPR = nil
+                        }
+                    }
+                }
             } catch {
                 print("Error updating set: \(error)")
             }

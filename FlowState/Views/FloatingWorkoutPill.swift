@@ -17,6 +17,16 @@ struct FloatingWorkoutPill: View {
         return String(format: "%02d:%02d", minutes, seconds)
     }
     
+    private func formatRestTime(_ seconds: Int) -> String {
+        if seconds >= 60 {
+            let minutes = seconds / 60
+            let secs = seconds % 60
+            return String(format: "%d:%02d", minutes, secs)
+        } else {
+            return "\(seconds)s"
+        }
+    }
+    
     var body: some View {
         if let workout = workoutState.activeWorkout {
             Button {
@@ -32,9 +42,21 @@ struct FloatingWorkoutPill: View {
                             .font(.headline)
                             .foregroundStyle(.primary)
                         
-                        Text(formatElapsedTime(workoutState.elapsedTime))
-                            .font(.system(size: 14, weight: .medium, design: .monospaced))
-                            .foregroundStyle(.secondary)
+                        // Show rest timer if active, otherwise show workout duration
+                        if workoutState.restTimerViewModel.isRunning {
+                            HStack(spacing: 4) {
+                                Image(systemName: "timer")
+                                    .font(.caption2)
+                                    .foregroundStyle(.orange)
+                                Text(formatRestTime(workoutState.restTimerViewModel.remainingSeconds))
+                                    .font(.system(size: 14, weight: .medium, design: .monospaced))
+                                    .foregroundStyle(.orange)
+                            }
+                        } else {
+                            Text(formatElapsedTime(workoutState.elapsedTime))
+                                .font(.system(size: 14, weight: .medium, design: .monospaced))
+                                .foregroundStyle(.secondary)
+                        }
                     }
                     
                     Spacer()

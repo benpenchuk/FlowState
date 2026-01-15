@@ -119,7 +119,7 @@ struct EditTemplateExerciseSheet: View {
 #Preview {
     let config = ModelConfiguration(isStoredInMemoryOnly: true)
     let container = try! ModelContainer(for: Exercise.self, TemplateExercise.self, configurations: config)
-    let exercise = Exercise(name: "Bench Press", category: .chest)
+    let exercise = Exercise(name: "Bench Press", exerciseType: .strength, category: "Chest", equipment: [.barbell, .bench])
     let templateExercise = TemplateExercise(exercise: exercise, order: 0, defaultSets: 3, defaultReps: 10)
     
     return EditTemplateExerciseSheet(templateExercise: templateExercise, isTemporary: false) {}

@@ -13,6 +13,7 @@ struct HomeView: View {
     @EnvironmentObject private var workoutState: WorkoutStateManager
     @StateObject private var templateViewModel = TemplateViewModel()
     @StateObject private var workoutViewModel = ActiveWorkoutViewModel()
+    @StateObject private var progressViewModel = ProgressViewModel()
     @State private var showingTemplates = false
     @State private var selectedTemplate: WorkoutTemplate? = nil
     @State private var showingExistingWorkoutAlert = false
@@ -25,6 +26,9 @@ struct HomeView: View {
                 // Templates Section
                 templatesSection
                 
+                // Recent PRs Section
+                recentPRsSection
+                
                 // Quick Start Section
                 quickStartSection
             }
@@ -34,6 +38,7 @@ struct HomeView: View {
         .onAppear {
             templateViewModel.setModelContext(modelContext)
             workoutViewModel.setModelContext(modelContext)
+            progressViewModel.setModelContext(modelContext)
         }
         .alert("Start Workout", isPresented: Binding(
             get: { selectedTemplate != nil },
@@ -131,6 +136,39 @@ struct HomeView: View {
         }
     }
     
+    private var recentPRsSection: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            HStack {
+                Image(systemName: "star.fill")
+                    .foregroundStyle(.yellow)
+                Text("Recent PRs")
+                    .font(.title2)
+                    .fontWeight(.semibold)
+            }
+            
+            if progressViewModel.recentPRs.isEmpty {
+                VStack(spacing: 8) {
+                    Text("No recent PRs")
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                    
+                    Text("Complete workouts to track your progress!")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                        .multilineTextAlignment(.center)
+                }
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 20)
+            } else {
+                VStack(spacing: 12) {
+                    ForEach(progressViewModel.recentPRs.prefix(5)) { pr in
+                        PRCardView(pr: pr)
+                    }
+                }
+            }
+        }
+    }
+    
     private var quickStartSection: some View {
         VStack(alignment: .leading, spacing: 12) {
             Text("Quick Start")
@@ -216,6 +254,64 @@ struct TemplateCardView: View {
             )
         }
         .buttonStyle(.plain)
+    }
+}
+
+struct PRCardView: View {
+    let pr: PersonalRecord
+    
+    var body: some View {
+        HStack(spacing: 12) {
+            Image(systemName: "star.fill")
+                .font(.title3)
+                .foregroundStyle(.yellow)
+            
+            VStack(alignment: .leading, spacing: 4) {
+                Text(pr.exercise?.name ?? "Unknown Exercise")
+                    .font(.headline)
+                    .lineLimit(1)
+                
+                HStack(spacing: 8) {
+                    Text("\(String(format: "%.1f", pr.weight)) lbs")
+                        .font(.subheadline)
+                        .fontWeight(.semibold)
+                    
+                    Text("× \(pr.reps)")
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                }
+            }
+            
+            Spacer()
+            
+            VStack(alignment: .trailing, spacing: 4) {
+                Text(formatDate(pr.achievedAt))
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                
+                if let daysAgo = daysSince(pr.achievedAt) {
+                    Text("\(daysAgo)d ago")
+                        .font(.caption2)
+                        .foregroundStyle(.secondary)
+                }
+            }
+        }
+        .padding()
+        .background(Color(.systemGray6))
+        .cornerRadius(12)
+    }
+    
+    private func formatDate(_ date: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .short
+        formatter.timeStyle = .none
+        return formatter.string(from: date)
+    }
+    
+    private func daysSince(_ date: Date) -> Int? {
+        let calendar = Calendar.current
+        let components = calendar.dateComponents([.day], from: date, to: Date())
+        return components.day
     }
 }
 
