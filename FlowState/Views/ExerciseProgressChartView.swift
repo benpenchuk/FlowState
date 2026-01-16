@@ -28,7 +28,7 @@ struct ExerciseProgressChartView: View {
                     x: .value("Date", dataPoint.date, unit: .day),
                     y: .value("Weight", dataPoint.weight)
                 )
-                .foregroundStyle(.blue)
+                .foregroundStyle(Color.flowStateOrange)
                 .interpolationMethod(.catmullRom)
                 
                 // Data points
@@ -36,7 +36,7 @@ struct ExerciseProgressChartView: View {
                     x: .value("Date", dataPoint.date, unit: .day),
                     y: .value("Weight", dataPoint.weight)
                 )
-                .foregroundStyle(.blue)
+                .foregroundStyle(Color.flowStateOrange)
                 .symbolSize(60)
             }
             

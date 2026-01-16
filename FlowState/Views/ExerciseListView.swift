@@ -258,7 +258,7 @@ struct EquipmentFilterSheet: View {
                             Spacer()
                             if selectedEquipment.contains(equipment) {
                                 Image(systemName: "checkmark")
-                                    .foregroundStyle(.blue)
+                                    .foregroundStyle(Color.flowStateOrange)
                             }
                         }
                     }

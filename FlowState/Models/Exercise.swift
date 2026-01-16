@@ -39,7 +39,7 @@ enum Equipment: String, Codable, CaseIterable {
     case none
 }
 
-struct ExerciseInstructions: Sendable {
+struct ExerciseInstructions: Sendable, Codable {
     var setup: String
     var execution: String
     var tips: String
@@ -51,29 +51,8 @@ struct ExerciseInstructions: Sendable {
     }
 }
 
-// Explicit nonisolated Codable conformance for Swift 6
-extension ExerciseInstructions: Codable {
-    nonisolated func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(setup, forKey: .setup)
-        try container.encode(execution, forKey: .execution)
-        try container.encode(tips, forKey: .tips)
-    }
-    
-    nonisolated init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        setup = try container.decode(String.self, forKey: .setup)
-        execution = try container.decode(String.self, forKey: .execution)
-        tips = try container.decode(String.self, forKey: .tips)
-    }
-    
-    private enum CodingKeys: String, CodingKey {
-        case setup, execution, tips
-    }
-}
-
 @Model
-final class Exercise {
+nonisolated final class Exercise {
     var id: UUID
     var name: String
     var exerciseType: ExerciseType
@@ -81,7 +60,7 @@ final class Exercise {
     var equipment: [Equipment] // Array of equipment options
     var primaryMuscles: [String] // For strength exercises
     var secondaryMuscles: [String] // For strength exercises
-    var instructions: ExerciseInstructions // Structured instructions
+    var instructionsData: Data? // Stores ExerciseInstructions as JSON
     var isCustom: Bool
     var isFavorite: Bool
     var createdAt: Date
@@ -112,9 +91,23 @@ final class Exercise {
         self.equipment = equipment
         self.primaryMuscles = primaryMuscles
         self.secondaryMuscles = secondaryMuscles
-        self.instructions = instructions
+        self.instructionsData = try? JSONEncoder().encode(instructions)
         self.isCustom = isCustom
         self.isFavorite = isFavorite
         self.createdAt = createdAt
+    }
+    
+    // Helper method to get instructions as ExerciseInstructions
+    func getInstructions() -> ExerciseInstructions {
+        guard let data = instructionsData,
+              let decoded = try? JSONDecoder().decode(ExerciseInstructions.self, from: data) else {
+            return ExerciseInstructions()
+        }
+        return decoded
+    }
+    
+    // Helper method to set instructions
+    func setInstructions(_ instructions: ExerciseInstructions) {
+        instructionsData = try? JSONEncoder().encode(instructions)
     }
 }

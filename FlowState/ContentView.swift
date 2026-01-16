@@ -45,6 +45,7 @@ struct ContentView: View {
                     Label("Profile", systemImage: "person.circle")
                 }
             }
+            .tint(.flowStateOrange)
             .preferredColorScheme(appearanceMode == .system ? nil : (appearanceMode == .dark ? .dark : .light))
             
             // Floating workout pill (shown when workout is active but minimized)

@@ -36,8 +36,9 @@ struct ExerciseDetailView: View {
                 }
                 
                 // Instructions Section
-                if !exercise.instructions.setup.isEmpty || !exercise.instructions.execution.isEmpty || !exercise.instructions.tips.isEmpty {
-                    instructionsSection
+                let instructions = exercise.getInstructions()
+                if !instructions.setup.isEmpty || !instructions.execution.isEmpty || !instructions.tips.isEmpty {
+                    instructionsSection(instructions: instructions)
                 }
                 
                 // PR Section
@@ -106,8 +107,8 @@ struct ExerciseDetailView: View {
                         .font(.subheadline)
                         .padding(.horizontal, 12)
                         .padding(.vertical, 6)
-                        .background(Color(.systemBlue).opacity(0.2))
-                        .foregroundStyle(.blue)
+                        .background(Color.flowStateOrange.opacity(0.2))
+                        .foregroundStyle(Color.flowStateOrange)
                         .cornerRadius(16)
                 }
             }
@@ -172,7 +173,7 @@ struct ExerciseDetailView: View {
         .cornerRadius(12)
     }
     
-    private var instructionsSection: some View {
+    private func instructionsSection(instructions: ExerciseInstructions) -> some View {
         VStack(alignment: .leading, spacing: 16) {
             HStack {
                 Image(systemName: "book.fill")
@@ -180,37 +181,37 @@ struct ExerciseDetailView: View {
                     .font(.headline)
             }
             
-            if !exercise.instructions.setup.isEmpty {
+            if !instructions.setup.isEmpty {
                 VStack(alignment: .leading, spacing: 8) {
                     Text("Setup")
                         .font(.subheadline)
                         .fontWeight(.semibold)
                     
-                    Text(exercise.instructions.setup)
+                    Text(instructions.setup)
                         .font(.body)
                         .foregroundStyle(.secondary)
                 }
             }
             
-            if !exercise.instructions.execution.isEmpty {
+            if !instructions.execution.isEmpty {
                 VStack(alignment: .leading, spacing: 8) {
                     Text("Execution")
                         .font(.subheadline)
                         .fontWeight(.semibold)
                     
-                    Text(exercise.instructions.execution)
+                    Text(instructions.execution)
                         .font(.body)
                         .foregroundStyle(.secondary)
                 }
             }
             
-            if !exercise.instructions.tips.isEmpty {
+            if !instructions.tips.isEmpty {
                 VStack(alignment: .leading, spacing: 8) {
                     Text("Tips")
                         .font(.subheadline)
                         .fontWeight(.semibold)
                     
-                    Text(exercise.instructions.tips)
+                    Text(instructions.tips)
                         .font(.body)
                         .foregroundStyle(.secondary)
                 }

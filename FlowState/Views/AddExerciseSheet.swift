@@ -95,7 +95,7 @@ struct AddExerciseSheet: View {
                                     .foregroundStyle(.secondary)
                             } else {
                                 Text("\(selectedEquipment.count) selected")
-                                    .foregroundStyle(.blue)
+                                    .foregroundStyle(Color.flowStateOrange)
                             }
                         }
                     }
@@ -122,7 +122,7 @@ struct AddExerciseSheet: View {
                                         .foregroundStyle(.secondary)
                                 } else {
                                     Text("\(primaryMuscles.count) selected")
-                                        .foregroundStyle(.blue)
+                                        .foregroundStyle(Color.flowStateOrange)
                                 }
                             }
                         }
@@ -139,7 +139,7 @@ struct AddExerciseSheet: View {
                                         .foregroundStyle(.secondary)
                                 } else {
                                     Text("\(secondaryMuscles.count) selected")
-                                        .foregroundStyle(.blue)
+                                        .foregroundStyle(Color.flowStateOrange)
                                 }
                             }
                         }
@@ -279,7 +279,7 @@ struct EquipmentMultiSelectSheet: View {
                             Spacer()
                             if selectedEquipment.contains(equipment) {
                                 Image(systemName: "checkmark")
-                                    .foregroundStyle(.blue)
+                                    .foregroundStyle(Color.flowStateOrange)
                             }
                         }
                     }
@@ -340,7 +340,7 @@ struct MuscleMultiSelectSheet: View {
     var body: some View {
         NavigationStack {
             List {
-                ForEach(allMuscles, id: \.self) { muscle in
+                ForEach(Array(allMuscles), id: \.self) { muscle in
                     Button {
                         if let index = selectedMuscles.firstIndex(of: muscle) {
                             selectedMuscles.remove(at: index)
@@ -353,10 +353,11 @@ struct MuscleMultiSelectSheet: View {
                             Spacer()
                             if selectedMuscles.contains(muscle) {
                                 Image(systemName: "checkmark")
-                                    .foregroundStyle(.blue)
+                                    .foregroundStyle(Color.flowStateOrange)
                             }
                         }
                     }
+                    .buttonStyle(.plain)
                 }
             }
             .navigationTitle(title)

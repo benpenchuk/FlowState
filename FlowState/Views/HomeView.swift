@@ -19,10 +19,27 @@ struct HomeView: View {
     @State private var showingExistingWorkoutAlert = false
     @State private var templateToStart: WorkoutTemplate? = nil
     @State private var startingEmpty = false
+    @State private var userProfile: UserProfile?
+    @State private var weeklyStats = WeeklyStatsData(workoutsCount: 0, totalTime: 0, currentStreak: 0)
+    
+    private struct WeeklyStatsData {
+        var workoutsCount: Int
+        var totalTime: TimeInterval
+        var currentStreak: Int
+    }
     
     var body: some View {
         ScrollView {
-            VStack(alignment: .leading, spacing: 20) {
+            VStack(alignment: .leading, spacing: 24) {
+                // Logo Section
+                logoSection
+                
+                // Greeting Section
+                greetingSection
+                
+                // Weekly Stats Card
+                weeklyStatsCard
+                
                 // Templates Section
                 templatesSection
                 
@@ -34,11 +51,18 @@ struct HomeView: View {
             }
             .padding()
         }
-        .navigationTitle("Home")
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .principal) {
+                EmptyView()
+            }
+        }
         .onAppear {
             templateViewModel.setModelContext(modelContext)
             workoutViewModel.setModelContext(modelContext)
             progressViewModel.setModelContext(modelContext)
+            loadUserProfile()
+            calculateWeeklyStats()
         }
         .alert("Start Workout", isPresented: Binding(
             get: { selectedTemplate != nil },
@@ -82,8 +106,214 @@ struct HomeView: View {
         }
     }
     
+    private var logoSection: some View {
+        HStack(spacing: 12) {
+            Image("FlowStateLogo")
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(height: 45)
+            
+            Text("FlowState")
+                .font(.system(size: 28, weight: .bold, design: .rounded))
+                .foregroundStyle(.primary)
+        }
+        .padding(.bottom, 4)
+    }
+    
+    private var greetingSection: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text(greetingText)
+                .font(.title2)
+                .fontWeight(.semibold)
+            
+            Text("You've completed \(weeklyStats.workoutsCount) \(weeklyStats.workoutsCount == 1 ? "workout" : "workouts") this week")
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
+        }
+    }
+    
+    private var weeklyStatsCard: some View {
+        VStack(spacing: 16) {
+            HStack(spacing: 0) {
+                // Workouts Count
+                VStack(spacing: 8) {
+                    Text("\(weeklyStats.workoutsCount)")
+                        .font(.system(size: 32, weight: .bold, design: .rounded))
+                        .foregroundStyle(Color.accentColor)
+                    Text("Workouts")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+                .frame(maxWidth: .infinity)
+                
+                Divider()
+                    .frame(height: 50)
+                
+                // Total Time
+                VStack(spacing: 8) {
+                    Text(formatTime(weeklyStats.totalTime))
+                        .font(.system(size: 32, weight: .bold, design: .rounded))
+                        .foregroundStyle(Color.accentColor)
+                    Text("Total Time")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+                .frame(maxWidth: .infinity)
+                
+                Divider()
+                    .frame(height: 50)
+                
+                // Current Streak
+                VStack(spacing: 8) {
+                    Text("\(weeklyStats.currentStreak)")
+                        .font(.system(size: 32, weight: .bold, design: .rounded))
+                        .foregroundStyle(Color.accentColor)
+                    Text("Day Streak")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+                .frame(maxWidth: .infinity)
+            }
+        }
+        .padding()
+        .background(
+            RoundedRectangle(cornerRadius: 16)
+                .fill(Color(.systemBackground))
+                .shadow(color: .black.opacity(0.05), radius: 8, x: 0, y: 2)
+        )
+        .overlay(
+            RoundedRectangle(cornerRadius: 16)
+                .stroke(Color(.systemGray5), lineWidth: 0.5)
+        )
+    }
+    
+    private var greetingText: String {
+        let hour = Calendar.current.component(.hour, from: Date())
+        let timeOfDay: String
+        
+        if hour < 12 {
+            timeOfDay = "Good morning"
+        } else if hour < 18 {
+            timeOfDay = "Good afternoon"
+        } else {
+            timeOfDay = "Good evening"
+        }
+        
+        let name = userProfile?.name ?? "Athlete"
+        return "\(timeOfDay), \(name)"
+    }
+    
+    private func loadUserProfile() {
+        let descriptor = FetchDescriptor<UserProfile>()
+        
+        do {
+            let profiles = try modelContext.fetch(descriptor)
+            userProfile = profiles.first
+        } catch {
+            print("Error loading user profile: \(error)")
+        }
+    }
+    
+    private func calculateWeeklyStats() {
+        let calendar = Calendar.current
+        let now = Date()
+        let startOfWeek = calendar.date(from: calendar.dateComponents([.yearForWeekOfYear, .weekOfYear], from: now)) ?? now
+        
+        let workoutDescriptor = FetchDescriptor<Workout>(
+            predicate: #Predicate<Workout> { workout in
+                workout.completedAt != nil && workout.completedAt! >= startOfWeek
+            }
+        )
+        
+        do {
+            let workouts = try modelContext.fetch(workoutDescriptor)
+            var totalTime: TimeInterval = 0
+            
+            for workout in workouts {
+                if let completedAt = workout.completedAt {
+                    totalTime += completedAt.timeIntervalSince(workout.startedAt)
+                }
+            }
+            
+            weeklyStats = WeeklyStatsData(
+                workoutsCount: workouts.count,
+                totalTime: totalTime,
+                currentStreak: calculateStreak()
+            )
+        } catch {
+            print("Error calculating weekly stats: \(error)")
+            weeklyStats = WeeklyStatsData(workoutsCount: 0, totalTime: 0, currentStreak: calculateStreak())
+        }
+    }
+    
+    private func calculateStreak() -> Int {
+        let workoutDescriptor = FetchDescriptor<Workout>(
+            predicate: #Predicate<Workout> { workout in
+                workout.completedAt != nil
+            }
+        )
+        
+        do {
+            let completedWorkouts = try modelContext.fetch(workoutDescriptor)
+            guard !completedWorkouts.isEmpty else { return 0 }
+            
+            let calendar = Calendar.current
+            let today = calendar.startOfDay(for: Date())
+            
+            // Get unique workout dates
+            var workoutDates = Set<Date>()
+            for workout in completedWorkouts {
+                guard let completedAt = workout.completedAt else { continue }
+                workoutDates.insert(calendar.startOfDay(for: completedAt))
+            }
+            
+            // Calculate streak starting from today
+            var streak = 0
+            var checkDate = today
+            
+            // Check if today has a workout
+            if workoutDates.contains(checkDate) {
+                streak = 1
+            } else {
+                // If no workout today, check yesterday
+                checkDate = calendar.date(byAdding: .day, value: -1, to: checkDate) ?? checkDate
+                if workoutDates.contains(checkDate) {
+                    streak = 1
+                } else {
+                    return 0 // No streak if no workout today or yesterday
+                }
+            }
+            
+            // Continue checking previous days
+            while true {
+                checkDate = calendar.date(byAdding: .day, value: -1, to: checkDate) ?? checkDate
+                if workoutDates.contains(checkDate) {
+                    streak += 1
+                } else {
+                    break // Gap found, streak ends
+                }
+            }
+            
+            return streak
+        } catch {
+            print("Error calculating streak: \(error)")
+            return 0
+        }
+    }
+    
+    private func formatTime(_ timeInterval: TimeInterval) -> String {
+        let hours = Int(timeInterval) / 3600
+        let minutes = (Int(timeInterval) % 3600) / 60
+        
+        if hours > 0 {
+            return "\(hours)h"
+        } else {
+            return "\(minutes)m"
+        }
+    }
+    
     private var templatesSection: some View {
-        VStack(alignment: .leading, spacing: 12) {
+        VStack(alignment: .leading, spacing: 16) {
             HStack {
                 Text("Workout Templates")
                     .font(.title2)
@@ -129,6 +359,16 @@ struct HomeView: View {
                 }
             }
         }
+        .padding()
+        .background(
+            RoundedRectangle(cornerRadius: 16)
+                .fill(Color(.systemBackground))
+                .shadow(color: .black.opacity(0.05), radius: 8, x: 0, y: 2)
+        )
+        .overlay(
+            RoundedRectangle(cornerRadius: 16)
+                .stroke(Color(.systemGray5), lineWidth: 0.5)
+        )
         .sheet(isPresented: $showingTemplates) {
             NavigationStack {
                 TemplateListView()
@@ -137,7 +377,7 @@ struct HomeView: View {
     }
     
     private var recentPRsSection: some View {
-        VStack(alignment: .leading, spacing: 12) {
+        VStack(alignment: .leading, spacing: 16) {
             HStack {
                 Image(systemName: "star.fill")
                     .foregroundStyle(.yellow)
@@ -167,35 +407,39 @@ struct HomeView: View {
                 }
             }
         }
+        .padding()
+        .background(
+            RoundedRectangle(cornerRadius: 16)
+                .fill(Color(.systemBackground))
+                .shadow(color: .black.opacity(0.05), radius: 8, x: 0, y: 2)
+        )
+        .overlay(
+            RoundedRectangle(cornerRadius: 16)
+                .stroke(Color(.systemGray5), lineWidth: 0.5)
+        )
     }
     
     private var quickStartSection: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Text("Quick Start")
-                .font(.title2)
-                .fontWeight(.semibold)
-            
-            Button {
-                if workoutState.hasActiveWorkout() {
-                    showingExistingWorkoutAlert = true
-                    startingEmpty = true
-                } else {
-                    startEmptyWorkout()
-                }
-            } label: {
-                HStack {
-                    Image(systemName: "plus.circle.fill")
-                        .font(.title3)
-                    Text("Start Empty Workout")
-                        .font(.headline)
-                    Spacer()
-                }
-                .foregroundStyle(.white)
-                .frame(maxWidth: .infinity)
-                .padding()
-                .background(Color.accentColor)
-                .cornerRadius(12)
+        Button {
+            if workoutState.hasActiveWorkout() {
+                showingExistingWorkoutAlert = true
+                startingEmpty = true
+            } else {
+                startEmptyWorkout()
             }
+        } label: {
+            HStack {
+                Image(systemName: "plus.circle.fill")
+                    .font(.title3)
+                Text("Start Empty Workout")
+                    .font(.headline)
+                Spacer()
+            }
+            .foregroundStyle(.white)
+            .frame(maxWidth: .infinity)
+            .padding()
+            .background(Color.accentColor)
+            .cornerRadius(16)
         }
     }
     
