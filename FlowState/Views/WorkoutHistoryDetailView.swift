@@ -107,7 +107,9 @@ struct WorkoutHistoryDetailView: View {
                     Text("Effort:")
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
-                    effortRatingView(rating: effortRating)
+                    Text("\(effortRating)/10")
+                        .font(.subheadline)
+                        .fontWeight(.medium)
                     Spacer()
                 }
             }
@@ -145,36 +147,6 @@ struct WorkoutHistoryDetailView: View {
         .cornerRadius(12)
     }
     
-    private func effortRatingView(rating: Int) -> some View {
-        HStack(spacing: 4) {
-            ForEach(1...10, id: \.self) { number in
-                Circle()
-                    .fill(number <= rating ? effortColor(for: rating) : Color(.systemGray4))
-                    .frame(width: 12, height: 12)
-            }
-            Text("\(rating)/10")
-                .font(.subheadline)
-                .fontWeight(.medium)
-                .padding(.leading, 4)
-        }
-    }
-    
-    private func effortColor(for rating: Int) -> Color {
-        switch rating {
-        case 1...2:
-            return .green
-        case 3...4:
-            return .yellow
-        case 5...6:
-            return .orange
-        case 7...8:
-            return .red
-        case 9...10:
-            return Color(red: 0.5, green: 0.0, blue: 0.5) // Dark red/purple
-        default:
-            return .accentColor
-        }
-    }
     
     private func formatRestTime(_ timeInterval: TimeInterval) -> String {
         let minutes = Int(timeInterval) / 60
@@ -215,42 +187,55 @@ struct HistoricalSetRowView: View {
     
     var body: some View {
         HStack(spacing: 12) {
-            // Set number
-            Text("\(set.setNumber)")
-                .font(.headline)
-                .foregroundStyle(.secondary)
-                .frame(width: 32, alignment: .leading)
-            
-            // Weight and reps
-            if let weight = set.weight, let reps = set.reps {
-                let displayWeight = preferredUnits == .kg ? weight / 2.20462 : weight
-                let unit = preferredUnits == .kg ? "kg" : "lbs"
-                Text("\(displayWeight, specifier: "%.1f") \(unit) × \(reps)")
-                    .font(.body)
-            } else if let reps = set.reps {
-                Text("\(reps) reps")
-                    .font(.body)
+            // Status icon (checkmark for completed, dash for skipped)
+            if set.isCompleted {
+                Image(systemName: "checkmark")
+                    .font(.subheadline)
+                    .fontWeight(.semibold)
+                    .foregroundStyle(.green)
+                    .frame(width: 20)
             } else {
-                Text("—")
+                Image(systemName: "minus")
+                    .font(.subheadline)
+                    .fontWeight(.semibold)
+                    .foregroundStyle(.secondary)
+                    .frame(width: 20)
+            }
+            
+            // Set label
+            Text("Set \(set.setNumber)")
+                .font(.body)
+                .foregroundStyle(.primary)
+                .frame(width: 60, alignment: .leading)
+            
+            // Weight and reps or skipped
+            if set.isCompleted {
+                if let weight = set.weight, let reps = set.reps {
+                    let displayWeight = preferredUnits == .kg ? weight / 2.20462 : weight
+                    let unit = preferredUnits == .kg ? "kg" : "lbs"
+                    Text("\(displayWeight, specifier: "%.1f") \(unit) × \(reps)")
+                        .font(.body)
+                        .foregroundStyle(.primary)
+                } else if let reps = set.reps {
+                    Text("\(reps) reps")
+                        .font(.body)
+                        .foregroundStyle(.primary)
+                } else {
+                    Text("—")
+                        .font(.body)
+                        .foregroundStyle(.secondary)
+                }
+            } else {
+                // Incomplete/skipped set
+                Text("skipped")
                     .font(.body)
                     .foregroundStyle(.secondary)
             }
             
             Spacer()
-            
-            // Completion indicator
-            if set.isCompleted {
-                Image(systemName: "checkmark.circle.fill")
-                    .foregroundStyle(.green)
-            } else {
-                Image(systemName: "circle")
-                    .foregroundStyle(.secondary)
-            }
         }
-        .padding(.vertical, 6)
+        .padding(.vertical, 8)
         .padding(.horizontal, 12)
-        .background(set.isCompleted ? Color(.systemGray6) : Color.clear)
-        .cornerRadius(8)
     }
 }
 
