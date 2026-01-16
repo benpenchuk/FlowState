@@ -6,11 +6,13 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct SetRowView: View {
     let set: SetRecord
     let onUpdate: (SetRecord, Int?, Double?, Bool) -> Void
     let onDelete: () -> Void
+    let preferredUnits: Units
     
     @State private var repsText: String
     @State private var weightText: String
@@ -20,12 +22,18 @@ struct SetRowView: View {
         case weight, reps
     }
     
-    init(set: SetRecord, onUpdate: @escaping (SetRecord, Int?, Double?, Bool) -> Void, onDelete: @escaping () -> Void) {
+    init(set: SetRecord, preferredUnits: Units = .lbs, onUpdate: @escaping (SetRecord, Int?, Double?, Bool) -> Void, onDelete: @escaping () -> Void) {
         self.set = set
+        self.preferredUnits = preferredUnits
         self.onUpdate = onUpdate
         self.onDelete = onDelete
+        
+        // Convert weight for display
+        let displayWeight = set.weight.map { weight in
+            preferredUnits == .kg ? weight / 2.20462 : weight
+        }
         _repsText = State(initialValue: set.reps.map { String($0) } ?? "")
-        _weightText = State(initialValue: set.weight.map { String(format: "%.1f", $0) } ?? "")
+        _weightText = State(initialValue: displayWeight.map { String(format: "%.1f", $0) } ?? "")
     }
     
     var body: some View {
@@ -43,9 +51,20 @@ struct SetRowView: View {
                 .frame(width: 80)
                 .focused($focusedField, equals: .weight)
                 .onChange(of: weightText) { oldValue, newValue in
-                    let weight = Double(newValue)
-                    onUpdate(set, set.reps, weight, set.isCompleted)
+                    // Convert from display units to lbs for storage
+                    if let displayWeight = Double(newValue) {
+                        let weightInLbs = preferredUnits == .kg ? displayWeight * 2.20462 : displayWeight
+                        onUpdate(set, set.reps, weightInLbs, set.isCompleted)
+                    } else {
+                        onUpdate(set, set.reps, nil, set.isCompleted)
+                    }
                 }
+            
+            // Unit label
+            Text(preferredUnits.rawValue)
+                .font(.caption)
+                .foregroundStyle(.secondary)
+                .frame(width: 30, alignment: .leading)
             
             Text("×")
                 .foregroundStyle(.secondary)
@@ -90,12 +109,14 @@ struct SetRowView: View {
     List {
         SetRowView(
             set: SetRecord(setNumber: 1, reps: 10, weight: 135, isCompleted: false),
+            preferredUnits: .lbs,
             onUpdate: { _, _, _, _ in },
             onDelete: {}
         )
         
         SetRowView(
             set: SetRecord(setNumber: 2, reps: 10, weight: 135, isCompleted: true),
+            preferredUnits: .kg,
             onUpdate: { _, _, _, _ in },
             onDelete: {}
         )

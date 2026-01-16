@@ -247,6 +247,48 @@ All ViewModels in the app, their responsibilities, and usage.
 
 ---
 
+## ProfileViewModel
+
+**Location:** `ViewModels/ProfileViewModel.swift`
+
+**Type:** `@StateObject` (view-scoped)
+
+**Responsibility:** Manages user profile, preferences, and statistics
+
+**Properties:**
+- `@Published var profile: UserProfile?` - User profile (single instance)
+- `@Published var totalWorkouts: Int` - Total completed workouts
+- `@Published var totalPRs: Int` - Total personal records
+- `@Published var currentStreak: Int` - Current workout streak (consecutive days)
+- `@Published var recentPRs: [PersonalRecord]` - Recent PRs (last 3)
+
+**Key Methods:**
+- `setModelContext(_ context: ModelContext)` - Initialize with SwiftData context
+- `loadProfile()` - Fetch or create the single UserProfile instance
+- `calculateStats()` - Calculate total workouts, PRs, and streak
+- `calculateStreak() -> Int` - Calculate consecutive days with completed workouts
+- `loadRecentPRs(limit: Int)` - Load recent PRs for display
+- `updateName(_ newName: String)` - Update user name
+- `updatePreferredUnits(_ units: Units)` - Update units preference
+- `updateDefaultRestTime(_ seconds: Int)` - Update default rest time
+- `updateAppearanceMode(_ mode: AppearanceMode)` - Update appearance preference
+- `refreshStats()` - Recalculate statistics
+
+**Used By:**
+- `ProfileView` - Profile display and stats
+- `SettingsView` - Settings management
+- `ContentView` - Appearance mode preference
+- `ActiveWorkoutFullScreenView` - Default rest time
+- Various views for units conversion
+
+**Special Notes:**
+- Only one UserProfile instance exists per app
+- Automatically creates profile on first launch if none exists
+- Streak calculation checks consecutive days with completed workouts
+- Stats are calculated on demand and can be refreshed
+
+---
+
 ## ViewModel Usage Patterns
 
 ### @EnvironmentObject Pattern
@@ -258,6 +300,8 @@ All ViewModels in the app, their responsibilities, and usage.
 - Examples: `HistoryView` (HistoryViewModel)
 - Examples: `ExerciseListView` (ExerciseLibraryViewModel)
 - Examples: `ExerciseDetailView` (ProgressViewModel)
+- Examples: `ProfileView` (ProfileViewModel)
+- Examples: `SettingsView` (ProfileViewModel)
 
 ### @ObservedObject Pattern
 - Used when ViewModel is passed from parent
@@ -306,4 +350,11 @@ ProgressViewModel
 ├── Used by ActiveWorkoutViewModel (PR detection)
 ├── Used by ExerciseDetailView (progress tracking)
 └── Used by HomeView (recent PRs)
+
+ProfileViewModel
+├── Used by ProfileView (profile display and stats)
+├── Used by SettingsView (settings management)
+├── Used by ContentView (appearance mode)
+├── Used by ActiveWorkoutFullScreenView (default rest time)
+└── Used by various views (units conversion)
 ```

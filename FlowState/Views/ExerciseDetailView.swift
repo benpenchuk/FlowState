@@ -13,6 +13,7 @@ struct ExerciseDetailView: View {
     @Environment(\.modelContext) private var modelContext
     @StateObject private var progressViewModel = ProgressViewModel()
     @StateObject private var libraryViewModel = ExerciseLibraryViewModel()
+    @StateObject private var profileViewModel = ProfileViewModel()
     @State private var currentPR: PersonalRecord? = nil
     @State private var progressionData: [(date: Date, weight: Double)] = []
     @State private var prs: [PersonalRecord] = []
@@ -65,6 +66,7 @@ struct ExerciseDetailView: View {
         .onAppear {
             progressViewModel.setModelContext(modelContext)
             libraryViewModel.setModelContext(modelContext)
+            profileViewModel.setModelContext(modelContext)
             loadData()
         }
     }
@@ -258,7 +260,9 @@ struct ExerciseDetailView: View {
             if let pr = currentPR {
                 HStack(spacing: 16) {
                     VStack(alignment: .leading, spacing: 4) {
-                        Text("\(String(format: "%.1f", pr.weight)) lbs")
+                        let displayWeight = profileViewModel.profile?.units == .kg ? pr.weight / 2.20462 : pr.weight
+                        let unit = profileViewModel.profile?.units == .kg ? "kg" : "lbs"
+                        Text("\(String(format: "%.1f", displayWeight)) \(unit)")
                             .font(.title)
                             .fontWeight(.bold)
                         
@@ -335,7 +339,8 @@ struct ExerciseDetailView: View {
                     HistoryRowView(
                         date: entry.date,
                         maxWeight: entry.maxWeight,
-                        sets: entry.sets
+                        sets: entry.sets,
+                        preferredUnits: profileViewModel.profile?.units ?? .lbs
                     )
                 }
             }
@@ -380,6 +385,7 @@ struct HistoryRowView: View {
     let date: Date
     let maxWeight: Double
     let sets: [SetRecord]
+    let preferredUnits: Units
     
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
@@ -390,7 +396,9 @@ struct HistoryRowView: View {
                 
                 Spacer()
                 
-                Text("\(String(format: "%.1f", maxWeight)) lbs")
+                let displayWeight = preferredUnits == .kg ? maxWeight / 2.20462 : maxWeight
+                let unit = preferredUnits == .kg ? "kg" : "lbs"
+                Text("\(String(format: "%.1f", displayWeight)) \(unit)")
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
             }
@@ -398,7 +406,8 @@ struct HistoryRowView: View {
             HStack(spacing: 4) {
                 ForEach(sets) { set in
                     if let weight = set.weight, let reps = set.reps {
-                        Text("\(String(format: "%.1f", weight))×\(reps)")
+                        let displayWeight = preferredUnits == .kg ? weight / 2.20462 : weight
+                        Text("\(String(format: "%.1f", displayWeight))×\(reps)")
                             .font(.caption)
                             .padding(.horizontal, 6)
                             .padding(.vertical, 2)

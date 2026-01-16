@@ -102,11 +102,15 @@
 1. Start workout from template or empty
 2. Full-screen workout view appears
 3. Edit set: tap weight/reps fields, enter values
-4. Mark set complete: tap checkmark
+4. Mark set complete: tap checkmark (automatically captures timestamp)
 5. Add set: tap "Add Set" button
 6. Add exercise: tap "Add Exercise", select from library
 7. Finish workout: tap "Finish Workout" button
-8. Workout saved to history
+8. Workout completion screen appears with optional feedback:
+   - Rate effort (1-10 scale, optional)
+   - Add notes (optional)
+   - Save workout or skip feedback
+9. Workout saved to history with all captured data
 
 ---
 
@@ -171,7 +175,10 @@
 - View all completed workouts
 - Grouped by date (Today, Yesterday, Last 7 days, Months)
 - Workout details: name, duration, exercise count, set count
-- Individual workout detail view
+- Individual workout detail view with enhanced data:
+  - Effort rating (1-10 scale with visual indicator)
+  - Notes (if provided)
+  - Total rest time (if tracked)
 - Delete workouts
 - View sets and weights for each exercise
 
@@ -185,7 +192,8 @@
 2. See workouts grouped by date
 3. Tap workout to view details
 4. See all exercises and sets logged
-5. Tap trash icon to delete workout
+5. View effort rating, notes, and total rest time (if available)
+6. Tap trash icon to delete workout
 
 ---
 
@@ -211,17 +219,43 @@
 
 ---
 
-### ✅ Dark Theme
+### ✅ Profile & Settings
 
 **Status:** Complete
 
 **Description:**
-- App uses dark theme throughout
-- `.preferredColorScheme(.dark)` set in `ContentView`
-- Consistent dark appearance
+- Profile tab showing user stats and achievements
+- User profile with editable name
+- Stats display: Total Workouts, Personal Records, Current Streak
+- Recent Achievements section (last 3 PRs)
+- Settings screen with preferences:
+  - Units preference (lbs / kg)
+  - Default Rest Time (30s, 60s, 90s, 120s, 180s)
+  - Appearance Mode (Dark / Light / System)
+- Data management:
+  - Export Workout Data (placeholder)
+  - Clear All Data (with confirmation)
+- About section with app version, feedback, and about info
+- Units conversion throughout app (all weights stored as lbs, converted for display)
+- Appearance mode applied app-wide
 
 **Implementation:**
-- `Views/ContentView.swift` - Theme setting
+- `Models/UserProfile.swift` - Profile model with Units and AppearanceMode enums
+- `ViewModels/ProfileViewModel.swift` - Profile management and stats calculation
+- `Views/ProfileView.swift` - Profile display with stats cards
+- `Views/SettingsView.swift` - Settings screen
+- `Views/ContentView.swift` - Appearance mode implementation
+- `Views/SetRowView.swift` - Units conversion in set input
+- `Views/WorkoutHistoryDetailView.swift` - Units in history
+- `Views/ExerciseDetailView.swift` - Units in exercise details
+- `Views/ActiveWorkoutFullScreenView.swift` - Default rest time from profile
+
+**User Flow:**
+1. Navigate to Profile tab
+2. View stats and recent achievements
+3. Tap gear icon to open Settings
+4. Adjust preferences (units, rest time, appearance)
+5. Changes apply immediately throughout app
 
 ---
 
@@ -267,8 +301,9 @@
 | Rest Timer | ✅ Complete | RestTimerView.swift, RestTimerViewModel.swift | Auto-start, adjustable |
 | Workout History | ✅ Complete | HistoryView.swift, HistoryViewModel.swift | List, detail, delete |
 | Single Active Workout | ✅ Complete | ActiveWorkoutViewModel.swift, HomeView.swift | Enforcement via alerts |
-| Dark Theme | ✅ Complete | ContentView.swift | App-wide dark mode |
+| Dark Theme | ✅ Complete | ContentView.swift | App-wide dark mode (now configurable) |
 | Progress Tracking & PRs | ✅ Complete | PersonalRecord.swift, ProgressViewModel.swift, ExerciseDetailView.swift, ExerciseProgressChartView.swift, PRNotificationView.swift | PR detection, charts, history |
+| Profile & Settings | ✅ Complete | UserProfile.swift, ProfileViewModel.swift, ProfileView.swift, SettingsView.swift | Profile stats, preferences, units, appearance |
 
 ---
 
@@ -302,9 +337,19 @@
 
 6. **Finish Workout**
    - User taps "Finish Workout"
-   - Workout marked as completed (`completedAt = Date()`)
+   - Workout completion screen appears:
+     - Shows workout summary (name, duration, exercises, sets)
+     - Optional effort rating (1-10 scale with color coding)
+     - Optional notes field (collapsible)
+     - "Save Workout" or "Skip & Save" buttons
+   - User can provide feedback or skip
+   - Workout marked as completed with all captured data:
+     - `completedAt = Date()`
+     - `effortRating` (if provided)
+     - `notes` (if provided)
+     - `totalRestTime` (automatically calculated)
    - Returns to HomeView
-   - Workout appears in History tab
+   - Workout appears in History tab with all data visible
 
 ### Template Creation Flow
 

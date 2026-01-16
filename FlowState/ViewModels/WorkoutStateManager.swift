@@ -19,6 +19,8 @@ final class WorkoutStateManager: ObservableObject {
     
     private var modelContext: ModelContext?
     nonisolated(unsafe) private var timer: Timer?
+    private var totalRestTimeAccumulated: TimeInterval = 0 // Track total rest time during workout
+    private var restTimerStartTime: Date? // Track when current rest timer started
     
     init() {
         self.restTimerViewModel = RestTimerViewModel(defaultDuration: 90)
@@ -28,6 +30,32 @@ final class WorkoutStateManager: ObservableObject {
         self.modelContext = context
         loadActiveWorkout()
         startTimer()
+        observeRestTimerCompletion()
+    }
+    
+    private var cancellables = Set<AnyCancellable>()
+    
+    private func observeRestTimerCompletion() {
+        // Observe when rest timer completes naturally
+        restTimerViewModel.$isComplete
+            .dropFirst()
+            .sink { [weak self] isComplete in
+                Task { @MainActor in
+                    if isComplete {
+                        self?.handleRestTimerCompleted()
+                    }
+                }
+            }
+            .store(in: &cancellables)
+    }
+    
+    private func handleRestTimerCompleted() {
+        // Accumulate rest time when timer completes naturally
+        if restTimerStartTime != nil {
+            // When timer completes, all time was used
+            totalRestTimeAccumulated += TimeInterval(restTimerViewModel.totalSeconds)
+            restTimerStartTime = nil
+        }
     }
     
     private func loadActiveWorkout() {
@@ -43,6 +71,9 @@ final class WorkoutStateManager: ObservableObject {
         do {
             let workouts = try modelContext.fetch(descriptor)
             activeWorkout = workouts.first
+            if activeWorkout != nil {
+                totalRestTimeAccumulated = 0 // Reset when loading existing workout
+            }
             updateElapsedTime()
         } catch {
             print("Error loading active workout: \(error)")
@@ -60,6 +91,7 @@ final class WorkoutStateManager: ObservableObject {
     
     func setActiveWorkout(_ workout: Workout) {
         activeWorkout = workout
+        totalRestTimeAccumulated = 0 // Reset rest time tracking for new workout
         updateElapsedTime()
         if timer == nil {
             startTimer()
@@ -80,13 +112,22 @@ final class WorkoutStateManager: ObservableObject {
         guard let modelContext = modelContext,
               let workout = activeWorkout else { return }
         
+        // Add any remaining rest time if timer is running
+        if restTimerViewModel.isRunning, restTimerStartTime != nil {
+            let restTimeUsed = restTimerViewModel.totalSeconds - restTimerViewModel.remainingSeconds
+            totalRestTimeAccumulated += TimeInterval(restTimeUsed)
+            restTimerStartTime = nil
+        }
+        
         workout.completedAt = Date()
+        workout.totalRestTime = totalRestTimeAccumulated > 0 ? totalRestTimeAccumulated : nil
         restTimerViewModel.stop()
         
         do {
             try modelContext.save()
             activeWorkout = nil
             isWorkoutFullScreen = false
+            totalRestTimeAccumulated = 0 // Reset for next workout
             stopTimer()
         } catch {
             print("Error finishing workout: \(error)")
@@ -111,18 +152,34 @@ final class WorkoutStateManager: ObservableObject {
     }
     
     func startRestTimer(duration: Int? = nil) {
+        // If timer was already running, accumulate the time used
+        if restTimerViewModel.isRunning, restTimerStartTime != nil {
+            let restTimeUsed = restTimerViewModel.totalSeconds - restTimerViewModel.remainingSeconds
+            totalRestTimeAccumulated += TimeInterval(restTimeUsed)
+        }
+        
         restTimerViewModel.start(duration: duration)
+        restTimerStartTime = Date()
     }
     
     func stopRestTimer() {
+        // Accumulate rest time when timer is stopped (skipped)
+        // Note: Natural completion is handled by observeRestTimerCompletion()
+        if restTimerViewModel.isRunning, restTimerStartTime != nil {
+            let restTimeUsed = restTimerViewModel.totalSeconds - restTimerViewModel.remainingSeconds
+            totalRestTimeAccumulated += TimeInterval(restTimeUsed)
+            restTimerStartTime = nil
+        }
+        
         restTimerViewModel.stop()
     }
     
     private func startTimer() {
         stopTimer()
-        timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] _ in
-            Task { @MainActor in
-                self?.updateElapsedTime()
+        let weakSelf = self
+        timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { _ in
+            Task { @MainActor [weak weakSelf] in
+                weakSelf?.updateElapsedTime()
             }
         }
     }

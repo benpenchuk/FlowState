@@ -144,6 +144,9 @@ struct ExerciseSectionView: View {
     let entry: WorkoutEntry
     @ObservedObject var viewModel: ActiveWorkoutViewModel
     var onSetCompleted: (() -> Void)? = nil
+    var preferredUnits: Units = .lbs
+    
+    @Environment(\.modelContext) private var modelContext
     
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -157,6 +160,7 @@ struct ExerciseSectionView: View {
             ForEach(sets) { set in
                 SetRowView(
                     set: set,
+                    preferredUnits: preferredUnits,
                     onUpdate: { updatedSet, reps, weight, isCompleted in
                         // Check if we're transitioning from incomplete to complete
                         let wasCompleted = updatedSet.isCompleted

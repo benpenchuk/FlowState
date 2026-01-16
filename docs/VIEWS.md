@@ -11,10 +11,11 @@ All SwiftUI views in the app, organized by purpose.
 **ViewModel:** None (uses `@EnvironmentObject workoutState: WorkoutStateManager`)
 
 **Key Features:**
-- TabView with Home, History, Exercises tabs
-- Manages dark theme (`.preferredColorScheme(.dark)`)
+- TabView with Home, History, Exercises, Profile tabs
+- Manages appearance mode based on user preference (`.preferredColorScheme()`)
 - Conditionally shows `FloatingWorkoutPill` when workout is active but minimized
 - Presents full-screen workout via `fullScreenCover` when `isWorkoutFullScreen = true`
+- Loads user profile for appearance and units preferences
 
 **Presents:**
 - `ActiveWorkoutFullScreenView` (fullScreenCover)
@@ -144,11 +145,14 @@ All SwiftUI views in the app, organized by purpose.
 
 **Key Features:**
 - Set number display
-- Weight input field (optional)
+- Weight input field (optional) with unit conversion
+- Unit label (lbs or kg) based on user preference
 - Reps input field (optional)
 - Checkmark to mark complete
 - Delete button
 - Visual styling for completed sets
+- Converts weight for display (lbs ↔ kg) based on user preference
+- Stores all weights internally as lbs
 
 **Navigation:**
 - Embedded in `ExerciseSectionView` within `ActiveWorkoutView`
@@ -185,6 +189,9 @@ All SwiftUI views in the app, organized by purpose.
 
 **Key Features:**
 - Workout header with metadata (duration, exercise count, set count)
+- Effort rating display (if available) with visual 1-10 scale indicator
+- Total rest time display (if tracked)
+- Notes display (if provided)
 - All exercises with their sets
 - Delete workout option
 
@@ -195,6 +202,30 @@ All SwiftUI views in the app, organized by purpose.
 
 **Navigation:**
 - Navigated to from `HistoryView`
+
+---
+
+### WorkoutCompletionView.swift
+
+**Description:** Optional feedback screen shown when user finishes a workout
+
+**ViewModel:** None (receives callbacks from parent)
+
+**Key Features:**
+- Header section with workout name, duration, exercise count, and set count
+- Effort scale (1-10) with color-coded buttons:
+  - 1-2: Green (Light)
+  - 3-4: Yellow
+  - 5-6: Orange
+  - 7-8: Red
+  - 9-10: Dark red/purple (All Out)
+- Collapsible notes section with multi-line text field
+- "Save Workout" button (primary, saves with feedback)
+- "Skip & Save" button (secondary, saves without feedback)
+- All fields are optional - user can skip everything
+
+**Navigation:**
+- Presented as sheet from `ActiveWorkoutFullScreenView` when "Finish Workout" is tapped
 
 ---
 
@@ -437,6 +468,60 @@ All SwiftUI views in the app, organized by purpose.
 
 ---
 
+## Profile & Settings Views
+
+### ProfileView.swift
+
+**Description:** User profile view showing stats and achievements
+
+**ViewModel:** `@StateObject profileViewModel: ProfileViewModel`
+
+**Key Features:**
+- Profile header with editable name
+- Member since date
+- Stats cards: Total Workouts, Personal Records, Current Streak
+- Recent Achievements section (last 3 PRs)
+- Settings button (gear icon) in navigation bar
+
+**Contains:**
+- `StatCard` - Stats display cards
+- `PRCard` - Personal record display cards
+
+**Presents:**
+- `SettingsView` (sheet)
+
+**Navigation:**
+- Embedded in ContentView TabView
+
+---
+
+### SettingsView.swift
+
+**Description:** Settings screen with preferences, data management, and about
+
+**ViewModel:** `@StateObject profileViewModel: ProfileViewModel`
+
+**Key Features:**
+- Preferences section:
+  - Units picker (lbs / kg)
+  - Default Rest Time picker (30s, 60s, 90s, 120s, 180s)
+  - Appearance picker (Dark / Light / System)
+- Data section:
+  - Export Workout Data (placeholder alert)
+  - Clear All Data (with confirmation)
+- About section:
+  - App Version (from bundle)
+  - Send Feedback (opens mail composer)
+  - About FlowState (alert with description)
+
+**Contains:**
+- `MailComposeView` - Email composer for feedback
+
+**Navigation:**
+- Presented from `ProfileView` (sheet)
+
+---
+
 ## View Hierarchy
 
 ```
@@ -453,8 +538,11 @@ ContentView
 │   ├── HistoryView
 │   │   └── WorkoutHistoryDetailView
 │   │
-│   └── ExerciseListView
-│       └── AddExerciseSheet (sheet)
+│   ├── ExerciseListView
+│   │   └── AddExerciseSheet (sheet)
+│   │
+│   └── ProfileView
+│       └── SettingsView (sheet)
 │
 ├── FloatingWorkoutPill (conditional overlay)
 │
@@ -464,7 +552,9 @@ ContentView
     │   │   └── SetRowView (multiple)
     │   └── AddExerciseToWorkoutSheet (sheet)
     │
-    └── RestTimerView (conditional)
+    ├── RestTimerView (conditional)
+    │
+    └── WorkoutCompletionView (sheet)
 ```
 
 ## Navigation Patterns

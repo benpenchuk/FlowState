@@ -136,27 +136,27 @@ Features and improvements planned but not yet implemented.
 
 ### ⚙️ Settings Screen
 
-**Status:** Not Started
+**Status:** ✅ Complete (Basic Implementation)
 
 **Description:**
-- Default rest timer duration
-- Units (lbs vs. kg, miles vs. km)
-- Theme preferences (if light mode support added)
-- Export data (JSON backup)
-- Import data
-- Clear all data option
-- Notifications preferences
+- ✅ Default rest timer duration
+- ✅ Units (lbs vs. kg)
+- ✅ Theme preferences (Dark / Light / System)
+- ✅ Clear all data option
+- ⏳ Export data (JSON backup) - Future enhancement
+- ⏳ Import data - Future enhancement
+- ⏳ Notifications preferences - Future enhancement
 
-**Implementation Notes:**
-- Use `UserDefaults` or SwiftData for preferences
-- Settings view with sections
-- Export/import workout data as JSON
-- Warning dialogs for destructive actions
-
-**Files to Create:**
+**Implementation:**
+- `Models/UserProfile.swift` - Profile model with preferences
+- `ViewModels/ProfileViewModel.swift` - Settings management
+- `Views/ProfileView.swift` - Profile display
 - `Views/SettingsView.swift` - Settings UI
-- `ViewModels/SettingsViewModel.swift` - Settings management
-- `Models/Settings.swift` - Settings model (optional)
+
+**Future Enhancements:**
+- Export/import workout data as JSON
+- Notifications preferences
+- Additional settings options
 
 ---
 
@@ -229,7 +229,21 @@ Features and improvements planned but not yet implemented.
 
 ### 📤 Export/Import
 
-**Description:** CSV export, backup/restore functionality (partially covered in Settings)
+**Status:** Not Started
+
+**Description:** 
+- Export workout data as JSON/CSV
+- Import/restore data from backup
+- Backup/restore functionality
+
+**Implementation Notes:**
+- Export all workouts, exercises, templates, PRs
+- JSON format for easy parsing
+- Import validation and error handling
+- Settings screen integration (placeholder already exists)
+
+**Related Features:**
+- Settings screen (export button placeholder exists)
 
 ### 🎨 Custom Themes
 

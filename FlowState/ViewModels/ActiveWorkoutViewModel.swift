@@ -247,6 +247,15 @@ final class ActiveWorkoutViewModel: ObservableObject {
             sets[index].reps = reps
             sets[index].weight = weight
             sets[index].isCompleted = isCompleted
+            
+            // Set completedAt timestamp when set is marked complete
+            if !wasCompleted && isCompleted {
+                sets[index].completedAt = Date()
+            } else if wasCompleted && !isCompleted {
+                // Clear timestamp if set is unmarked
+                sets[index].completedAt = nil
+            }
+            
             entry.setSets(sets)
             
             do {
@@ -294,10 +303,16 @@ final class ActiveWorkoutViewModel: ObservableObject {
     }
     
     func finishWorkout() {
+        finishWorkout(effortRating: nil, notes: nil)
+    }
+    
+    func finishWorkout(effortRating: Int?, notes: String?) {
         guard let modelContext = modelContext,
               let workout = activeWorkout else { return }
         
         workout.completedAt = Date()
+        workout.effortRating = effortRating
+        workout.notes = notes
         
         do {
             try modelContext.save()

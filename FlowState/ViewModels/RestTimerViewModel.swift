@@ -16,6 +16,11 @@ final class RestTimerViewModel: ObservableObject {
     @Published var isRunning: Bool = false
     @Published var isComplete: Bool = false
     
+    // Expose totalSeconds for rest time tracking
+    var totalDuration: Int {
+        totalSeconds
+    }
+    
     nonisolated(unsafe) private var timer: Timer?
     private var defaultDuration: Int = 90 // Default 90 seconds
     
@@ -64,10 +69,13 @@ final class RestTimerViewModel: ObservableObject {
     
     private func startTimer() {
         stopTimer()
-        timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] _ in
+        let tickMethod = { [weak self] in
             Task { @MainActor in
                 self?.tick()
             }
+        }
+        timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { _ in
+            _ = tickMethod()
         }
     }
     

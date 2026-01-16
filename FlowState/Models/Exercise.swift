@@ -39,7 +39,7 @@ enum Equipment: String, Codable, CaseIterable {
     case none
 }
 
-struct ExerciseInstructions: Codable {
+struct ExerciseInstructions: Sendable {
     var setup: String
     var execution: String
     var tips: String
@@ -48,6 +48,27 @@ struct ExerciseInstructions: Codable {
         self.setup = setup
         self.execution = execution
         self.tips = tips
+    }
+}
+
+// Explicit nonisolated Codable conformance for Swift 6
+extension ExerciseInstructions: Codable {
+    nonisolated func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(setup, forKey: .setup)
+        try container.encode(execution, forKey: .execution)
+        try container.encode(tips, forKey: .tips)
+    }
+    
+    nonisolated init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        setup = try container.decode(String.self, forKey: .setup)
+        execution = try container.decode(String.self, forKey: .execution)
+        tips = try container.decode(String.self, forKey: .tips)
+    }
+    
+    private enum CodingKeys: String, CodingKey {
+        case setup, execution, tips
     }
 }
 

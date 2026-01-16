@@ -16,8 +16,9 @@ struct SetRecord: Codable, Identifiable {
     var distance: Double?
     var equipment: String? // Optional: which equipment was used this set
     var isCompleted: Bool
+    var completedAt: Date? // When this set was marked complete
     
-    init(id: UUID = UUID(), setNumber: Int, reps: Int? = nil, weight: Double? = nil, duration: TimeInterval? = nil, distance: Double? = nil, equipment: String? = nil, isCompleted: Bool = false) {
+    init(id: UUID = UUID(), setNumber: Int, reps: Int? = nil, weight: Double? = nil, duration: TimeInterval? = nil, distance: Double? = nil, equipment: String? = nil, isCompleted: Bool = false, completedAt: Date? = nil) {
         self.id = id
         self.setNumber = setNumber
         self.reps = reps
@@ -26,5 +27,6 @@ struct SetRecord: Codable, Identifiable {
         self.distance = distance
         self.equipment = equipment
         self.isCompleted = isCompleted
+        self.completedAt = completedAt
     }
 }

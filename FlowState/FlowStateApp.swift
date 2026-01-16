@@ -18,6 +18,7 @@ struct FlowStateApp: App {
             Workout.self,
             WorkoutEntry.self,
             PersonalRecord.self,
+            UserProfile.self,
         ])
         
         // For development: Use a specific URL to allow easy database reset

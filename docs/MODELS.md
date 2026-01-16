@@ -81,7 +81,9 @@ Represents a single workout session (active or completed).
 - `name: String?` - Optional workout name
 - `startedAt: Date` - When workout started
 - `completedAt: Date?` - When workout finished (nil = active workout)
-- `notes: String?` - Optional notes
+- `notes: String?` - Optional notes about the workout
+- `effortRating: Int?` - Optional effort rating (1-10 scale)
+- `totalRestTime: TimeInterval?` - Sum of all rest periods during the workout
 
 **Relationships:**
 - `entries: [WorkoutEntry]?` - Exercises in this workout (ordered)
@@ -90,6 +92,8 @@ Represents a single workout session (active or completed).
 - Active workout: `completedAt == nil`
 - Completed workout: `completedAt != nil` (appears in history)
 - Only one active workout allowed at a time
+- `effortRating` and `notes` are captured via `WorkoutCompletionView` when finishing workout
+- `totalRestTime` is automatically tracked and accumulated during the workout
 
 ---
 
@@ -138,6 +142,62 @@ Represents a personal record (PR) for an exercise - the highest weight lifted fo
 
 ---
 
+### UserProfile
+
+Represents the user's profile and preferences. Only one instance exists per app.
+
+**Properties:**
+- `id: UUID` - Unique identifier
+- `name: String` - User's name (default: "Athlete")
+- `createdAt: Date` - When profile was created (first app launch)
+- `preferredUnits: String` - Units preference (stored as String, accessed via `units` computed property)
+- `defaultRestTime: Int` - Default rest timer duration in seconds (default: 90)
+- `appearanceMode: String` - Appearance preference (stored as String, accessed via `appearance` computed property)
+
+**Computed Properties:**
+- `units: Units` - Get/set preferred units (.lbs or .kg)
+- `appearance: AppearanceMode` - Get/set appearance mode (.dark, .light, or .system)
+
+**Usage:**
+- Single instance model (only one profile per app)
+- Created automatically on first launch
+- Used throughout app for units conversion and appearance preferences
+- Default rest time used when starting rest timer
+
+---
+
+## Enums
+
+### Units
+
+Enum defining weight units.
+
+**Values:**
+- `lbs` - Pounds (default)
+- `kg` - Kilograms
+
+**Usage:**
+- User preference for displaying weights
+- All weights stored internally as lbs, converted for display only
+- Conversion: 1 kg = 2.20462 lbs
+
+---
+
+### AppearanceMode
+
+Enum defining appearance mode preference.
+
+**Values:**
+- `dark` - Force dark mode
+- `light` - Force light mode
+- `system` - Use device setting (default)
+
+**Usage:**
+- User preference for app appearance
+- Applied via `.preferredColorScheme()` in ContentView
+
+---
+
 ## Codable Structs (Not SwiftData Models)
 
 ### SetRecord
@@ -153,6 +213,7 @@ Represents a single set within a workout entry. Stored as JSON in `WorkoutEntry.
 - `distance: Double?` - Distance for cardio sets (miles/km)
 - `equipment: String?` - Optional: which equipment was used this set
 - `isCompleted: Bool` - Whether set was completed
+- `completedAt: Date?` - When this set was marked complete (for analyzing workout pace)
 
 **Why Not a SwiftData Model?**
 
@@ -167,8 +228,6 @@ Represents a single set within a workout entry. Stored as JSON in `WorkoutEntry.
 - Decoded/encoded via helper methods on `WorkoutEntry`
 
 ---
-
-## Enums
 
 ### ExerciseType
 

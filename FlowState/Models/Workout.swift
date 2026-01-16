@@ -15,16 +15,20 @@ final class Workout {
     var startedAt: Date
     var completedAt: Date?
     var notes: String?
+    var effortRating: Int? // 1-10 scale, optional
+    var totalRestTime: TimeInterval? // Sum of all rest periods
     
     @Relationship(deleteRule: .cascade)
     var entries: [WorkoutEntry]?
     
-    init(id: UUID = UUID(), name: String? = nil, startedAt: Date = Date(), completedAt: Date? = nil, notes: String? = nil, entries: [WorkoutEntry] = []) {
+    init(id: UUID = UUID(), name: String? = nil, startedAt: Date = Date(), completedAt: Date? = nil, notes: String? = nil, effortRating: Int? = nil, totalRestTime: TimeInterval? = nil, entries: [WorkoutEntry] = []) {
         self.id = id
         self.name = name
         self.startedAt = startedAt
         self.completedAt = completedAt
         self.notes = notes
+        self.effortRating = effortRating
+        self.totalRestTime = totalRestTime
         self.entries = entries
     }
 }
