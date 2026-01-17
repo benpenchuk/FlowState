@@ -46,6 +46,6 @@ git push
 ## Editing
 ```bash
 git add .
-git commit -m "Latest working update"
+git commit -m "Latest working update, history view"
 git push
 ```

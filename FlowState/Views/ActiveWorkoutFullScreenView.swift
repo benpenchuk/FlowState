@@ -75,10 +75,47 @@ struct ActiveWorkoutFullScreenView: View {
         }
     }
     
+    private var isWorkoutComplete: Bool {
+        let progress = exerciseProgress
+        return progress.total > 0 && progress.completed == progress.total
+    }
+    
+    @ViewBuilder
+    private var smartFinishPrompt: some View {
+        if isWorkoutComplete {
+            Button {
+                showingCompletionSheet = true
+            } label: {
+                HStack(spacing: 12) {
+                    Image(systemName: "checkmark.seal.fill")
+                        .font(.title2)
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text("Workout Complete!")
+                            .font(.headline)
+                        Text("Tap to save your progress")
+                            .font(.subheadline)
+                            .opacity(0.8)
+                    }
+                    Spacer()
+                    Image(systemName: "chevron.right")
+                }
+                .padding()
+                .background(Color.green)
+                .foregroundStyle(.white)
+                .cornerRadius(16)
+                .shadow(radius: 4)
+            }
+            .padding(.horizontal, ActiveWorkoutLayout.contentPadding)
+            .padding(.bottom, 20)
+            .transition(.move(edge: .bottom).combined(with: .opacity))
+            .zIndex(2000)
+        }
+    }
+    
     @ViewBuilder
     private func workoutContentView(workout: Workout) -> some View {
         NavigationStack {
-            ZStack {
+            ZStack(alignment: .bottom) {
                 // Solid background
                 Color(.systemBackground)
                     .ignoresSafeArea()
@@ -95,23 +132,34 @@ struct ActiveWorkoutFullScreenView: View {
                     .animation(.spring(response: 0.3, dampingFraction: 0.8), value: scrollOffset)
                     
                     // Scrollable content area
-                    ScrollView {
-                        VStack(spacing: 0) {
-                            workoutContentBody(workout: workout)
+                    ScrollViewReader { proxy in
+                        ScrollView {
+                            VStack(spacing: 0) {
+                                workoutContentBody(workout: workout)
+                            }
+                            .background(GeometryReader { geometry in
+                                Color.clear.preference(
+                                    key: ScrollOffsetPreferenceKey.self,
+                                    value: geometry.frame(in: .named("scroll")).minY
+                                )
+                            })
                         }
-                        .background(GeometryReader { geometry in
-                            Color.clear.preference(
-                                key: ScrollOffsetPreferenceKey.self,
-                                value: geometry.frame(in: .named("scroll")).minY
-                            )
-                        })
-                    }
-                    .coordinateSpace(name: "scroll")
-                    .onPreferenceChange(ScrollOffsetPreferenceKey.self) { newValue in
-                        // At top: minY ≈ 0 or positive  
-                        // Scrolled down: minY becomes negative
-                        // scrollOffset increases as user scrolls down
-                        scrollOffset = max(0, -newValue)
+                        .coordinateSpace(name: "scroll")
+                        .onPreferenceChange(ScrollOffsetPreferenceKey.self) { newValue in
+                            // At top: minY ≈ 0 or positive  
+                            // Scrolled down: minY becomes negative
+                            // scrollOffset increases as user scrolls down
+                            scrollOffset = max(0, -newValue)
+                        }
+                        .onChange(of: viewModel.scrollToSetId) { oldValue, newValue in
+                            if let id = newValue {
+                                withAnimation(.spring(response: 0.4, dampingFraction: 0.8)) {
+                                    proxy.scrollTo(id, anchor: .center)
+                                }
+                                // Reset after scrolling
+                                viewModel.scrollToSetId = nil
+                            }
+                        }
                     }
                     .background(
                         Color.clear
@@ -123,6 +171,8 @@ struct ActiveWorkoutFullScreenView: View {
                             )
                     )
                 }
+                
+                smartFinishPrompt
             }
             .navigationTitle("Active Workout")
             .navigationBarTitleDisplayMode(.inline)
@@ -152,13 +202,13 @@ struct ActiveWorkoutFullScreenView: View {
                 }
             }
             .alert("Cancel Workout", isPresented: $showingCancelAlert) {
-                Button("Cancel", role: .cancel) {}
-                Button("Discard", role: .destructive) {
+                Button("Keep Workout", role: .cancel) {}
+                Button("Discard Workout", role: .destructive) {
                     workoutState.cancelWorkout()
                     dismiss()
                 }
             } message: {
-                Text("Are you sure you want to discard this workout? All progress will be lost.")
+                Text(cancelAlertMessage)
             }
             .sheet(isPresented: $showingAddExercise) {
                 AddExerciseToWorkoutSheet(viewModel: viewModel)
@@ -185,9 +235,51 @@ struct ActiveWorkoutFullScreenView: View {
         }
     }
     
+    private var exerciseProgress: (completed: Int, total: Int) {
+        guard let workout = workout, let entries = workout.entries else { return (0, 0) }
+        let completed = entries.filter { entry in
+            let sets = entry.getSets()
+            return !sets.isEmpty && sets.allSatisfy { $0.isCompleted }
+        }.count
+        return (completed, entries.count)
+    }
+    
     @ViewBuilder
     private func fullHeaderView(workout: Workout) -> some View {
         VStack(spacing: 12) {
+            // Progress Section
+            let progress = exerciseProgress
+            if progress.total > 0 {
+                VStack(spacing: 6) {
+                    HStack {
+                        Text("Workout Progress")
+                            .font(.caption2)
+                            .fontWeight(.bold)
+                            .foregroundStyle(.secondary)
+                            .textCase(.uppercase)
+                        Spacer()
+                        Text("\(progress.completed)/\(progress.total) Exercises")
+                            .font(.caption2)
+                            .fontWeight(.bold)
+                            .foregroundStyle(.secondary)
+                    }
+                    
+                    ZStack(alignment: .leading) {
+                        Capsule()
+                            .fill(Color(.systemGray5))
+                            .frame(height: 6)
+                        
+                        GeometryReader { geo in
+                            Capsule()
+                                .fill(Color.orange)
+                                .frame(width: geo.size.width * CGFloat(Double(progress.completed) / Double(progress.total)))
+                        }
+                    }
+                    .frame(height: 6)
+                }
+                .padding(.horizontal, 4)
+            }
+
             // Timer
             timerView
             
@@ -196,7 +288,7 @@ struct ActiveWorkoutFullScreenView: View {
                 restTimerView
             }
         }
-        .padding(.horizontal)
+        .padding(.horizontal, ActiveWorkoutLayout.contentPadding)
         .padding(.top, 8)
         .padding(.bottom, 12)
         .background(
@@ -209,6 +301,12 @@ struct ActiveWorkoutFullScreenView: View {
     @ViewBuilder
     private func compactPillsView(workout: Workout) -> some View {
         HStack(spacing: 8) {
+            // Progress pill
+            let progress = exerciseProgress
+            if progress.total > 0 {
+                compactProgressPill(progress: progress)
+            }
+            
             // Duration pill
             compactDurationPill
             
@@ -217,13 +315,28 @@ struct ActiveWorkoutFullScreenView: View {
                 compactRestTimerPill
             }
         }
-        .padding(.horizontal)
+        .padding(.horizontal, ActiveWorkoutLayout.contentPadding)
         .padding(.vertical, 8)
         .background(
             Color(.systemBackground)
                 .shadow(color: .black.opacity(0.05), radius: 2, y: 1)
         )
         .animation(.spring(response: 0.3, dampingFraction: 0.8), value: scrollOffset)
+    }
+    
+    private func compactProgressPill(progress: (completed: Int, total: Int)) -> some View {
+        HStack(spacing: 6) {
+            Image(systemName: "checklist")
+                .font(.system(size: 12, weight: .medium))
+                .foregroundStyle(.orange)
+            Text("\(progress.completed)/\(progress.total)")
+                .font(.system(size: 14, weight: .semibold, design: .rounded))
+                .foregroundStyle(.primary)
+        }
+        .padding(.horizontal, 12)
+        .padding(.vertical, 8)
+        .background(Color(.systemGray6))
+        .cornerRadius(12)
     }
     
     private var compactDurationPill: some View {
@@ -328,10 +441,16 @@ struct ActiveWorkoutFullScreenView: View {
     @ViewBuilder
     private func exercisesSection(workout: Workout) -> some View {
         if let entries = workout.entries?.sorted(by: { $0.order < $1.order }), !entries.isEmpty {
+            let firstIncompleteId = entries.first(where: { entry in
+                let sets = entry.getSets()
+                return sets.isEmpty || !sets.allSatisfy { $0.isCompleted }
+            })?.id
+            
             ForEach(entries) { entry in
                 ExerciseSectionView(
                     entry: entry,
                     viewModel: viewModel,
+                    isActive: entry.id == firstIncompleteId,
                     onSetCompleted: {
                         // Get default rest duration from user settings
                         let defaultRestDuration = profileViewModel.profile?.defaultRestTime ?? 90
@@ -375,6 +494,16 @@ struct ActiveWorkoutFullScreenView: View {
                 .cornerRadius(12)
         }
         .padding(.top, 8)
+    }
+    
+    private var cancelAlertMessage: String {
+        guard let workout = workoutState.activeWorkout else { return "Are you sure you want to discard this workout?" }
+        let completed = countCompletedSets(in: workout)
+        if completed > 0 {
+            return "You've completed \(completed) set\(completed == 1 ? "" : "s"). Are you sure you want to discard this workout? This cannot be undone."
+        } else {
+            return "Are you sure you want to discard this workout? All progress will be lost."
+        }
     }
     
     private func countCompletedSets(in workout: Workout) -> Int {

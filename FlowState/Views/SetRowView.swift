@@ -8,7 +8,9 @@
 import SwiftUI
 
 struct SetRowView: View {
+    @ObservedObject var viewModel: ActiveWorkoutViewModel
     let set: SetRecord
+    let lastSessionSet: SetRecord?
     let onUpdate: (SetRecord, Int?, Double?, Bool) -> Void
     let onDelete: () -> Void
     let onLabelUpdate: ((SetRecord, SetLabel) -> Void)?
@@ -17,16 +19,14 @@ struct SetRowView: View {
     @State private var repsText: String
     @State private var weightText: String
     @State private var showingNumPad = false
-    @State private var editingField: Field?
+    @State private var editingField: ActiveWorkoutField?
     @State private var numPadValue: String = ""
     @State private var showingLabelPicker = false
     
-    enum Field {
-        case weight, reps
-    }
-    
-    init(set: SetRecord, preferredUnits: Units = .lbs, onUpdate: @escaping (SetRecord, Int?, Double?, Bool) -> Void, onDelete: @escaping () -> Void, onLabelUpdate: ((SetRecord, SetLabel) -> Void)? = nil) {
+    init(viewModel: ActiveWorkoutViewModel, set: SetRecord, lastSessionSet: SetRecord? = nil, preferredUnits: Units = .lbs, onUpdate: @escaping (SetRecord, Int?, Double?, Bool) -> Void, onDelete: @escaping () -> Void, onLabelUpdate: ((SetRecord, SetLabel) -> Void)? = nil) {
+        self.viewModel = viewModel
         self.set = set
+        self.lastSessionSet = lastSessionSet
         self.preferredUnits = preferredUnits
         self.onUpdate = onUpdate
         self.onDelete = onDelete
@@ -41,13 +41,29 @@ struct SetRowView: View {
     }
     
     var body: some View {
-        ViewThatFits(in: .horizontal) {
-            wideLayout
-            compactLayout
+        HStack(spacing: 6) {
+            dragHandle
+            setNumber
+
+            HStack(spacing: 4) {
+                weightField
+                
+                Text("×")
+                    .font(.caption)
+                    .fontWeight(.semibold)
+                    .foregroundStyle(.secondary)
+                
+                repsField
+            }
+            
+            Spacer(minLength: 2)
+            
+            labelIndicator
+            completionButton
         }
-        .padding(.vertical, 10)
-        .padding(.horizontal, 12)
-        .frame(minHeight: 60, alignment: .center)
+        .padding(.vertical, 4)
+        .padding(.horizontal, 6)
+        .frame(minHeight: 48, alignment: .center)
         .background(
             RoundedRectangle(cornerRadius: 12)
                 .fill(set.isCompleted ? Color(.systemGray6).opacity(0.8) : Color(.systemBackground))
@@ -99,131 +115,115 @@ struct SetRowView: View {
         }
     }
 
-    // MARK: - Layout (responsive)
-
-    private var wideLayout: some View {
-        HStack(spacing: 10) {
-            dragHandle
-            setNumber
-
-            weightField(compact: false)
-
-            Text("×")
-                .font(.callout)
-                .fontWeight(.semibold)
-                .foregroundStyle(.secondary)
-                .padding(.horizontal, 2)
-
-            repsField(compact: false)
-
-            Spacer(minLength: 0)
-            labelIndicator
-            completionButton
-        }
-    }
-
-    private var compactLayout: some View {
-        HStack(spacing: 8) {
-            dragHandle
-            setNumber
-
-            weightField(compact: true)
-            repsField(compact: true)
-
-            Spacer(minLength: 0)
-            labelIndicator
-            completionButton
-        }
-    }
-
     private var dragHandle: some View {
         Image(systemName: "line.3.horizontal")
-            .font(.system(size: 18, weight: .medium))
-            .foregroundStyle(.secondary.opacity(0.6))
-            .frame(width: 24, height: 44)
+            .font(.system(size: 14, weight: .medium))
+            .foregroundStyle(.secondary.opacity(0.4))
+            .frame(width: 20, height: 44)
             .contentShape(Rectangle())
             .accessibilityHidden(true)
     }
 
     private var setNumber: some View {
         Text("\(set.setNumber)")
-            .font(.title3)
+            .font(.system(.subheadline, design: .rounded))
             .fontWeight(.bold)
             .foregroundStyle(.secondary)
-            .frame(minWidth: 26, alignment: .center)
+            .frame(width: 22, alignment: .center)
             .accessibilityLabel("Set \(set.setNumber)")
     }
 
-    private func weightField(compact: Bool) -> some View {
-        Button {
-            editingField = .weight
-            numPadValue = weightText.isEmpty ? "" : weightText
-            showingNumPad = true
-        } label: {
-            fieldBox(
-                value: weightText,
-                placeholder: "0.0",
-                subtitle: preferredUnits.rawValue,
-                isActive: showingNumPad && editingField == .weight,
-                compact: compact
-            )
+    private var weightField: some View {
+        HStack(spacing: 4) {
+            stepperButton(systemName: "minus") { adjustWeight(by: preferredUnits == .kg ? -1.0 : -2.5) }
+            
+            Button {
+                editingField = .weight
+                numPadValue = weightText.isEmpty ? "" : weightText
+                showingNumPad = true
+            } label: {
+                fieldBox(
+                    value: weightText,
+                    placeholder: "0.0",
+                    subtitle: preferredUnits.rawValue,
+                    isActive: showingNumPad && editingField == .weight
+                )
+            }
+            .buttonStyle(.plain)
+            
+            stepperButton(systemName: "plus") { adjustWeight(by: preferredUnits == .kg ? 1.0 : 2.5) }
         }
-        .buttonStyle(.plain)
-        .layoutPriority(compact ? 1 : 2)
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .accessibilityLabel("Weight")
     }
 
-    private func repsField(compact: Bool) -> some View {
-        Button {
-            editingField = .reps
-            numPadValue = repsText.isEmpty ? "" : repsText
-            showingNumPad = true
-        } label: {
-            fieldBox(
-                value: repsText,
-                placeholder: "0",
-                subtitle: "reps",
-                isActive: showingNumPad && editingField == .reps,
-                compact: compact
-            )
+    private var repsField: some View {
+        HStack(spacing: 4) {
+            stepperButton(systemName: "minus") { adjustReps(by: -1) }
+            
+            Button {
+                editingField = .reps
+                numPadValue = repsText.isEmpty ? "" : repsText
+                showingNumPad = true
+            } label: {
+                fieldBox(
+                    value: repsText,
+                    placeholder: "0",
+                    subtitle: "reps",
+                    isActive: showingNumPad && editingField == .reps
+                )
+            }
+            .buttonStyle(.plain)
+            
+            stepperButton(systemName: "plus") { adjustReps(by: 1) }
         }
-        .buttonStyle(.plain)
-        .layoutPriority(compact ? 1 : 2)
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .accessibilityLabel("Reps")
     }
 
     private func fieldBox(
         value: String,
         placeholder: String,
         subtitle: String,
-        isActive: Bool,
-        compact: Bool
+        isActive: Bool
     ) -> some View {
-        VStack(alignment: .leading, spacing: compact ? 1 : 2) {
+        VStack(alignment: .center, spacing: 1) {
             Text(value.isEmpty ? placeholder : value)
-                .font(.system(size: compact ? 18 : 20, weight: .semibold, design: .default))
+                .font(.system(size: 18, weight: .bold, design: .rounded))
                 .foregroundStyle(value.isEmpty ? .secondary : .primary)
                 .lineLimit(1)
-                .minimumScaleFactor(0.7)
-
-            Text(subtitle)
-                .font(.caption2)
-                .foregroundStyle(.secondary)
-                .lineLimit(1)
                 .minimumScaleFactor(0.8)
+
+            VStack(spacing: 0) {
+                Text(subtitle)
+                    .font(.system(size: 10))
+                    .foregroundStyle(.secondary)
+                
+                if let last = lastSessionSet {
+                    let lastValue: String = {
+                        if subtitle == "reps" {
+                            return "\(last.reps ?? 0)"
+                        } else {
+                            let displayWeight = last.weight.map { w in
+                                preferredUnits == .kg ? w / 2.20462 : w
+                            }
+                            return displayWeight.map { String(format: "%.1f", $0) } ?? "0"
+                        }
+                    }()
+                    
+                    Text("Last: \(lastValue)")
+                        .font(.system(size: 9, weight: .medium, design: .rounded))
+                        .foregroundStyle(.orange.opacity(0.8))
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.7)
+                }
+            }
         }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(.vertical, compact ? 10 : 12)
-        .padding(.horizontal, compact ? 10 : 12)
-        .background(isActive ? Color.orange.opacity(0.15) : Color(.systemGray6))
+        .frame(minWidth: 48, maxWidth: 72)
+        .padding(.vertical, 3)
+        .padding(.horizontal, 2)
+        .background(isActive ? Color.orange.opacity(0.1) : Color(.systemGray6))
         .overlay(
-            RoundedRectangle(cornerRadius: 10)
-                .stroke(isActive ? Color.orange : Color.clear, lineWidth: 2)
+            RoundedRectangle(cornerRadius: 8)
+                .stroke(isActive ? Color.orange : Color.clear, lineWidth: 1.5)
         )
-        .cornerRadius(10)
-        .contentShape(Rectangle())
+        .cornerRadius(8)
     }
 
     private var labelIndicator: some View {
@@ -277,6 +277,38 @@ struct SetRowView: View {
         }
     }
     
+    private func adjustWeight(by amount: Double) {
+        let currentWeight = Double(weightText) ?? 0.0
+        let newWeight = max(0, currentWeight + amount)
+        weightText = String(format: "%.1f", newWeight)
+        
+        let weightInLbs = preferredUnits == .kg ? newWeight * 2.20462 : newWeight
+        onUpdate(set, set.reps, weightInLbs, set.isCompleted)
+    }
+    
+    private func adjustReps(by amount: Int) {
+        let currentReps = Int(repsText) ?? 0
+        let newReps = max(0, currentReps + amount)
+        repsText = "\(newReps)"
+        onUpdate(set, newReps, set.weight, set.isCompleted)
+    }
+    
+    private func stepperButton(systemName: String, action: @escaping () -> Void) -> some View {
+        Button(action: {
+            let impact = UIImpactFeedbackGenerator(style: .light)
+            impact.impactOccurred()
+            action()
+        }) {
+            Image(systemName: systemName)
+                .font(.system(size: 10, weight: .bold))
+                .foregroundStyle(.orange)
+                .frame(width: 22, height: 22)
+                .background(Color.orange.opacity(0.1))
+                .clipShape(Circle())
+        }
+        .buttonStyle(.plain)
+    }
+    
     private func saveNumPadValue() {
         guard let field = editingField else { return }
         
@@ -299,8 +331,10 @@ struct SetRowView: View {
 }
 
 #Preview {
+    let vm = ActiveWorkoutViewModel()
     List {
         SetRowView(
+            viewModel: vm,
             set: SetRecord(setNumber: 1, reps: 10, weight: 135, isCompleted: false, label: .warmup),
             preferredUnits: .lbs,
             onUpdate: { _, _, _, _ in },
@@ -309,6 +343,7 @@ struct SetRowView: View {
         )
         
         SetRowView(
+            viewModel: vm,
             set: SetRecord(setNumber: 2, reps: 10, weight: 135, isCompleted: true, label: .failure),
             preferredUnits: .kg,
             onUpdate: { _, _, _, _ in },
@@ -317,6 +352,7 @@ struct SetRowView: View {
         )
         
         SetRowView(
+            viewModel: vm,
             set: SetRecord(setNumber: 3, reps: 8, weight: 185, isCompleted: false, label: .prAttempt),
             preferredUnits: .lbs,
             onUpdate: { _, _, _, _ in },

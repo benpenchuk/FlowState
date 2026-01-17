@@ -11,15 +11,15 @@ import SwiftUI
 
 enum ActiveWorkoutLayout {
     /// Padding around the scroll content body.
-    static let contentPadding: CGFloat = 16
+    static let contentPadding: CGFloat = 14
 
     /// Outer padding inside an exercise card.
-    static let exerciseCardPadding: CGFloat = 16
+    static let exerciseCardPadding: CGFloat = 12
 
     /// Spacing between major sections inside the workout body.
-    static let workoutSectionSpacing: CGFloat = 20
+    static let workoutSectionSpacing: CGFloat = 16
 
     /// Standard corner radius used by exercise cards.
-    static let exerciseCardCornerRadius: CGFloat = 12
+    static let exerciseCardCornerRadius: CGFloat = 10
 }
 

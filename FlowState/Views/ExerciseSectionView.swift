@@ -12,6 +12,7 @@ import UniformTypeIdentifiers
 struct ExerciseSectionView: View {
     let entry: WorkoutEntry
     @ObservedObject var viewModel: ActiveWorkoutViewModel
+    var isActive: Bool = false
     var onSetCompleted: (() -> Void)? = nil
     var preferredUnits: Units = .lbs
     
@@ -27,6 +28,7 @@ struct ExerciseSectionView: View {
     @State private var currentDragId: UUID? = nil
     @State private var showingExerciseDetails = false
     @State private var showingExerciseHistory = false
+    @State private var lastSessionSets: [SetRecord] = []
     
     private var equipmentIcon: (name: String, color: Color)? {
         guard let exercise = entry.exercise,
@@ -71,10 +73,34 @@ struct ExerciseSectionView: View {
         entry.exercise?.getInstructions() ?? ExerciseInstructions()
     }
     
+    private var cardBackgroundColor: Color {
+        if isActive {
+            return Color.orange.opacity(0.05)
+        } else if allSetsCompleted && !sets.isEmpty {
+            return Color.green.opacity(0.03)
+        } else {
+            return Color(.systemGray6).opacity(0.5)
+        }
+    }
+    
+    private var cardStrokeColor: Color {
+        if isActive {
+            return Color.orange.opacity(0.5)
+        } else if allSetsCompleted && !sets.isEmpty {
+            return Color.green.opacity(0.3)
+        } else {
+            return Color.clear
+        }
+    }
+    
+    private var cardStrokeWidth: CGFloat {
+        isActive ? 2 : 1
+    }
+    
     var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
+        VStack(alignment: .leading, spacing: 8) {
             // Exercise header
-            HStack(spacing: 8) {
+            HStack(spacing: 4) {
                 Button {
                     withAnimation { isExpanded.toggle() }
                 } label: {
@@ -95,6 +121,13 @@ struct ExerciseSectionView: View {
                 Text(entry.exercise?.name ?? "Unknown Exercise")
                     .font(.headline)
                     .padding(.horizontal, 4)
+                
+                if allSetsCompleted && !sets.isEmpty {
+                    Image(systemName: "checkmark.circle.fill")
+                        .foregroundStyle(.green)
+                        .font(.subheadline)
+                        .transition(.scale.combined(with: .opacity))
+                }
                 
                 if !isExpanded {
                     Text("\(sets.count) set\(sets.count == 1 ? "" : "s")")
@@ -122,14 +155,23 @@ struct ExerciseSectionView: View {
             if isExpanded {
                 if !sets.isEmpty {
                     VStack(spacing: 4) {
-                        ForEach(Array(sets.enumerated()), id: \.element.id) { _, set in
+                        ForEach(Array(sets.enumerated()), id: \.element.id) { index, set in
+                            // Try to match by set number first, then fall back to index if needed
+                            let lastSet = lastSessionSets.first(where: { $0.setNumber == set.setNumber }) ?? 
+                                         (index < lastSessionSets.count ? lastSessionSets[index] : nil)
+                            
                             SetRowView(
+                                viewModel: viewModel,
                                 set: set,
+                                lastSessionSet: lastSet,
                                 preferredUnits: preferredUnits,
                                 onUpdate: { updatedSet, reps, weight, isCompleted in
                                     let wasCompleted = updatedSet.isCompleted
                                     viewModel.updateSet(in: entry, set: updatedSet, reps: reps, weight: weight, isCompleted: isCompleted)
-                                    if !wasCompleted && isCompleted { onSetCompleted?() }
+                                    if !wasCompleted && isCompleted { 
+                                        onSetCompleted?()
+                                        viewModel.autoAdvance(from: entry, completedSet: updatedSet)
+                                    }
                                 },
                                 onDelete: {
                                     let allSets = entry.getSets()
@@ -146,6 +188,7 @@ struct ExerciseSectionView: View {
                                     viewModel.updateSetLabel(in: entry, set: updatedSet, label: label)
                                 }
                             )
+                            .id(set.id)
                             .contentShape(Rectangle())
                             .opacity(draggedSetId == set.id ? 0.5 : 1.0)
                             .overlay(
@@ -168,7 +211,7 @@ struct ExerciseSectionView: View {
                                 }
                                 return itemProvider
                             } preview: {
-                                SetRowView(set: set, preferredUnits: preferredUnits, onUpdate: { _, _, _, _ in }, onDelete: {}, onLabelUpdate: nil)
+                                SetRowView(viewModel: viewModel, set: set, preferredUnits: preferredUnits, onUpdate: { _, _, _, _ in }, onDelete: {}, onLabelUpdate: nil)
                                     .frame(width: 350)
                                     .background(Color(.systemBackground))
                             }
@@ -195,7 +238,7 @@ struct ExerciseSectionView: View {
                     .font(.subheadline)
                     .foregroundStyle(.tint)
                     .frame(maxWidth: .infinity)
-                    .padding(.vertical, 8)
+                    .padding(.vertical, 6)
                     .background(Color(.systemGray6))
                     .cornerRadius(8)
                 }
@@ -318,9 +361,20 @@ struct ExerciseSectionView: View {
             }
         }
         .padding(ActiveWorkoutLayout.exerciseCardPadding)
-        .background(Color(.systemGray6).opacity(0.5))
-        .cornerRadius(ActiveWorkoutLayout.exerciseCardCornerRadius)
-        .onAppear { notesText = entry.notes ?? "" }
+        .background(
+            RoundedRectangle(cornerRadius: ActiveWorkoutLayout.exerciseCardCornerRadius)
+                .fill(cardBackgroundColor)
+        )
+        .overlay(
+            RoundedRectangle(cornerRadius: ActiveWorkoutLayout.exerciseCardCornerRadius)
+                .stroke(cardStrokeColor, lineWidth: cardStrokeWidth)
+        )
+        .onAppear { 
+            notesText = entry.notes ?? "" 
+            if let exercise = entry.exercise {
+                lastSessionSets = viewModel.getLastSessionSets(for: exercise)
+            }
+        }
         .alert("Remove Exercise", isPresented: $showingDeleteExerciseAlert) {
             Button("Cancel", role: .cancel) {}
             Button("Remove", role: .destructive) { viewModel.deleteExercise(entry) }

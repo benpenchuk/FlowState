@@ -10,9 +10,16 @@ import SwiftData
 import SwiftUI
 import Combine
 
+enum ActiveWorkoutField {
+    case weight, reps
+}
+
 final class ActiveWorkoutViewModel: ObservableObject {
     @Published var activeWorkout: Workout?
     @Published var detectedPR: PersonalRecord? = nil // PR detected when set is completed
+    @Published var focusedSetId: UUID? = nil
+    @Published var focusedField: ActiveWorkoutField? = nil
+    @Published var scrollToSetId: UUID? = nil
     
     private var modelContext: ModelContext?
     private var progressViewModel: ProgressViewModel?
@@ -276,6 +283,78 @@ final class ActiveWorkoutViewModel: ObservableObject {
                 print("Error updating set: \(error)")
             }
         }
+    }
+    
+    func autoAdvance(from entry: WorkoutEntry, completedSet: SetRecord) {
+        guard let workout = activeWorkout else { return }
+        
+        // 1. Try to find the next incomplete set in the CURRENT entry
+        let sets = entry.getSets().sorted { $0.setNumber < $1.setNumber }
+        if let nextIncomplete = sets.first(where: { !$0.isCompleted && $0.setNumber > completedSet.setNumber }) {
+            withAnimation(.spring(response: 0.4, dampingFraction: 0.8)) {
+                scrollToSetId = nextIncomplete.id
+            }
+            return
+        }
+        
+        // 2. If all sets in current entry are done, try the next entry
+        if let entries = workout.entries?.sorted(by: { $0.order < $1.order }) {
+            if let currentEntryIndex = entries.firstIndex(where: { $0.id == entry.id }),
+               currentEntryIndex + 1 < entries.count {
+                let nextEntry = entries[currentEntryIndex + 1]
+                let nextSets = nextEntry.getSets().sorted { $0.setNumber < $1.setNumber }
+                if let firstIncomplete = nextSets.first(where: { !$0.isCompleted }) {
+                    withAnimation(.spring(response: 0.4, dampingFraction: 0.8)) {
+                        scrollToSetId = firstIncomplete.id
+                    }
+                }
+            }
+        }
+    }
+    
+    func getLastSessionSets(for exercise: Exercise) -> [SetRecord] {
+        guard let modelContext = modelContext else { return [] }
+        
+        // Fetch recent completed workouts
+        let descriptor = FetchDescriptor<Workout>(
+            predicate: #Predicate<Workout> { workout in
+                workout.completedAt != nil
+            },
+            sortBy: [SortDescriptor(\.completedAt, order: .reverse)]
+        )
+        
+        do {
+            let workouts = try modelContext.fetch(descriptor)
+            
+            // Look for the most recent workout that contains this exercise
+            for workout in workouts {
+                guard let entries = workout.entries else { continue }
+                
+                // Find all entries for this exercise in this workout (in case of supersets/multiple entries)
+                let matchingEntries = entries.filter { entry in
+                    if let entryExercise = entry.exercise {
+                        return entryExercise.id == exercise.id || entryExercise.name == exercise.name
+                    }
+                    return false
+                }.sorted { $0.order < $1.order }
+                
+                if !matchingEntries.isEmpty {
+                    // Combine sets from all matching entries in this workout
+                    var allSets: [SetRecord] = []
+                    for entry in matchingEntries {
+                        allSets.append(contentsOf: entry.getSets())
+                    }
+                    
+                    // Return only completed sets, sorted by their original set numbers
+                    return allSets.filter { $0.isCompleted }
+                        .sorted { $0.setNumber < $1.setNumber }
+                }
+            }
+        } catch {
+            print("Error fetching last session sets: \(error)")
+        }
+        
+        return []
     }
     
     func removeSet(from entry: WorkoutEntry, set: SetRecord) {
