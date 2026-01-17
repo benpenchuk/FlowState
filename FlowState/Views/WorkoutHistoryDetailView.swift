@@ -24,7 +24,7 @@ struct WorkoutHistoryDetailView: View {
     
     var body: some View {
         ScrollView {
-            VStack(alignment: .leading, spacing: 20) {
+            VStack(alignment: .leading, spacing: ActiveWorkoutLayout.workoutSectionSpacing) {
                 // Header info
                 headerSection
                 
@@ -154,17 +154,24 @@ struct WorkoutHistoryDetailView: View {
                     
                     Text(notes)
                         .font(.body)
-                        .padding()
+                        .padding(12)
                         .frame(maxWidth: .infinity, alignment: .leading)
-                        .background(Color(.systemBackground))
+                        .background(Color(.systemBackground).opacity(0.5))
                         .cornerRadius(8)
                 }
             }
         }
-        .padding()
+        .padding(ActiveWorkoutLayout.exerciseCardPadding)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(Color(.systemGray6))
-        .cornerRadius(12)
+        .background(
+            RoundedRectangle(cornerRadius: ActiveWorkoutLayout.exerciseCardCornerRadius)
+                .fill(Color(.secondarySystemGroupedBackground))
+                .shadow(color: .black.opacity(0.08), radius: 4, x: 0, y: 2)
+        )
+        .overlay(
+            RoundedRectangle(cornerRadius: ActiveWorkoutLayout.exerciseCardCornerRadius)
+                .stroke(Color(.systemGray5), lineWidth: 0.8)
+        )
     }
     
     
@@ -186,18 +193,96 @@ struct HistoricalExerciseSectionView: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text(entry.exercise?.name ?? "Unknown Exercise")
-                .font(.headline)
-                .padding(.horizontal, 4)
+            HStack(alignment: .firstTextBaseline) {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(entry.exercise?.category.uppercased() ?? "EXERCISE")
+                        .font(.caption2)
+                        .fontWeight(.bold)
+                        .foregroundStyle(.secondary)
+                    
+                    Text(entry.exercise?.name ?? "Unknown Exercise")
+                        .font(.headline)
+                }
+                
+                Spacer()
+                
+                if entry.totalVolume > 0 {
+                    VStack(alignment: .trailing, spacing: 4) {
+                        Text("Volume")
+                            .font(.caption2)
+                            .fontWeight(.bold)
+                            .foregroundStyle(.secondary)
+                        
+                        Text(formatVolume(entry.totalVolume))
+                            .font(.subheadline)
+                            .fontWeight(.semibold)
+                            .foregroundStyle(.primary)
+                    }
+                }
+            }
+            .padding(.horizontal, 4)
+            .padding(.bottom, 4)
+            
+            Divider()
+                .opacity(0.5)
             
             let sets = entry.getSets().sorted { $0.setNumber < $1.setNumber }
-            ForEach(sets) { set in
-                HistoricalSetRowView(set: set, preferredUnits: preferredUnits)
+            VStack(spacing: 0) {
+                ForEach(sets) { set in
+                    HistoricalSetRowView(set: set, preferredUnits: preferredUnits)
+                    
+                    if set.id != sets.last?.id {
+                        Divider()
+                            .padding(.leading, 44) // Align with the start of the set number text
+                            .opacity(0.3)
+                    }
+                }
+            }
+            
+            // Exercise Notes
+            if let notes = entry.notes, !notes.isEmpty {
+                VStack(alignment: .leading, spacing: 6) {
+                    Divider()
+                        .padding(.vertical, 4)
+                    
+                    Label("Notes", systemImage: "note.text")
+                        .font(.caption)
+                        .fontWeight(.bold)
+                        .foregroundStyle(.secondary)
+                    
+                    Text(notes)
+                        .font(.subheadline)
+                        .foregroundStyle(.primary)
+                        .padding(8)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .background(Color(.systemBackground).opacity(0.5))
+                        .cornerRadius(8)
+                }
+                .padding(.horizontal, 4)
             }
         }
-        .padding()
-        .background(Color(.systemGray6).opacity(0.5))
-        .cornerRadius(12)
+        .padding(ActiveWorkoutLayout.exerciseCardPadding)
+        .background(
+            RoundedRectangle(cornerRadius: ActiveWorkoutLayout.exerciseCardCornerRadius)
+                .fill(Color(.secondarySystemGroupedBackground))
+                .shadow(color: .black.opacity(0.08), radius: 4, x: 0, y: 2)
+        )
+        .overlay(
+            RoundedRectangle(cornerRadius: ActiveWorkoutLayout.exerciseCardCornerRadius)
+                .stroke(Color(.systemGray5), lineWidth: 0.8)
+        )
+    }
+    
+    private func formatVolume(_ volumeInLbs: Double) -> String {
+        let displayVolume = preferredUnits == .kg ? volumeInLbs / 2.20462 : volumeInLbs
+        let unit = preferredUnits == .kg ? "kg" : "lbs"
+        
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        formatter.maximumFractionDigits = 0
+        
+        let formatted = formatter.string(from: NSNumber(value: displayVolume)) ?? "\(Int(displayVolume))"
+        return "\(formatted) \(unit)"
     }
 }
 
@@ -206,56 +291,114 @@ struct HistoricalSetRowView: View {
     let preferredUnits: Units
     
     var body: some View {
-        HStack(spacing: 12) {
-            // Status icon (checkmark for completed, dash for skipped)
-            if set.isCompleted {
-                Image(systemName: "checkmark")
-                    .font(.subheadline)
-                    .fontWeight(.semibold)
-                    .foregroundStyle(.green)
-                    .frame(width: 20)
-            } else {
-                Image(systemName: "minus")
-                    .font(.subheadline)
-                    .fontWeight(.semibold)
-                    .foregroundStyle(.secondary)
-                    .frame(width: 20)
+        HStack(spacing: 16) {
+            // Set Label Badge or Status icon
+            ZStack {
+                if set.label != .none {
+                    Text(labelInitial(for: set.label))
+                        .font(.system(size: 10, weight: .bold))
+                        .foregroundStyle(.white)
+                        .frame(width: 20, height: 20)
+                        .background(labelColor(for: set.label))
+                        .clipShape(Circle())
+                } else {
+                    if set.isCompleted {
+                        Image(systemName: "checkmark.circle.fill")
+                            .font(.subheadline)
+                            .foregroundStyle(.green)
+                            .frame(width: 20, height: 20)
+                    } else {
+                        Image(systemName: "xmark.circle.fill")
+                            .font(.subheadline)
+                            .foregroundStyle(.secondary)
+                            .frame(width: 20, height: 20)
+                    }
+                }
             }
+            .frame(width: 24)
             
-            // Set label
+            // Set number
             Text("Set \(set.setNumber)")
-                .font(.body)
-                .foregroundStyle(.primary)
-                .frame(width: 60, alignment: .leading)
+                .font(.body.monospacedDigit())
+                .foregroundStyle(.secondary)
+                .frame(width: 55, alignment: .leading)
             
             // Weight and reps or skipped
-            if set.isCompleted {
-                if let weight = set.weight, let reps = set.reps {
-                    let displayWeight = preferredUnits == .kg ? weight / 2.20462 : weight
-                    let unit = preferredUnits == .kg ? "kg" : "lbs"
-                    Text("\(displayWeight, specifier: "%.1f") \(unit) × \(reps)")
-                        .font(.body)
-                        .foregroundStyle(.primary)
-                } else if let reps = set.reps {
-                    Text("\(reps) reps")
-                        .font(.body)
-                        .foregroundStyle(.primary)
+            Group {
+                if set.isCompleted {
+                    HStack(spacing: 4) {
+                        if let weight = set.weight, let reps = set.reps {
+                            let displayWeight = preferredUnits == .kg ? weight / 2.20462 : weight
+                            let unit = preferredUnits == .kg ? "kg" : "lbs"
+                            
+                            let weightStr = displayWeight.truncatingRemainder(dividingBy: 1) == 0 ? 
+                                String(format: "%.0f", displayWeight) : 
+                                String(format: "%.1f", displayWeight)
+                            
+                            Text(weightStr)
+                                .font(.body.monospacedDigit())
+                                .fontWeight(.semibold)
+                            
+                            Text(unit)
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                            
+                            Text("×")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                                .padding(.horizontal, 2)
+                            
+                            Text("\(reps)")
+                                .font(.body.monospacedDigit())
+                                .fontWeight(.semibold)
+                            
+                            Text("reps")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        } else if let reps = set.reps {
+                            Text("\(reps)")
+                                .font(.body.monospacedDigit())
+                                .fontWeight(.semibold)
+                            Text("reps")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        } else {
+                            Text("—")
+                                .foregroundStyle(.secondary)
+                        }
+                    }
                 } else {
-                    Text("—")
-                        .font(.body)
+                    Text("skipped")
+                        .font(.subheadline)
                         .foregroundStyle(.secondary)
+                        .italic()
                 }
-            } else {
-                // Incomplete/skipped set
-                Text("skipped")
-                    .font(.body)
-                    .foregroundStyle(.secondary)
             }
             
             Spacer()
         }
-        .padding(.vertical, 8)
-        .padding(.horizontal, 12)
+        .padding(.vertical, 10)
+        .padding(.horizontal, 4)
+    }
+    
+    private func labelInitial(for label: SetLabel) -> String {
+        switch label {
+        case .warmup: return "W"
+        case .failure: return "F"
+        case .dropSet: return "D"
+        case .prAttempt: return "PR"
+        case .none: return ""
+        }
+    }
+    
+    private func labelColor(for label: SetLabel) -> Color {
+        switch label {
+        case .warmup: return .cyan
+        case .failure: return .red
+        case .dropSet: return .purple
+        case .prAttempt: return .yellow
+        case .none: return .gray
+        }
     }
 }
 

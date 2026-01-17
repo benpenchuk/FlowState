@@ -43,4 +43,12 @@ final class WorkoutEntry {
     func setSets(_ sets: [SetRecord]) {
         setsData = try? JSONEncoder().encode(sets)
     }
+
+    // Helper to calculate total volume for this entry
+    var totalVolume: Double {
+        getSets().reduce(0) { total, set in
+            guard set.isCompleted, let weight = set.weight, let reps = set.reps else { return total }
+            return total + (weight * Double(reps))
+        }
+    }
 }

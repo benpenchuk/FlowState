@@ -39,4 +39,22 @@ struct SetRecord: Codable, Identifiable {
         self.completedAt = completedAt
         self.label = label
     }
+    
+    func formattedValue(preferredUnits: Units) -> String {
+        guard isCompleted else { return "skipped" }
+        
+        if let weight = weight, let reps = reps {
+            let displayWeight = preferredUnits == .kg ? weight / 2.20462 : weight
+            let unit = preferredUnits == .kg ? "kg" : "lbs"
+            
+            let weightStr = displayWeight.truncatingRemainder(dividingBy: 1) == 0 ? 
+                String(format: "%.0f", displayWeight) : 
+                String(format: "%.1f", displayWeight)
+                
+            return "\(weightStr) \(unit) × \(reps)"
+        } else if let reps = reps {
+            return "\(reps) reps"
+        }
+        return "—"
+    }
 }
