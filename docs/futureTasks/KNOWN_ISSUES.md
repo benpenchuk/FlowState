@@ -42,6 +42,13 @@ This document tracks known issues, UI/UX improvements needed, and future enhance
 - **Status**: Partially Fixed (has timeout fallback)
 - **Notes**: Current implementation has 2-second timeout to clear state
 
+### Active Workout Scroll & Timer Pill Transition
+- **Issue**: Scrolling up in active workout causes buggy timer-to-pill transitions near the top
+- **Details**: The transition from full-screen timers to floating pills is not smooth when scrolling close to the top of the workout view
+- **Priority**: Medium
+- **Status**: Open
+- **Notes**: Complex scrolling animation issue requiring investigation of scroll position detection and transition logic
+
 ## Performance Issues
 
 None currently identified.

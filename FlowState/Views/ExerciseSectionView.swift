@@ -281,13 +281,37 @@ struct ExerciseSectionView: View {
                     .buttonStyle(.plain)
                     
                     if showingNotes {
-                        TextField("Add notes...", text: $notesText, axis: .vertical)
-                            .textFieldStyle(.roundedBorder)
-                            .lineLimit(3...)
-                            .font(.body)
-                            .onChange(of: notesText) { _, newValue in
-                                viewModel.updateExerciseNotes(in: entry, notes: newValue.isEmpty ? nil : newValue)
+                        VStack(alignment: .leading, spacing: 8) {
+                            TextEditor(text: $notesText)
+                                .frame(minHeight: 60, maxHeight: 120)
+                                .cornerRadius(8)
+                                .padding(4)
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 8)
+                                        .stroke(Color(.systemGray4), lineWidth: 1)
+                                )
+                                .font(.body)
+                                .accessibilityLabel("Exercise notes")
+                                .onAppear {
+                                    // Avoid double assignment if already loaded
+                                    if notesText.isEmpty { notesText = entry.notes ?? "" }
+                                }
+                            HStack {
+                                Spacer()
+                                Button(action: {
+                                    viewModel.updateExerciseNotes(in: entry, notes: notesText.isEmpty ? nil : notesText)
+                                    withAnimation { showingNotes = false }
+                                    hideKeyboard()
+                                }) {
+                                    Text("Done")
+                                        .font(.body)
+                                        .fontWeight(.medium)
+                                }
+                                .buttonStyle(.borderedProminent)
+                                .tint(.blue)
+                                .accessibilityLabel("Save notes and close")
                             }
+                        }
                     }
                 }
                 .padding(.top, 8)

@@ -40,15 +40,15 @@ struct HomeView: View {
                 
                 // Weekly Stats Card
                 weeklyStatsCard
-                
-                // Templates Section
-                templatesSection
-                
-                // Recent PRs Section
-                recentPRsSection
-                
+
                 // Quick Start Section
                 quickStartSection
+
+                // Templates Section
+                templatesSection
+
+                // Recent PRs Section
+                recentPRsSection
             }
             .padding()
         }
@@ -347,7 +347,7 @@ struct HomeView: View {
     private var templatesSection: some View {
         VStack(alignment: .leading, spacing: 16) {
             HStack {
-                Text("Workout Templates")
+                Text("Start From Template")
                     .font(.title2)
                     .fontWeight(.semibold)
                 
@@ -503,7 +503,7 @@ struct HomeView: View {
 struct TemplateCardView: View {
     let template: WorkoutTemplate
     let onTap: () -> Void
-    
+
     var body: some View {
         Button {
             onTap()
@@ -513,12 +513,12 @@ struct TemplateCardView: View {
                     .font(.headline)
                     .lineLimit(2)
                     .foregroundStyle(.primary)
-                
+
                 HStack {
                     Label("\(template.exercises?.count ?? 0)", systemImage: "dumbbell")
                         .font(.caption)
                         .foregroundStyle(.secondary)
-                    
+
                     Spacer()
                 }
             }

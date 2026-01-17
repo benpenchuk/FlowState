@@ -20,6 +20,15 @@ struct EditTemplateExerciseSheet: View {
     @State private var reps: Int
     @State private var weight: Double?
     @State private var hasWeight: Bool
+    @State private var showingCustomNumPad = false
+    @State private var numPadValue: String = ""
+    @State private var editingField: EditingField?
+    
+    enum EditingField {
+        case sets
+        case reps
+        case weight
+    }
     
     init(templateExercise: TemplateExercise, isTemporary: Bool = false, onSave: @escaping () -> Void) {
         self.templateExercise = templateExercise
@@ -42,7 +51,11 @@ struct EditTemplateExerciseSheet: View {
                 }
                 
                 Section {
-                    Stepper(value: $sets, in: 1...10) {
+                    Button {
+                        editingField = .sets
+                        numPadValue = String(sets)
+                        showingCustomNumPad = true
+                    } label: {
                         HStack {
                             Text("Sets")
                             Spacer()
@@ -50,8 +63,13 @@ struct EditTemplateExerciseSheet: View {
                                 .foregroundStyle(.secondary)
                         }
                     }
+                    .buttonStyle(.plain)
                     
-                    Stepper(value: $reps, in: 1...50) {
+                    Button {
+                        editingField = .reps
+                        numPadValue = String(reps)
+                        showingCustomNumPad = true
+                    } label: {
                         HStack {
                             Text("Reps")
                             Spacer()
@@ -59,23 +77,28 @@ struct EditTemplateExerciseSheet: View {
                                 .foregroundStyle(.secondary)
                         }
                     }
-                } header: {
-                    Text("Defaults")
-                }
-                
-                Section {
+                    .buttonStyle(.plain)
+                    
                     Toggle("Default Weight", isOn: $hasWeight)
                     
                     if hasWeight {
-                        HStack {
-                            TextField("Weight", value: $weight, format: .number.precision(.fractionLength(1)))
-                                .keyboardType(.decimalPad)
-                            Text("lbs")
-                                .foregroundStyle(.secondary)
+                        Button {
+                            editingField = .weight
+                            numPadValue = weight.map { String(format: "%.1f", $0) } ?? ""
+                            showingCustomNumPad = true
+                        } label: {
+                            HStack {
+                                Text(weight.map { String(format: "%.1f", $0) } ?? "0.0")
+                                    .foregroundStyle(.primary)
+                                Text("lbs")
+                                    .foregroundStyle(.secondary)
+                                Spacer()
+                            }
                         }
+                        .buttonStyle(.plain)
                     }
                 } header: {
-                    Text("Weight (Optional)")
+                    Text("Defaults")
                 }
             }
             .navigationTitle("Edit Exercise")
@@ -91,6 +114,40 @@ struct EditTemplateExerciseSheet: View {
                     Button("Save") {
                         saveExercise()
                     }
+                }
+            }
+            .sheet(isPresented: $showingCustomNumPad) {
+                if let field = editingField {
+                    CustomNumPadView(
+                        value: $numPadValue,
+                        showDecimal: field == .weight,
+                        fieldLabel: field == .sets ? "Sets" : (field == .reps ? "Reps" : "Weight"),
+                        preferredUnits: field == .weight ? .lbs : nil,
+                        onDone: {
+                            showingCustomNumPad = false
+                            
+                            switch field {
+                            case .sets:
+                                if let newSets = Int(numPadValue), newSets > 0 {
+                                    sets = newSets
+                                }
+                            case .reps:
+                                if let newReps = Int(numPadValue), newReps > 0 {
+                                    reps = newReps
+                                }
+                            case .weight:
+                                if let newWeight = Double(numPadValue) {
+                                    weight = newWeight
+                                } else if numPadValue.isEmpty {
+                                    weight = nil
+                                }
+                            }
+                            
+                            editingField = nil
+                        }
+                    )
+                    .presentationDetents([.height(500)])
+                    .presentationDragIndicator(.visible)
                 }
             }
         }
