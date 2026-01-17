@@ -42,3 +42,10 @@ git add .
 git commit -m "Describe what you did"
 git push
 ```
+
+## Editing
+```bash
+git add .
+git commit -m "Describe what you did"
+git push
+```

@@ -14,9 +14,6 @@ struct ProfileView: View {
     @State private var showingSettings = false
     @State private var isEditingName = false
     @State private var editedName = ""
-    @State private var showingClearDataAlert = false
-    @State private var showingAboutAlert = false
-    @State private var isPreferencesExpanded = false
     
     var body: some View {
         NavigationStack {
@@ -30,9 +27,6 @@ struct ProfileView: View {
                     
                     // Recent Achievements Section
                     recentAchievementsSection
-                    
-                    // Preferences Section
-                    preferencesSection
                 }
                 .padding()
             }
@@ -53,17 +47,6 @@ struct ProfileView: View {
             }
             .onAppear {
                 viewModel.setModelContext(modelContext)
-            }
-            .alert("Clear All Data", isPresented: $showingClearDataAlert) {
-                Button("Cancel", role: .cancel) {}
-                Button("Clear", role: .destructive) { clearAllData() }
-            } message: {
-                Text("This will permanently delete all workouts, exercises, templates, and PRs. This cannot be undone.")
-            }
-            .alert("About FlowState", isPresented: $showingAboutAlert) {
-                Button("OK", role: .cancel) {}
-            } message: {
-                Text("FlowState is a minimal workout tracker built with SwiftUI and SwiftData.")
             }
         }
     }
@@ -138,64 +121,6 @@ struct ProfileView: View {
         }
     }
     
-    private var preferencesSection: some View {
-        DisclosureGroup("Preferences", isExpanded: $isPreferencesExpanded) {
-            VStack(spacing: 0) {
-                if let profile = viewModel.profile {
-                    preferenceRow("Units") {
-                        Picker("Units", selection: Binding(get: { profile.units }, set: { viewModel.updatePreferredUnits($0) })) {
-                            ForEach(Units.allCases, id: \.self) { Text($0.rawValue.uppercased()).tag($0) }
-                        }
-                    }
-                    Divider()
-                    preferenceRow("Rest Time") {
-                        Picker("Rest Time", selection: Binding(get: { profile.defaultRestTime }, set: { viewModel.updateDefaultRestTime($0) })) {
-                            ForEach([30, 60, 90, 120, 180], id: \.self) { Text("\($0)s").tag($0) }
-                        }
-                    }
-                    Divider()
-                    preferenceRow("Appearance") {
-                        Picker("Appearance", selection: Binding(get: { profile.appearance }, set: { viewModel.updateAppearanceMode($0) })) {
-                            Text("Dark").tag(AppearanceMode.dark)
-                            Text("Light").tag(AppearanceMode.light)
-                            Text("System").tag(AppearanceMode.system)
-                        }
-                    }
-                    Divider()
-                    Button { showingAboutAlert = true } label: {
-                        preferenceRow("About FlowState") { Image(systemName: "chevron.right").font(.caption).foregroundStyle(.secondary) }
-                    }.buttonStyle(.plain)
-                    Divider()
-                    Button(role: .destructive) { showingClearDataAlert = true } label: {
-                        HStack { Text("Clear All Data"); Spacer() }.padding(.vertical, 12)
-                    }
-                }
-            }
-        }
-        .padding()
-        .background(Color(.systemGray6))
-        .cornerRadius(12)
-        .accentColor(.orange)
-    }
-    
-    private func preferenceRow<Content: View>(_ label: String, @ViewBuilder content: () -> Content) -> some View {
-        HStack {
-            Text(label)
-            Spacer()
-            content()
-        }
-        .padding(.vertical, 12)
-    }
-    
-    private func clearAllData() {
-        try? modelContext.delete(model: Workout.self)
-        try? modelContext.delete(model: Exercise.self)
-        try? modelContext.delete(model: WorkoutTemplate.self)
-        try? modelContext.delete(model: PersonalRecord.self)
-        try? modelContext.save()
-        viewModel.refreshStats()
-    }
-    
     private var recentAchievementsSection: some View {
         VStack(alignment: .leading, spacing: 12) {
             Text("Recent Achievements")
@@ -227,16 +152,11 @@ struct ProfileView: View {
     private func formatTotalVolume(_ volumeInLbs: Double) -> String {
         let preferredUnits = viewModel.profile?.units ?? .lbs
         let displayVolume = preferredUnits == .kg ? volumeInLbs / 2.20462 : volumeInLbs
+        let unitLabel = preferredUnits == .kg ? "kg" : "lbs"
         
-        // Format with comma separator, no decimals
-        let formatter = NumberFormatter()
-        formatter.numberStyle = .decimal
-        formatter.maximumFractionDigits = 0
-        
-        if let formatted = formatter.string(from: NSNumber(value: displayVolume)) {
-            return formatted
-        }
-        return "\(Int(displayVolume))"
+        // Use abbreviated formatting for large numbers (e.g., 24k, 2.1M)
+        let abbreviated = displayVolume.abbreviated()
+        return "\(abbreviated) \(unitLabel)"
     }
 }
 

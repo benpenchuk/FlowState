@@ -1,0 +1,8 @@
+{"hypothesisId":"A","message":"Fetching workouts","timestamp":1768680578326,"location":"HistoryViewModel.swift:fetch","data":{"context":"SwiftData.ModelContext"}}
+{"message":"Navigating with workout ID","timestamp":1768680579604,"hypothesisId":"F","location":"HistoryView.swift:nav","data":{"workoutId":"C7453E19-AF41-4B95-B6CD-F89AA2813874"}}
+{"location":"WorkoutHistoryDetailView.swift:fetchWorkout:start","data":{"workoutId":"C7453E19-AF41-4B95-B6CD-F89AA2813874"},"hypothesisId":"F","message":"Starting fetch","timestamp":1768680579625}
+{"location":"WorkoutHistoryDetailView.swift:fetchWorkout:success","message":"Fetch completed","timestamp":1768680579626,"hypothesisId":"F","data":{"count":1,"entriesCount":5,"found":true}}
+{"message":"Fetching workouts","hypothesisId":"A","timestamp":1768680679530,"data":{"context":"SwiftData.ModelContext"},"location":"HistoryViewModel.swift:fetch"}
+{"message":"Navigating with workout ID","location":"HistoryView.swift:nav","timestamp":1768680680371,"data":{"workoutId":"C7453E19-AF41-4B95-B6CD-F89AA2813874"},"hypothesisId":"F"}
+{"timestamp":1768680680392,"data":{"workoutId":"C7453E19-AF41-4B95-B6CD-F89AA2813874"},"location":"WorkoutHistoryDetailView.swift:fetchWorkout:start","message":"Starting fetch","hypothesisId":"F"}
+{"data":{"entriesCount":5,"found":true,"count":1},"timestamp":1768680680394,"location":"WorkoutHistoryDetailView.swift:fetchWorkout:success","message":"Fetch completed","hypothesisId":"F"}

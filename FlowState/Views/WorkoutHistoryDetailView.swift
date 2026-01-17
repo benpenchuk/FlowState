@@ -76,76 +76,82 @@ struct WorkoutHistoryDetailView: View {
     }
     
     private var headerSection: some View {
-        VStack(alignment: .leading, spacing: 12) {
+        VStack(alignment: .leading, spacing: 16) {
+            // Header info with Date
             if let completedAt = workout.completedAt {
-                HStack {
-                    Text(completedAt, format: .dateTime.month().day().year().hour().minute())
-                        .font(.subheadline)
-                        .foregroundStyle(.secondary)
-                    
-                    Spacer()
+                HStack(spacing: 6) {
+                    Image(systemName: "calendar")
+                    Text(completedAt, format: .dateTime.weekday(.wide).month().day().year())
+                    Text("•")
+                    Text(completedAt, format: .dateTime.hour().minute())
                 }
+                .font(.caption)
+                .fontWeight(.medium)
+                .foregroundStyle(.secondary)
             }
             
-            HStack(spacing: 20) {
-                InfoBadge(
-                    icon: "clock",
-                    title: "Duration",
-                    value: viewModel.formatDuration(duration)
-                )
+            VStack(alignment: .leading, spacing: 12) {
+                Text("Summary")
+                    .font(.subheadline)
+                    .fontWeight(.bold)
+                    .foregroundStyle(.secondary)
+                    .textCase(.uppercase)
                 
-                InfoBadge(
-                    icon: "dumbbell",
-                    title: "Exercises",
-                    value: "\(workout.entries?.count ?? 0)"
-                )
-                
-                InfoBadge(
-                    icon: "checkmark.circle",
-                    title: "Sets",
-                    value: "\(viewModel.countCompletedSets(in: workout))"
-                )
-                
-                if let volumeText = viewModel.formatVolume(workout.totalVolume, preferredUnits: profileViewModel.profile?.units ?? .lbs) {
+                LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())], spacing: 20) {
                     InfoBadge(
-                        icon: "scalemass",
-                        title: "Volume",
-                        value: volumeText
+                        icon: "clock",
+                        title: "Duration",
+                        value: viewModel.formatDuration(duration)
                     )
-                }
-            }
-            
-            // Effort Rating
-            if let effortRating = workout.effortRating {
-                HStack {
-                    Text("Effort:")
-                        .font(.subheadline)
-                        .foregroundStyle(.secondary)
-                    Text("\(effortRating)/10")
-                        .font(.subheadline)
-                        .fontWeight(.medium)
-                    Spacer()
-                }
-            }
-            
-            // Total Rest Time
-            if let totalRestTime = workout.totalRestTime, totalRestTime > 0 {
-                HStack {
-                    Text("Total rest:")
-                        .font(.subheadline)
-                        .foregroundStyle(.secondary)
-                    Text(formatRestTime(totalRestTime))
-                        .font(.subheadline)
-                    Spacer()
+                    
+                    InfoBadge(
+                        icon: "dumbbell",
+                        title: "Exercises",
+                        value: "\(workout.entries?.count ?? 0)"
+                    )
+                    
+                    InfoBadge(
+                        icon: "checkmark.circle",
+                        title: "Sets",
+                        value: "\(viewModel.countCompletedSets(in: workout))"
+                    )
+                    
+                    if let volumeText = viewModel.formatVolume(workout.totalVolume, preferredUnits: profileViewModel.profile?.units ?? .lbs) {
+                        InfoBadge(
+                            icon: "scalemass",
+                            title: "Volume",
+                            value: volumeText
+                        )
+                    }
+                    
+                    if let effortRating = workout.effortRating {
+                        InfoBadge(
+                            icon: "gauge.with.needle",
+                            title: "Effort",
+                            value: "\(effortRating)/10"
+                        )
+                    }
+                    
+                    if let totalRestTime = workout.totalRestTime, totalRestTime > 0 {
+                        InfoBadge(
+                            icon: "pause.circle",
+                            title: "Total Rest",
+                            value: formatRestTime(totalRestTime)
+                        )
+                    }
                 }
             }
             
             // Notes
             if let notes = workout.notes, !notes.isEmpty {
+                Divider()
+                
                 VStack(alignment: .leading, spacing: 8) {
-                    Text("Notes:")
+                    Label("Notes", systemImage: "note.text")
                         .font(.subheadline)
+                        .fontWeight(.bold)
                         .foregroundStyle(.secondary)
+                    
                     Text(notes)
                         .font(.body)
                         .padding()

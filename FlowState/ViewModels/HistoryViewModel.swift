@@ -130,22 +130,15 @@ final class HistoryViewModel: ObservableObject {
         return totalCompleted
     }
     
-    // Format volume with units conversion and comma separator
+    // Format volume with units conversion and abbreviated notation
     func formatVolume(_ volumeInLbs: Double?, preferredUnits: Units) -> String? {
         guard let volume = volumeInLbs, volume > 0 else { return nil }
         
         let displayVolume = preferredUnits == .kg ? volume / 2.20462 : volume
         let unit = preferredUnits == .kg ? "kg" : "lbs"
         
-        // Format with comma separator, no decimals
-        let formatter = NumberFormatter()
-        formatter.numberStyle = .decimal
-        formatter.maximumFractionDigits = 0
-        
-        if let formatted = formatter.string(from: NSNumber(value: displayVolume)) {
-            return "\(formatted) \(unit)"
-        }
-        return "\(Int(displayVolume)) \(unit)"
+        // Use abbreviated formatter (e.g., 16.2k, 1.5M)
+        return "\(displayVolume.abbreviated()) \(unit)"
     }
     
     // Format workout for export as shareable text
