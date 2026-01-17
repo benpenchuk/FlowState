@@ -41,34 +41,29 @@ struct SetRowView: View {
     }
     
     var body: some View {
-        HStack(spacing: 6) {
+        HStack(spacing: 8) {
             dragHandle
             setNumber
 
-            HStack(spacing: 4) {
+            HStack(spacing: 6) {
                 weightField
+                    .frame(maxWidth: .infinity)
                 
                 Text("×")
-                    .font(.caption)
-                    .fontWeight(.semibold)
-                    .foregroundStyle(.secondary)
+                    .font(.system(size: 14, weight: .bold, design: .rounded))
+                    .foregroundStyle(.secondary.opacity(0.3))
                 
                 repsField
+                    .frame(maxWidth: .infinity)
             }
-            
-            Spacer(minLength: 2)
             
             labelIndicator
             completionButton
         }
         .padding(.vertical, 4)
-        .padding(.horizontal, 6)
+        .padding(.horizontal, 4)
         .frame(minHeight: 48, alignment: .center)
-        .background(
-            RoundedRectangle(cornerRadius: 12)
-                .fill(set.isCompleted ? Color(.systemGray6).opacity(0.8) : Color(.systemBackground))
-                .shadow(color: .black.opacity(0.05), radius: 2, y: 1)
-        )
+        .background(set.isCompleted ? Color.green.opacity(0.05) : Color.clear)
         .swipeActions(edge: .leading, allowsFullSwipe: false) {
             Button(role: .destructive) {
                 onDelete()
@@ -145,7 +140,7 @@ struct SetRowView: View {
                 fieldBox(
                     value: weightText,
                     placeholder: "0.0",
-                    subtitle: preferredUnits.rawValue,
+                    isWeight: true,
                     isActive: showingNumPad && editingField == .weight
                 )
             }
@@ -167,7 +162,7 @@ struct SetRowView: View {
                 fieldBox(
                     value: repsText,
                     placeholder: "0",
-                    subtitle: "reps",
+                    isWeight: false,
                     isActive: showingNumPad && editingField == .reps
                 )
             }
@@ -180,50 +175,18 @@ struct SetRowView: View {
     private func fieldBox(
         value: String,
         placeholder: String,
-        subtitle: String,
+        isWeight: Bool,
         isActive: Bool
     ) -> some View {
-        VStack(alignment: .center, spacing: 1) {
-            Text(value.isEmpty ? placeholder : value)
-                .font(.system(size: 18, weight: .bold, design: .rounded))
-                .foregroundStyle(value.isEmpty ? .secondary : .primary)
-                .lineLimit(1)
-                .minimumScaleFactor(0.8)
-
-            VStack(spacing: 0) {
-                Text(subtitle)
-                    .font(.system(size: 10))
-                    .foregroundStyle(.secondary)
-                
-                if let last = lastSessionSet {
-                    let lastValue: String = {
-                        if subtitle == "reps" {
-                            return "\(last.reps ?? 0)"
-                        } else {
-                            let displayWeight = last.weight.map { w in
-                                preferredUnits == .kg ? w / 2.20462 : w
-                            }
-                            return displayWeight.map { String(format: "%.1f", $0) } ?? "0"
-                        }
-                    }()
-                    
-                    Text("Last: \(lastValue)")
-                        .font(.system(size: 9, weight: .medium, design: .rounded))
-                        .foregroundStyle(.orange.opacity(0.8))
-                        .lineLimit(1)
-                        .minimumScaleFactor(0.7)
-                }
-            }
-        }
-        .frame(minWidth: 48, maxWidth: 72)
-        .padding(.vertical, 3)
-        .padding(.horizontal, 2)
-        .background(isActive ? Color.orange.opacity(0.1) : Color(.systemGray6))
-        .overlay(
-            RoundedRectangle(cornerRadius: 8)
-                .stroke(isActive ? Color.orange : Color.clear, lineWidth: 1.5)
-        )
-        .cornerRadius(8)
+        return Text(value.isEmpty ? placeholder : value)
+            .font(.system(size: 20, weight: .bold, design: .rounded))
+            .foregroundStyle(value.isEmpty ? Color.secondary.opacity(0.3) : (isActive ? .orange : .primary))
+            .lineLimit(1)
+            .minimumScaleFactor(0.8)
+            .frame(maxWidth: .infinity)
+            .padding(.vertical, 8)
+            .background(isActive ? Color.orange.opacity(0.1) : Color.clear)
+            .cornerRadius(8)
     }
 
     private var labelIndicator: some View {
@@ -231,12 +194,12 @@ struct SetRowView: View {
             if set.label != .none {
                 Circle()
                     .fill(labelColor(for: set.label))
-                    .frame(width: 10, height: 10)
-                    .padding(.horizontal, 6)
+                    .frame(width: 8, height: 8)
+                    .padding(.horizontal, 4)
             } else {
                 Color.clear
-                    .frame(width: 10, height: 10)
-                    .padding(.horizontal, 6)
+                    .frame(width: 8, height: 8)
+                    .padding(.horizontal, 4)
             }
         }
         .contentShape(Rectangle())
@@ -253,9 +216,9 @@ struct SetRowView: View {
             onUpdate(set, set.reps, set.weight, !set.isCompleted)
         } label: {
             Image(systemName: set.isCompleted ? "checkmark.circle.fill" : "circle")
-                .font(.system(size: 26, weight: .medium))
-                .foregroundStyle(set.isCompleted ? .green : .secondary)
-                .frame(width: 40, height: 44)
+                .font(.system(size: 24, weight: .semibold))
+                .foregroundStyle(set.isCompleted ? .green : .secondary.opacity(0.4))
+                .frame(width: 44, height: 44)
                 .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
@@ -302,7 +265,7 @@ struct SetRowView: View {
             Image(systemName: systemName)
                 .font(.system(size: 10, weight: .bold))
                 .foregroundStyle(.orange)
-                .frame(width: 22, height: 22)
+                .frame(width: 24, height: 24)
                 .background(Color.orange.opacity(0.1))
                 .clipShape(Circle())
         }

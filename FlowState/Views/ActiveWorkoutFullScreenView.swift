@@ -36,6 +36,7 @@ struct ActiveWorkoutFullScreenView: View {
     @State private var showingCompletedTimer: Bool = false
     @State private var showingCompletionSheet = false
     @State private var scrollOffset: CGFloat = 0
+    @State private var restTimerPulse = false
     
     init() {
         let vm = ActiveWorkoutViewModel()
@@ -48,8 +49,8 @@ struct ActiveWorkoutFullScreenView: View {
     
     var body: some View {
         ZStack {
-            // Solid background to prevent anything showing through
-            Color(.systemBackground)
+            // Background color for the whole view
+            Color(.systemGroupedBackground)
                 .ignoresSafeArea()
             
             Group {
@@ -75,61 +76,22 @@ struct ActiveWorkoutFullScreenView: View {
         }
     }
     
-    private var isWorkoutComplete: Bool {
-        let progress = exerciseProgress
-        return progress.total > 0 && progress.completed == progress.total
-    }
-    
-    @ViewBuilder
-    private var smartFinishPrompt: some View {
-        if isWorkoutComplete {
-            Button {
-                showingCompletionSheet = true
-            } label: {
-                HStack(spacing: 12) {
-                    Image(systemName: "checkmark.seal.fill")
-                        .font(.title2)
-                    VStack(alignment: .leading, spacing: 2) {
-                        Text("Workout Complete!")
-                            .font(.headline)
-                        Text("Tap to save your progress")
-                            .font(.subheadline)
-                            .opacity(0.8)
-                    }
-                    Spacer()
-                    Image(systemName: "chevron.right")
-                }
-                .padding()
-                .background(Color.green)
-                .foregroundStyle(.white)
-                .cornerRadius(16)
-                .shadow(radius: 4)
-            }
-            .padding(.horizontal, ActiveWorkoutLayout.contentPadding)
-            .padding(.bottom, 20)
-            .transition(.move(edge: .bottom).combined(with: .opacity))
-            .zIndex(2000)
-        }
-    }
-    
     @ViewBuilder
     private func workoutContentView(workout: Workout) -> some View {
         NavigationStack {
             ZStack(alignment: .bottom) {
-                // Solid background
-                Color(.systemBackground)
-                    .ignoresSafeArea()
-                
                 VStack(spacing: 0) {
                     // Dynamic header (full or compact based on scroll)
                     Group {
-                        if scrollOffset < 50 {
+                        if scrollOffset < ActiveWorkoutLayout.headerTransitionThreshold {
                             fullHeaderView(workout: workout)
                         } else {
                             compactPillsView(workout: workout)
                         }
                     }
                     .animation(.spring(response: 0.3, dampingFraction: 0.8), value: scrollOffset)
+                    
+                    Divider()
                     
                     // Scrollable content area
                     ScrollViewReader { proxy in
@@ -171,8 +133,6 @@ struct ActiveWorkoutFullScreenView: View {
                             )
                     )
                 }
-                
-                smartFinishPrompt
             }
             .navigationTitle("Active Workout")
             .navigationBarTitleDisplayMode(.inline)
@@ -291,10 +251,7 @@ struct ActiveWorkoutFullScreenView: View {
         .padding(.horizontal, ActiveWorkoutLayout.contentPadding)
         .padding(.top, 8)
         .padding(.bottom, 12)
-        .background(
-            Color(.systemBackground)
-                .shadow(color: .black.opacity(0.05), radius: 4, y: 2)
-        )
+        .background(Color(.systemBackground))
         .animation(.spring(response: 0.3, dampingFraction: 0.8), value: scrollOffset)
     }
     
@@ -317,17 +274,14 @@ struct ActiveWorkoutFullScreenView: View {
         }
         .padding(.horizontal, ActiveWorkoutLayout.contentPadding)
         .padding(.vertical, 8)
-        .background(
-            Color(.systemBackground)
-                .shadow(color: .black.opacity(0.05), radius: 2, y: 1)
-        )
+        .background(Color(.systemBackground))
         .animation(.spring(response: 0.3, dampingFraction: 0.8), value: scrollOffset)
     }
     
     private func compactProgressPill(progress: (completed: Int, total: Int)) -> some View {
         HStack(spacing: 6) {
             Image(systemName: "checklist")
-                .font(.system(size: 12, weight: .medium))
+                .font(.system(size: 12, weight: .bold))
                 .foregroundStyle(.orange)
             Text("\(progress.completed)/\(progress.total)")
                 .font(.system(size: 14, weight: .semibold, design: .rounded))
@@ -335,22 +289,22 @@ struct ActiveWorkoutFullScreenView: View {
         }
         .padding(.horizontal, 12)
         .padding(.vertical, 8)
-        .background(Color(.systemGray6))
+        .background(Color(.secondarySystemGroupedBackground))
         .cornerRadius(12)
     }
     
     private var compactDurationPill: some View {
         HStack(spacing: 6) {
             Image(systemName: "timer")
-                .font(.system(size: 12, weight: .medium))
+                .font(.system(size: 12, weight: .bold))
                 .foregroundStyle(.orange)
-            Text("Duration: \(formatElapsedTime(workoutState.elapsedTime))")
+            Text("\(formatElapsedTime(workoutState.elapsedTime))")
                 .font(.system(size: 14, weight: .semibold, design: .monospaced))
                 .foregroundStyle(.primary)
         }
         .padding(.horizontal, 12)
         .padding(.vertical, 8)
-        .background(Color(.systemGray6))
+        .background(Color(.secondarySystemGroupedBackground))
         .cornerRadius(12)
     }
     
@@ -359,7 +313,7 @@ struct ActiveWorkoutFullScreenView: View {
             // Tiny circular progress indicator
             ZStack {
                 Circle()
-                    .stroke(Color(.systemGray5), lineWidth: 2)
+                    .stroke(restTimerPulse ? Color.orange.opacity(0.3) : Color(.systemGray5), lineWidth: 2)
                     .frame(width: 16, height: 16)
                 
                 let progress = workoutState.restTimerViewModel.totalSeconds > 0 ?
@@ -367,19 +321,21 @@ struct ActiveWorkoutFullScreenView: View {
                 
                 Circle()
                     .trim(from: 0, to: progress)
-                    .stroke(Color.orange, style: StrokeStyle(lineWidth: 2, lineCap: .round))
+                    .stroke(restTimerPulse ? Color.white : Color.orange, style: StrokeStyle(lineWidth: 2, lineCap: .round))
                     .frame(width: 16, height: 16)
                     .rotationEffect(.degrees(-90))
             }
             
-            Text("Rest: \(formatRestTime(workoutState.restTimerViewModel.remainingSeconds))")
+            Text("\(formatRestTime(workoutState.restTimerViewModel.remainingSeconds))")
                 .font(.system(size: 14, weight: .semibold, design: .monospaced))
-                .foregroundStyle(.orange)
+                .foregroundStyle(restTimerPulse ? .white : .orange)
         }
         .padding(.horizontal, 12)
         .padding(.vertical, 8)
-        .background(Color(.systemGray6))
+        .background(restTimerPulse ? Color.orange : Color(.secondarySystemGroupedBackground))
         .cornerRadius(12)
+        .scaleEffect(restTimerPulse ? 1.1 : 1.0)
+        .animation(.spring(response: 0.3, dampingFraction: 0.6), value: restTimerPulse)
     }
     
     private func formatRestTime(_ seconds: Int) -> String {
@@ -419,6 +375,8 @@ struct ActiveWorkoutFullScreenView: View {
                 showingCompletedTimer = false
             }
         )
+        .scaleEffect(restTimerPulse ? 1.05 : 1.0)
+        .animation(.spring(response: 0.3, dampingFraction: 0.6), value: restTimerPulse)
         .transition(.move(edge: .top).combined(with: .opacity))
         .onChange(of: workoutState.restTimerViewModel.isComplete) { oldValue, newValue in
             if newValue {
@@ -433,9 +391,12 @@ struct ActiveWorkoutFullScreenView: View {
     }
     
     private func workoutNameField(workout: Workout) -> some View {
-        Text(workout.name ?? "Workout")
-            .font(.title2)
-            .fontWeight(.bold)
+        HStack {
+            Text(workout.name ?? "Workout")
+                .font(.title2)
+                .fontWeight(.bold)
+            Spacer()
+        }
     }
     
     @ViewBuilder
@@ -457,6 +418,17 @@ struct ActiveWorkoutFullScreenView: View {
                         showingCompletedTimer = false // Reset completion state
                         workoutState.restTimerViewModel.stop() // Stop current timer
                         workoutState.startRestTimer(duration: defaultRestDuration)
+                        
+                        // Pulse animation for the rest timer indicator
+                        withAnimation(.spring(response: 0.3, dampingFraction: 0.6)) {
+                            restTimerPulse = true
+                        }
+                        
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                            withAnimation(.easeOut(duration: 0.2)) {
+                                restTimerPulse = false
+                            }
+                        }
                     },
                     preferredUnits: profileViewModel.profile?.units ?? .lbs
                 )
@@ -472,11 +444,11 @@ struct ActiveWorkoutFullScreenView: View {
         Button {
             showingAddExercise = true
         } label: {
-            Label("Add Exercise", systemImage: "plus.circle")
+            Label("Add Exercise", systemImage: "plus.circle.fill")
                 .font(.headline)
                 .frame(maxWidth: .infinity)
                 .padding()
-                .background(Color(.systemGray6))
+                .background(Color(.secondarySystemGroupedBackground))
                 .cornerRadius(12)
         }
     }
@@ -531,15 +503,16 @@ struct ActiveWorkoutFullScreenView: View {
         VStack(spacing: 4) {
             Text("Duration")
                 .font(.caption)
+                .fontWeight(.medium)
                 .foregroundStyle(.secondary)
             
             Text(formatElapsedTime(workoutState.elapsedTime))
-                .font(.system(size: 32, weight: .bold, design: .monospaced))
+                .font(.system(size: 36, weight: .bold, design: .rounded))
                 .foregroundStyle(.primary)
         }
-        .padding()
+        .padding(.vertical, 16)
         .frame(maxWidth: .infinity)
-        .background(Color(.systemGray6))
+        .background(Color(.secondarySystemGroupedBackground))
         .cornerRadius(12)
     }
     

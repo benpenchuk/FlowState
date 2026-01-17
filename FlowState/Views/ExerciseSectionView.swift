@@ -30,7 +30,7 @@ struct ExerciseSectionView: View {
     @State private var showingExerciseHistory = false
     @State private var lastSessionSets: [SetRecord] = []
     
-    private var equipmentIcon: (name: String, color: Color)? {
+    private var equipmentIcon: String? {
         guard let exercise = entry.exercise,
               let primaryEquipment = exercise.equipment.first else {
             return nil
@@ -38,25 +38,25 @@ struct ExerciseSectionView: View {
         return equipmentIconMapping(for: primaryEquipment)
     }
     
-    private func equipmentIconMapping(for equipment: Equipment) -> (name: String, color: Color)? {
+    private func equipmentIconMapping(for equipment: Equipment) -> String? {
         switch equipment {
-        case .barbell: return ("figure.strengthtraining.traditional", .orange)
-        case .dumbbell: return ("dumbbell.fill", .orange)
-        case .cable: return ("cable.connector", .blue)
-        case .machine: return ("figure.strengthtraining.functional", .purple)
-        case .bodyweight: return ("figure.flexibility", .green)
-        case .kettlebell: return ("figure.strengthtraining.traditional", .orange)
-        case .resistanceBand: return ("figure.strengthtraining.functional", .purple)
-        case .ezBar, .trapBar: return ("figure.strengthtraining.traditional", .orange)
-        case .smithMachine: return ("figure.strengthtraining.functional", .purple)
-        case .pullupBar: return ("figure.flexibility", .green)
-        case .dipBars: return ("figure.flexibility", .green)
-        case .bench, .inclineBench, .declineBench: return ("figure.strengthtraining.functional", .purple)
-        case .treadmill: return ("figure.run", .blue)
-        case .bike: return ("bicycle", .blue)
-        case .rowingMachine: return ("figure.rower", .blue)
-        case .elliptical, .stairClimber: return ("figure.step.training", .blue)
-        case .jumpRope: return ("figure.jumprope", .blue)
+        case .barbell: return "figure.strengthtraining.traditional"
+        case .dumbbell: return "dumbbell.fill"
+        case .cable: return "cable.connector"
+        case .machine: return "figure.strengthtraining.functional"
+        case .bodyweight: return "figure.flexibility"
+        case .kettlebell: return "figure.strengthtraining.traditional"
+        case .resistanceBand: return "figure.strengthtraining.functional"
+        case .ezBar, .trapBar: return "figure.strengthtraining.traditional"
+        case .smithMachine: return "figure.strengthtraining.functional"
+        case .pullupBar: return "figure.flexibility"
+        case .dipBars: return "figure.flexibility"
+        case .bench, .inclineBench, .declineBench: return "figure.strengthtraining.functional"
+        case .treadmill: return "figure.run"
+        case .bike: return "bicycle"
+        case .rowingMachine: return "figure.rower"
+        case .elliptical, .stairClimber: return "figure.step.training"
+        case .jumpRope: return "figure.jumprope"
         case .none: return nil
         }
     }
@@ -73,157 +73,148 @@ struct ExerciseSectionView: View {
         entry.exercise?.getInstructions() ?? ExerciseInstructions()
     }
     
-    private var cardBackgroundColor: Color {
-        if isActive {
-            return Color.orange.opacity(0.05)
-        } else if allSetsCompleted && !sets.isEmpty {
-            return Color.green.opacity(0.03)
-        } else {
-            return Color(.systemGray6).opacity(0.5)
-        }
-    }
-    
-    private var cardStrokeColor: Color {
-        if isActive {
-            return Color.orange.opacity(0.5)
-        } else if allSetsCompleted && !sets.isEmpty {
-            return Color.green.opacity(0.3)
-        } else {
-            return Color.clear
-        }
-    }
-    
-    private var cardStrokeWidth: CGFloat {
-        isActive ? 2 : 1
-    }
-    
     var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
+        VStack(alignment: .leading, spacing: 12) {
             // Exercise header
-            HStack(spacing: 4) {
-                Button {
-                    withAnimation { isExpanded.toggle() }
-                } label: {
-                    Image(systemName: isExpanded ? "chevron.down" : "chevron.right")
-                        .font(.caption)
+            HStack(spacing: 8) {
+                if let iconName = equipmentIcon {
+                    Image(systemName: iconName)
+                        .font(.system(size: 16, weight: .medium))
                         .foregroundStyle(.secondary)
-                        .frame(width: 20)
-                }
-                .buttonStyle(.plain)
-                
-                if let icon = equipmentIcon {
-                    Image(systemName: icon.name)
-                        .font(.system(size: 14, weight: .medium))
-                        .foregroundStyle(icon.color)
-                        .frame(width: 20)
+                        .frame(width: 24)
                 }
                 
                 Text(entry.exercise?.name ?? "Unknown Exercise")
-                    .font(.headline)
-                    .padding(.horizontal, 4)
+                    .font(.title3)
+                    .fontWeight(.bold)
                 
                 if allSetsCompleted && !sets.isEmpty {
                     Image(systemName: "checkmark.circle.fill")
                         .foregroundStyle(.green)
                         .font(.subheadline)
-                        .transition(.scale.combined(with: .opacity))
-                }
-                
-                if !isExpanded {
-                    Text("\(sets.count) set\(sets.count == 1 ? "" : "s")")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
                 }
                 
                 Spacer()
                 
-                if entry.exercise != nil {
+                Menu {
                     Button { showingExerciseDetails = true } label: {
-                        Image(systemName: "info.circle")
-                            .foregroundColor(.blue)
-                            .font(.caption)
+                        Label("Exercise Info", systemImage: "info.circle")
                     }
-                }
-                
-                Button { showingDeleteExerciseAlert = true } label: {
-                    Image(systemName: "trash")
-                        .foregroundColor(.red)
-                        .font(.caption)
+                    
+                    Button(role: .destructive) { showingDeleteExerciseAlert = true } label: {
+                        Label("Remove Exercise", systemImage: "trash")
+                    }
+                } label: {
+                    Image(systemName: "ellipsis.circle")
+                        .font(.title3)
+                        .foregroundStyle(.secondary)
                 }
             }
+            .padding(.horizontal, 4)
             
             if isExpanded {
                 if !sets.isEmpty {
-                    VStack(spacing: 4) {
+                    // Column Headers
+                    HStack(spacing: 0) {
+                        // Space for drag handle (20) + spacing (8) + set number (22) = 50
+                        Color.clear.frame(width: 50) 
+                        
+                        Text("WEIGHT")
+                            .font(.system(size: 10, weight: .bold))
+                            .foregroundStyle(.secondary)
+                            .frame(maxWidth: .infinity)
+                        
+                        // Matching the "×" separator space: spacing(6) + "×" (~12) + spacing(6) = ~24
+                        Color.clear.frame(width: 24)
+                        
+                        Text("REPS")
+                            .font(.system(size: 10, weight: .bold))
+                            .foregroundStyle(.secondary)
+                            .frame(maxWidth: .infinity)
+                        
+                        // Space for spacing(8) + label indicator (22) + spacing(8) + checkmark (40) = 78
+                        Color.clear.frame(width: 78)
+                    }
+                    .padding(.horizontal, 8) // Match SetRowView padding
+                    .padding(.bottom, 4)
+
+                    VStack(spacing: 0) {
                         ForEach(Array(sets.enumerated()), id: \.element.id) { index, set in
                             // Try to match by set number first, then fall back to index if needed
                             let lastSet = lastSessionSets.first(where: { $0.setNumber == set.setNumber }) ?? 
                                          (index < lastSessionSets.count ? lastSessionSets[index] : nil)
                             
-                            SetRowView(
-                                viewModel: viewModel,
-                                set: set,
-                                lastSessionSet: lastSet,
-                                preferredUnits: preferredUnits,
-                                onUpdate: { updatedSet, reps, weight, isCompleted in
-                                    let wasCompleted = updatedSet.isCompleted
-                                    viewModel.updateSet(in: entry, set: updatedSet, reps: reps, weight: weight, isCompleted: isCompleted)
-                                    if !wasCompleted && isCompleted { 
-                                        onSetCompleted?()
-                                        viewModel.autoAdvance(from: entry, completedSet: updatedSet)
+                            VStack(spacing: 0) {
+                                SetRowView(
+                                    viewModel: viewModel,
+                                    set: set,
+                                    lastSessionSet: lastSet,
+                                    preferredUnits: preferredUnits,
+                                    onUpdate: { updatedSet, reps, weight, isCompleted in
+                                        let wasCompleted = updatedSet.isCompleted
+                                        viewModel.updateSet(in: entry, set: updatedSet, reps: reps, weight: weight, isCompleted: isCompleted)
+                                        if !wasCompleted && isCompleted { 
+                                            onSetCompleted?()
+                                            viewModel.autoAdvance(from: entry, completedSet: updatedSet)
+                                        }
+                                    },
+                                    onDelete: {
+                                        let allSets = entry.getSets()
+                                        if let actualIndex = allSets.firstIndex(where: { $0.id == set.id }) {
+                                            if allSets.count == 1 {
+                                                pendingSetIndex = actualIndex
+                                                showingDeleteLastSetAlert = true
+                                            } else {
+                                                viewModel.deleteSet(from: entry, at: actualIndex)
+                                            }
+                                        }
+                                    },
+                                    onLabelUpdate: { updatedSet, label in
+                                        viewModel.updateSetLabel(in: entry, set: updatedSet, label: label)
                                     }
-                                },
-                                onDelete: {
-                                    let allSets = entry.getSets()
-                                    if let actualIndex = allSets.firstIndex(where: { $0.id == set.id }) {
-                                        if allSets.count == 1 {
-                                            pendingSetIndex = actualIndex
-                                            showingDeleteLastSetAlert = true
-                                        } else {
-                                            viewModel.deleteSet(from: entry, at: actualIndex)
+                                )
+                                .id(set.id)
+                                .contentShape(Rectangle())
+                                .opacity(draggedSetId == set.id ? 0.5 : 1.0)
+                                .overlay(
+                                    Group {
+                                        if dropTargetSetId == set.id && draggedSetId != set.id {
+                                            RoundedRectangle(cornerRadius: ActiveWorkoutLayout.exerciseCardCornerRadius)
+                                                .stroke(Color.orange, lineWidth: 2)
+                                                .padding(-4)
                                         }
                                     }
-                                },
-                                onLabelUpdate: { updatedSet, label in
-                                    viewModel.updateSetLabel(in: entry, set: updatedSet, label: label)
-                                }
-                            )
-                            .id(set.id)
-                            .contentShape(Rectangle())
-                            .opacity(draggedSetId == set.id ? 0.5 : 1.0)
-                            .overlay(
-                                Group {
-                                    if dropTargetSetId == set.id && draggedSetId != set.id {
-                                        RoundedRectangle(cornerRadius: ActiveWorkoutLayout.exerciseCardCornerRadius)
-                                            .stroke(Color.orange, lineWidth: 2)
-                                            .padding(-4)
+                                )
+                                .onDrag {
+                                    draggedSetId = set.id
+                                    currentDragId = set.id
+                                    let uuidString = set.id.uuidString
+                                    let itemProvider = NSItemProvider()
+                                    itemProvider.registerDataRepresentation(forTypeIdentifier: "public.text", visibility: .all) { completion in
+                                        completion(uuidString.data(using: .utf8), nil)
+                                        return nil
                                     }
+                                    return itemProvider
+                                } preview: {
+                                    SetRowView(viewModel: viewModel, set: set, preferredUnits: preferredUnits, onUpdate: { _, _, _, _ in }, onDelete: {}, onLabelUpdate: nil)
+                                        .frame(width: 350)
+                                        .background(Color(.systemBackground))
                                 }
-                            )
-                            .onDrag {
-                                draggedSetId = set.id
-                                currentDragId = set.id
-                                let uuidString = set.id.uuidString
-                                let itemProvider = NSItemProvider()
-                                itemProvider.registerDataRepresentation(forTypeIdentifier: "public.text", visibility: .all) { completion in
-                                    completion(uuidString.data(using: .utf8), nil)
-                                    return nil
+                                .onDrop(of: [.text], delegate: SetDropDelegate(
+                                    destinationSet: set,
+                                    sets: sets,
+                                    entry: entry,
+                                    viewModel: viewModel,
+                                    draggedSetId: $draggedSetId,
+                                    dropTargetSetId: $dropTargetSetId,
+                                    currentDragId: $currentDragId
+                                ))
+                                
+                                if index < sets.count - 1 {
+                                    Divider()
+                                        .padding(.leading, 50) // Align with set number
                                 }
-                                return itemProvider
-                            } preview: {
-                                SetRowView(viewModel: viewModel, set: set, preferredUnits: preferredUnits, onUpdate: { _, _, _, _ in }, onDelete: {}, onLabelUpdate: nil)
-                                    .frame(width: 350)
-                                    .background(Color(.systemBackground))
                             }
-                            .onDrop(of: [.text], delegate: SetDropDelegate(
-                                destinationSet: set,
-                                sets: sets,
-                                entry: entry,
-                                viewModel: viewModel,
-                                draggedSetId: $draggedSetId,
-                                dropTargetSetId: $dropTargetSetId,
-                                currentDragId: $currentDragId
-                            ))
                         }
                     }
                 }
@@ -231,144 +222,99 @@ struct ExerciseSectionView: View {
                 Button {
                     viewModel.addSetToEntry(entry)
                 } label: {
-                    HStack {
-                        Image(systemName: "plus.circle")
-                        Text("Add Set")
-                    }
-                    .font(.subheadline)
-                    .foregroundStyle(.tint)
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 6)
-                    .background(Color(.systemGray6))
-                    .cornerRadius(8)
+                    Label("Add Set", systemImage: "plus.circle.fill")
+                        .font(.subheadline)
+                        .fontWeight(.semibold)
+                        .foregroundStyle(.orange)
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 10)
+                        .background(Color.orange.opacity(0.1))
+                        .cornerRadius(10)
                 }
+                .padding(.top, 4)
                 
-                // Instructions
-                VStack(alignment: .leading, spacing: 8) {
-                    Button {
-                        withAnimation { showingInstructions.toggle() }
-                    } label: {
-                        HStack {
-                            Image(systemName: showingInstructions ? "book.fill" : "book")
-                                .font(.headline)
-                                .foregroundStyle(.orange)
-                            Text("Instructions")
-                                .font(.headline)
-                                .fontWeight(.semibold)
-                                .foregroundStyle(.primary)
-                            Spacer()
-                            if !instructions.setup.isEmpty || !instructions.execution.isEmpty || !instructions.tips.isEmpty {
-                                Image(systemName: "circle.fill")
-                                    .font(.system(size: 8))
-                                    .foregroundStyle(.orange)
+                // Instructions & Notes
+                VStack(spacing: 0) {
+                    Divider().padding(.vertical, 8)
+                    
+                    HStack(spacing: 16) {
+                        Button {
+                            withAnimation { 
+                                showingInstructions.toggle()
+                                if showingInstructions { showingNotes = false }
                             }
+                        } label: {
+                            Label("Instructions", systemImage: "book")
+                                .font(.subheadline)
+                                .fontWeight(.medium)
+                                .foregroundStyle(showingInstructions ? .orange : .secondary)
                         }
+                        
+                        Button {
+                            withAnimation { 
+                                showingNotes.toggle()
+                                if showingNotes { 
+                                    showingInstructions = false
+                                    if notesText.isEmpty { notesText = entry.notes ?? "" }
+                                }
+                            }
+                        } label: {
+                            Label("Notes", systemImage: "pencil.and.outline")
+                                .font(.subheadline)
+                                .fontWeight(.medium)
+                                .foregroundStyle(showingNotes ? .blue : .secondary)
+                        }
+                        
+                        Spacer()
                     }
-                    .buttonStyle(.plain)
                     
                     if showingInstructions {
-                        VStack(alignment: .leading, spacing: 12) {
+                        VStack(alignment: .leading, spacing: 8) {
                             if !instructions.setup.isEmpty {
-                                VStack(alignment: .leading, spacing: 6) {
-                                    Text("Setup").font(.body).fontWeight(.semibold)
-                                    Text(instructions.setup).font(.body).foregroundStyle(.secondary).fixedSize(horizontal: false, vertical: true)
-                                }
+                                Text("Setup").font(.caption).fontWeight(.bold).foregroundStyle(.secondary)
+                                Text(instructions.setup).font(.subheadline)
                             }
                             if !instructions.execution.isEmpty {
-                                VStack(alignment: .leading, spacing: 6) {
-                                    Text("Execution").font(.body).fontWeight(.semibold)
-                                    Text(instructions.execution).font(.body).foregroundStyle(.secondary).fixedSize(horizontal: false, vertical: true)
-                                }
-                            }
-                            if !instructions.tips.isEmpty {
-                                VStack(alignment: .leading, spacing: 6) {
-                                    Text("Tips").font(.body).fontWeight(.semibold)
-                                    Text(instructions.tips).font(.body).foregroundStyle(.secondary).fixedSize(horizontal: false, vertical: true)
-                                }
+                                Text("Execution").font(.caption).fontWeight(.bold).foregroundStyle(.secondary)
+                                Text(instructions.execution).font(.subheadline)
                             }
                             if instructions.setup.isEmpty && instructions.execution.isEmpty && instructions.tips.isEmpty {
-                                Text("No instructions available.").font(.body).foregroundStyle(.secondary).italic()
+                                Text("No instructions available.").font(.subheadline).foregroundStyle(.secondary).italic()
                             }
                         }
-                        .padding(12)
-                        .background(Color(.systemGray5).opacity(0.5))
-                        .cornerRadius(8)
+                        .padding(.top, 12)
+                        .transition(.opacity.combined(with: .move(edge: .top)))
                     }
-                }
-                .padding(.top, 8)
-                
-                // Notes
-                VStack(alignment: .leading, spacing: 8) {
-                    Button {
-                        withAnimation {
-                            showingNotes.toggle()
-                            if showingNotes && notesText.isEmpty { notesText = entry.notes ?? "" }
-                        }
-                    } label: {
-                        HStack {
-                            Image(systemName: showingNotes ? "note.text" : "note")
-                                .font(.headline)
-                                .foregroundStyle(.blue)
-                            Text("Notes")
-                                .font(.headline)
-                                .fontWeight(.semibold)
-                                .foregroundStyle(.primary)
-                            Spacer()
-                            if !(entry.notes?.isEmpty ?? true) {
-                                Image(systemName: "circle.fill")
-                                    .font(.system(size: 8))
-                                    .foregroundStyle(.blue)
-                            }
-                        }
-                    }
-                    .buttonStyle(.plain)
                     
                     if showingNotes {
                         VStack(alignment: .leading, spacing: 8) {
                             TextEditor(text: $notesText)
-                                .frame(minHeight: 60, maxHeight: 120)
+                                .frame(minHeight: 80)
+                                .padding(8)
+                                .background(Color(.systemGray6))
                                 .cornerRadius(8)
-                                .padding(4)
-                                .overlay(
-                                    RoundedRectangle(cornerRadius: 8)
-                                        .stroke(Color(.systemGray4), lineWidth: 1)
-                                )
-                                .font(.body)
-                                .accessibilityLabel("Exercise notes")
-                                .onAppear {
-                                    // Avoid double assignment if already loaded
-                                    if notesText.isEmpty { notesText = entry.notes ?? "" }
-                                }
+                                .font(.subheadline)
+                            
                             HStack {
                                 Spacer()
-                                Button(action: {
+                                Button("Save") {
                                     viewModel.updateExerciseNotes(in: entry, notes: notesText.isEmpty ? nil : notesText)
                                     withAnimation { showingNotes = false }
                                     hideKeyboard()
-                                }) {
-                                    Text("Done")
-                                        .font(.body)
-                                        .fontWeight(.medium)
                                 }
-                                .buttonStyle(.borderedProminent)
-                                .tint(.blue)
-                                .accessibilityLabel("Save notes and close")
+                                .font(.subheadline)
+                                .fontWeight(.bold)
                             }
                         }
+                        .padding(.top, 12)
+                        .transition(.opacity.combined(with: .move(edge: .top)))
                     }
                 }
-                .padding(.top, 8)
             }
         }
         .padding(ActiveWorkoutLayout.exerciseCardPadding)
-        .background(
-            RoundedRectangle(cornerRadius: ActiveWorkoutLayout.exerciseCardCornerRadius)
-                .fill(cardBackgroundColor)
-        )
-        .overlay(
-            RoundedRectangle(cornerRadius: ActiveWorkoutLayout.exerciseCardCornerRadius)
-                .stroke(cardStrokeColor, lineWidth: cardStrokeWidth)
-        )
+        .background(Color(.secondarySystemGroupedBackground))
+        .cornerRadius(ActiveWorkoutLayout.exerciseCardCornerRadius)
         .onAppear { 
             notesText = entry.notes ?? "" 
             if let exercise = entry.exercise {
