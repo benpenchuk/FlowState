@@ -124,4 +124,64 @@ final class HistoryViewModel: ObservableObject {
         }
         return totalCompleted
     }
+    
+    // Format workout for export as shareable text
+    func formatWorkoutForExport(_ workout: Workout, preferredUnits: Units = .lbs) -> String {
+        var text = "💪 "
+        text += (workout.name ?? "Workout")
+        
+        if let completedAt = workout.completedAt {
+            let formatter = DateFormatter()
+            formatter.dateFormat = "MMM d, yyyy"
+            text += " - \(formatter.string(from: completedAt))"
+        }
+        text += "\n\n"
+        
+        guard let entries = workout.entries?.sorted(by: { $0.order < $1.order }), !entries.isEmpty else {
+            return text + "No exercises"
+        }
+        
+        for entry in entries {
+            let exerciseName = entry.exercise?.name ?? "Unknown Exercise"
+            text += "\(exerciseName)\n"
+            
+            let sets = entry.getSets().sorted { $0.setNumber < $1.setNumber }
+            for set in sets {
+                if set.isCompleted {
+                    var setText = "  Set \(set.setNumber): "
+                    
+                    if let weight = set.weight, let reps = set.reps {
+                        let displayWeight = preferredUnits == .kg ? weight / 2.20462 : weight
+                        let unit = preferredUnits == .kg ? "kg" : "lbs"
+                        let weightStr = displayWeight.truncatingRemainder(dividingBy: 1) == 0 ? String(format: "%.0f", displayWeight) : String(format: "%.1f", displayWeight)
+                        setText += "\(weightStr) \(unit) × \(reps) reps ✓"
+                    } else if let reps = set.reps {
+                        setText += "\(reps) reps ✓"
+                    } else {
+                        setText += "✓"
+                    }
+                    text += setText + "\n"
+                }
+            }
+            
+            if let notes = entry.notes, !notes.isEmpty {
+                text += "  Notes: \(notes)\n"
+            }
+            
+            text += "\n"
+        }
+        
+        if let completedAt = workout.completedAt {
+            let duration = calculateDuration(startedAt: workout.startedAt, completedAt: completedAt)
+            text += "Duration: \(formatDuration(duration))\n"
+        }
+        
+        if let notes = workout.notes, !notes.isEmpty {
+            text += "Notes: \(notes)\n"
+        }
+        
+        text += "\nFlowState - Find Your Flow"
+        
+        return text.trimmingCharacters(in: .whitespacesAndNewlines)
+    }
 }

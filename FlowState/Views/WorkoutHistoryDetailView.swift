@@ -48,10 +48,16 @@ struct WorkoutHistoryDetailView: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
-                Button(role: .destructive) {
-                    showingDeleteAlert = true
-                } label: {
-                    Image(systemName: "trash")
+                HStack(spacing: 16) {
+                    ShareLink(item: viewModel.formatWorkoutForExport(workout, preferredUnits: profileViewModel.profile?.units ?? .lbs)) {
+                        Image(systemName: "square.and.arrow.up")
+                    }
+                    
+                    Button(role: .destructive) {
+                        showingDeleteAlert = true
+                    } label: {
+                        Image(systemName: "trash")
+                    }
                 }
             }
         }
