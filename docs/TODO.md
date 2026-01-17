@@ -2,7 +2,41 @@
 
 Features and improvements planned but not yet implemented.
 
-## High Priority
+## Completed Features ✅
+
+### Active Workout UX Improvements (Phase 1)
+
+**Status:** ✅ Complete
+
+**Description:**
+- ✅ Delete sets during workout (swipe-to-delete functionality)
+- ✅ Delete exercises during workout (trash icon with confirmation)
+- ✅ Custom number pad with Done button (replaces native keyboard)
+- ✅ Prevent workout name editing during active workout
+- ✅ App state persistence (resume workout on launch with alert)
+- ✅ Rest timer continues when phone is locked (wall-clock time tracking)
+- ✅ Rest timer sound notification with haptic feedback and toggle
+
+### Workout Management Features (Phase 2)
+
+**Status:** ✅ Complete
+
+**Description:**
+- ✅ Reorder sets within exercise (drag handles with proper layout)
+- ✅ Set labels (Warmup, Failure, Drop Set, PR Attempt) with colored badges
+- ✅ Per-exercise notes during workout (collapsible text field)
+- ✅ Expand/collapse exercises during workout (chevron toggle)
+
+### Polish & Enhancement Features (Phase 3)
+
+**Status:** ✅ Complete
+
+**Description:**
+- ✅ Sticky header with timers (workout timer and rest timer always visible when scrolling)
+- ✅ Equipment icons on exercises (SF Symbols showing equipment type next to exercise names)
+- ✅ Better set entry UI/spacing (larger tap targets, card-style backgrounds, improved spacing and hierarchy)
+
+---
 
 ### 📊 Progress Tracking & Charts
 

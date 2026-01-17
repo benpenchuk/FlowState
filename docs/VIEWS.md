@@ -85,18 +85,22 @@ All SwiftUI views in the app, organized by purpose.
 
 **Key Features:**
 - Timer display (elapsed time)
-- Editable workout name
-- Exercise sections with sets
+- Workout name display (not editable during workout)
+- Exercise sections with expand/collapse functionality
+- Per-exercise notes (collapsible text field)
 - Add exercise button
 - Finish workout button
 - Cancel workout option
+- Trash icon for deleting exercises
+- Visual indicators for exercise completion state
 
 **Contains:**
-- `ExerciseSectionView` (multiple)
+- `ExerciseSectionView` (multiple, expandable/collapsible)
 - `SetRowView` (within ExerciseSectionView)
 
 **Presents:**
 - `AddExerciseToWorkoutSheet` (sheet)
+- `CustomNumPadView` (overlay for input)
 
 **Navigation:**
 - Embedded in `ActiveWorkoutFullScreenView`
@@ -131,15 +135,36 @@ All SwiftUI views in the app, organized by purpose.
 - Time remaining display
 - +30s and -30s adjustment buttons
 - Skip button
+- Sound toggle button (speaker icon)
 
 **Navigation:**
 - Embedded in `ActiveWorkoutFullScreenView` (conditionally shown)
 
 ---
 
+### CustomNumPadView.swift
+
+**Description:** Custom number pad component with built-in Done button
+
+**ViewModel:** None (uses bindings for input/output)
+
+**Key Features:**
+- Custom numpad with number buttons (0-9)
+- Decimal point button for weight input
+- Backspace button for corrections
+- Done button to confirm input
+- Clean design matching app style
+- Supports decimal weights and whole number reps
+
+**Navigation:**
+- Presented as overlay when weight/reps fields are tapped
+- Integrated into `SetRowView` and `ActiveWorkoutView` (for notes)
+
+---
+
 ### SetRowView.swift
 
-**Description:** Individual set input row (weight, reps, completion)
+**Description:** Individual set input row with drag reordering and labels
 
 **ViewModel:** None (receives callbacks from parent)
 
@@ -149,7 +174,9 @@ All SwiftUI views in the app, organized by purpose.
 - Unit label (lbs or kg) based on user preference
 - Reps input field (optional)
 - Checkmark to mark complete
-- Delete button
+- Delete button (swipe-to-delete)
+- Drag handle for reordering sets within exercise
+- Set labels with colored badges (Warmup, Failure, Drop Set, PR Attempt)
 - Visual styling for completed sets
 - Converts weight for display (lbs ↔ kg) based on user preference
 - Stores all weights internally as lbs
@@ -465,6 +492,23 @@ All SwiftUI views in the app, organized by purpose.
 
 **Navigation:**
 - Presented from `TemplateDetailView` (sheet)
+
+---
+
+### LabelPickerSheet.swift
+
+**Description:** Sheet for selecting set labels (Warmup, Failure, Drop Set, PR Attempt)
+
+**ViewModel:** None (uses bindings for selection)
+
+**Key Features:**
+- Predefined label options with colored badges
+- Single selection (tap to choose)
+- Cancel option to clear label
+- Visual preview of label appearance
+
+**Navigation:**
+- Presented from `SetRowView` when label area is tapped (sheet)
 
 ---
 

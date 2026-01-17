@@ -114,6 +114,239 @@
 
 ---
 
+### ✅ Set Reordering Within Exercises
+
+**Status:** Complete
+
+**Description:**
+- Drag-and-drop sets to reorder within an exercise
+- Useful for adding warmup sets after the fact
+- Visual drag handles on the right side of set rows
+- Smooth animations during reordering
+
+**Implementation:**
+- `Views/SetRowView.swift` - Added drag handle and reordering logic
+- `ViewModels/ActiveWorkoutViewModel.swift` - Set reordering methods
+- `Models/SetRecord.swift` - Order field for maintaining sequence
+
+**User Flow:**
+1. Long press and drag the handle on the right side of a set row
+2. Drag to desired position within the exercise
+3. Release to complete reordering
+4. Set order updates immediately
+
+---
+
+### ✅ Set Labels
+
+**Status:** Complete
+
+**Description:**
+- Tag sets with labels: Warmup, Failure, Drop Set, PR Attempt
+- Visual indicator (colored pill/badge next to set)
+- Optional labels that don't affect workout data
+- Quick selection via picker sheet
+
+**Implementation:**
+- `Views/LabelPickerSheet.swift` - Label selection UI
+- `Views/SetRowView.swift` - Label display and picker integration
+- `Models/SetRecord.swift` - Label enum and field
+
+**User Flow:**
+1. Tap the label area on a set row (shows current label or "Add Label")
+2. Select from predefined labels (Warmup, Failure, Drop Set, PR Attempt)
+3. Label appears as colored pill next to the set
+4. Tap label to change or remove
+
+---
+
+### ✅ Per-Exercise Notes During Workout
+
+**Status:** Complete
+
+**Description:**
+- Add notes to individual exercises during workout
+- Separate from overall workout notes
+- Collapsible text field to save space
+- Useful for tracking form issues, equipment notes, etc.
+
+**Implementation:**
+- `Views/ActiveWorkoutView.swift` - Exercise notes integration
+- `Models/WorkoutEntry.swift` - Notes field per exercise
+
+**User Flow:**
+1. During active workout, look for notes field under each exercise
+2. Tap to expand and enter notes
+3. Notes auto-save as you type
+4. Collapse to save space when not editing
+
+---
+
+### ✅ Expand/Collapse Exercises
+
+**Status:** Complete
+
+**Description:**
+- Collapse completed exercises to reduce scrolling
+- Tap exercise header to toggle expansion state
+- Visual indicators show completion status
+- Useful for long workouts with many exercises
+
+**Implementation:**
+- `Views/ActiveWorkoutView.swift` - Exercise expansion state management
+- `Models/WorkoutEntry.swift` - Expanded state tracking
+
+**User Flow:**
+1. During workout, completed exercises can be collapsed
+2. Tap exercise header (name area) to toggle expansion
+3. Collapsed exercises show summary (exercise name, sets completed)
+4. Expand to see all sets and add more
+
+---
+
+### ✅ Custom Number Pad
+
+**Status:** Complete
+
+**Description:**
+- Custom numpad component with built-in "Done" button
+- Replaces native iOS keyboard for weight and rep input
+- Clean design matching app style
+- Decimal point support for weights, whole numbers for reps
+- Dismisses keyboard immediately when "Done" is tapped
+
+**Implementation:**
+- `Views/CustomNumPadView.swift` - Custom numpad component
+- Integrated into `SetRowView` for weight/reps input
+- `Views/ActiveWorkoutView.swift` - Uses custom numpad for exercise notes
+
+**User Flow:**
+1. Tap weight or reps field in a set row
+2. Custom numpad appears instead of native keyboard
+3. Enter value using number buttons
+4. Tap "Done" to confirm and dismiss numpad
+5. Keyboard never appears, improving workout flow
+
+---
+
+### ✅ Set Labels
+
+**Status:** Complete
+
+**Description:**
+- Tag sets with labels: Warmup, Failure, Drop Set, PR Attempt
+- Visual indicator (colored pill/badge next to set)
+- Optional labels that don't affect workout data
+- Quick selection via picker sheet
+
+**Implementation:**
+- `Views/LabelPickerSheet.swift` - Label selection UI
+- `Views/SetRowView.swift` - Label display and picker integration
+- `Models/SetRecord.swift` - Label enum and field
+
+**User Flow:**
+1. Tap the label area on a set row (shows current label or "Add Label")
+2. Select from predefined labels (Warmup, Failure, Drop Set, PR Attempt)
+3. Label appears as colored pill next to the set
+4. Tap label to change or remove
+
+---
+
+### ✅ Per-Exercise Notes During Workout
+
+**Status:** Complete
+
+**Description:**
+- Add notes to individual exercises during workout
+- Separate from overall workout notes
+- Collapsible text field to save space
+- Useful for tracking form issues, equipment notes, etc.
+
+**Implementation:**
+- `Views/ActiveWorkoutView.swift` - Exercise notes integration
+- `Models/WorkoutEntry.swift` - Notes field per exercise
+
+**User Flow:**
+1. During active workout, look for notes field under each exercise
+2. Tap to expand and enter notes
+3. Notes auto-save as you type
+4. Collapse to save space when not editing
+
+---
+
+### ✅ Expand/Collapse Exercises
+
+**Status:** Complete
+
+**Description:**
+- Collapse completed exercises to reduce scrolling
+- Tap exercise header to toggle expansion state
+- Visual indicators show completion status
+- Useful for long workouts with many exercises
+
+**Implementation:**
+- `Views/ActiveWorkoutView.swift` - Exercise expansion state management
+- `Models/WorkoutEntry.swift` - Expanded state tracking
+
+**User Flow:**
+1. During workout, completed exercises can be collapsed
+2. Tap exercise header (name area) to toggle expansion
+3. Collapsed exercises show summary (exercise name, sets completed)
+4. Expand to see all sets and add more
+
+---
+
+### ✅ App State Persistence & Resume
+
+**Status:** Complete
+
+**Description:**
+- Resume incomplete workout on app launch
+- Detects active workout on startup
+- Shows "Resume Workout" or "Discard" alert
+- Restores workout state on resume
+- Prevents data loss from accidental app closure
+
+**Implementation:**
+- `ViewModels/WorkoutStateManager.swift` - App launch resume logic
+- `FlowStateApp.swift` - App launch detection
+- `Views/ResumeWorkoutSheet.swift` - Resume prompt UI
+
+**User Flow:**
+1. Force-quit app mid-workout
+2. Reopen app
+3. Alert appears: "Resume your active workout?"
+4. Choose "Resume" to continue workout
+5. Choose "Discard" to start fresh
+6. Workout state fully restored on resume
+
+---
+
+### ✅ Enhanced Rest Timer
+
+**Status:** Complete
+
+**Description:**
+- Rest timer continues when phone is locked/app backgrounded
+- Plays sound notification when rest timer completes
+- Haptic feedback included
+- Toggle button to enable/disable sound
+- Uses wall-clock time tracking for accuracy
+
+**Implementation:**
+- `ViewModels/RestTimerViewModel.swift` - Wall-clock time tracking
+- `Views/RestTimerView.swift` - Sound toggle button
+- System sound notification with haptic feedback
+
+**User Flow:**
+1. Complete a set to start rest timer
+2. Lock phone or background app
+3. Rest timer continues running
+4. When timer completes, sound plays and haptic feedback occurs
+5. Tap sound toggle button to enable/disable notifications
+
+---
+
 ### ✅ Floating Workout Pill
 
 **Status:** Complete
@@ -297,13 +530,25 @@
 | Exercise Library | ✅ Complete | Exercise.swift, ExerciseLibraryViewModel.swift, ExerciseListView.swift | Search, categories, custom exercises |
 | Workout Templates | ✅ Complete | WorkoutTemplate.swift, TemplateViewModel.swift, TemplateListView.swift | Create, edit, delete, reorder |
 | Active Workout Logging | ✅ Complete | ActiveWorkoutView.swift, ActiveWorkoutViewModel.swift, SetRowView.swift | Full-screen mode, set logging |
+| Custom Number Pad | ✅ Complete | CustomNumPadView.swift, SetRowView.swift | Built-in Done button, replaces keyboard |
+| Set Deletion | ✅ Complete | SetRowView.swift, ActiveWorkoutViewModel.swift | Swipe-to-delete with confirmation |
+| Exercise Deletion | ✅ Complete | ActiveWorkoutView.swift, ActiveWorkoutViewModel.swift | Trash icon with confirmation |
+| Workout Name Locking | ✅ Complete | ActiveWorkoutView.swift | Prevents editing during active workout |
+| App State Persistence | ✅ Complete | WorkoutStateManager.swift, FlowStateApp.swift, ResumeWorkoutSheet.swift | Resume workout on app launch |
+| Enhanced Rest Timer | ✅ Complete | RestTimerView.swift, RestTimerViewModel.swift | Wall-clock time, sound notifications, toggle |
+| Set Reordering | ✅ Complete | SetRowView.swift, ActiveWorkoutViewModel.swift, SetRecord.swift | Drag-and-drop within exercises |
+| Set Labels | ✅ Complete | LabelPickerSheet.swift, SetRowView.swift, SetRecord.swift | Warmup, Failure, Drop Set, PR Attempt |
+| Per-Exercise Notes | ✅ Complete | ActiveWorkoutView.swift, WorkoutEntry.swift | Individual exercise notes during workout |
+| Exercise Expand/Collapse | ✅ Complete | ActiveWorkoutView.swift, WorkoutEntry.swift | Collapse completed exercises |
 | Floating Workout Pill | ✅ Complete | FloatingWorkoutPill.swift, ContentView.swift | Minimize/resume |
-| Rest Timer | ✅ Complete | RestTimerView.swift, RestTimerViewModel.swift | Auto-start, adjustable |
 | Workout History | ✅ Complete | HistoryView.swift, HistoryViewModel.swift | List, detail, delete |
 | Single Active Workout | ✅ Complete | ActiveWorkoutViewModel.swift, HomeView.swift | Enforcement via alerts |
 | Dark Theme | ✅ Complete | ContentView.swift | App-wide dark mode (now configurable) |
 | Progress Tracking & PRs | ✅ Complete | PersonalRecord.swift, ProgressViewModel.swift, ExerciseDetailView.swift, ExerciseProgressChartView.swift, PRNotificationView.swift | PR detection, charts, history |
 | Profile & Settings | ✅ Complete | UserProfile.swift, ProfileViewModel.swift, ProfileView.swift, SettingsView.swift | Profile stats, preferences, units, appearance |
+| Sticky Header with Timers | ✅ Complete | ActiveWorkoutFullScreenView.swift | Fixed header with timers, scrollable content below |
+| Equipment Icons on Exercises | ✅ Complete | ActiveWorkoutView.swift | SF Symbols showing equipment type next to exercise names |
+| Better Set Entry UI/Spacing | ✅ Complete | SetRowView.swift | Larger tap targets (60pt), card backgrounds, improved spacing and hierarchy |
 
 ---
 

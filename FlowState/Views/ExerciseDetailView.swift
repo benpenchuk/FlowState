@@ -35,11 +35,9 @@ struct ExerciseDetailView: View {
                     musclesSection
                 }
                 
-                // Instructions Section
+                // Instructions Section (always show)
                 let instructions = exercise.getInstructions()
-                if !instructions.setup.isEmpty || !instructions.execution.isEmpty || !instructions.tips.isEmpty {
-                    instructionsSection(instructions: instructions)
-                }
+                instructionsSection(instructions: instructions)
                 
                 // PR Section
                 prSection
@@ -181,40 +179,49 @@ struct ExerciseDetailView: View {
                     .font(.headline)
             }
             
-            if !instructions.setup.isEmpty {
-                VStack(alignment: .leading, spacing: 8) {
-                    Text("Setup")
-                        .font(.subheadline)
-                        .fontWeight(.semibold)
-                    
-                    Text(instructions.setup)
-                        .font(.body)
-                        .foregroundStyle(.secondary)
-                }
-            }
+            let hasInstructions = !instructions.setup.isEmpty || !instructions.execution.isEmpty || !instructions.tips.isEmpty
             
-            if !instructions.execution.isEmpty {
-                VStack(alignment: .leading, spacing: 8) {
-                    Text("Execution")
-                        .font(.subheadline)
-                        .fontWeight(.semibold)
-                    
-                    Text(instructions.execution)
-                        .font(.body)
-                        .foregroundStyle(.secondary)
+            if hasInstructions {
+                if !instructions.setup.isEmpty {
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("Setup")
+                            .font(.subheadline)
+                            .fontWeight(.semibold)
+                        
+                        Text(instructions.setup)
+                            .font(.body)
+                            .foregroundStyle(.secondary)
+                    }
                 }
-            }
-            
-            if !instructions.tips.isEmpty {
-                VStack(alignment: .leading, spacing: 8) {
-                    Text("Tips")
-                        .font(.subheadline)
-                        .fontWeight(.semibold)
-                    
-                    Text(instructions.tips)
-                        .font(.body)
-                        .foregroundStyle(.secondary)
+                
+                if !instructions.execution.isEmpty {
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("Execution")
+                            .font(.subheadline)
+                            .fontWeight(.semibold)
+                        
+                        Text(instructions.execution)
+                            .font(.body)
+                            .foregroundStyle(.secondary)
+                    }
                 }
+                
+                if !instructions.tips.isEmpty {
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("Tips")
+                            .font(.subheadline)
+                            .fontWeight(.semibold)
+                        
+                        Text(instructions.tips)
+                            .font(.body)
+                            .foregroundStyle(.secondary)
+                    }
+                }
+            } else {
+                Text("No instructions available for this exercise.")
+                    .font(.body)
+                    .foregroundStyle(.secondary)
+                    .italic()
             }
         }
         .padding()

@@ -12,11 +12,9 @@ import Combine
 
 final class ActiveWorkoutViewModel: ObservableObject {
     @Published var activeWorkout: Workout?
-    @Published var elapsedTime: TimeInterval = 0
     @Published var detectedPR: PersonalRecord? = nil // PR detected when set is completed
     
     private var modelContext: ModelContext?
-    private var timer: Timer?
     private var progressViewModel: ProgressViewModel?
     
     func setModelContext(_ context: ModelContext) {
@@ -24,7 +22,6 @@ final class ActiveWorkoutViewModel: ObservableObject {
         progressViewModel = ProgressViewModel()
         progressViewModel?.setModelContext(context)
         loadActiveWorkout()
-        startTimer()
     }
     
     func refreshActiveWorkout() {
@@ -45,7 +42,6 @@ final class ActiveWorkoutViewModel: ObservableObject {
         do {
             let workouts = try modelContext.fetch(descriptor)
             activeWorkout = workouts.first
-            updateElapsedTime()
         } catch {
             print("Error loading active workout: \(error)")
             activeWorkout = nil
@@ -302,6 +298,105 @@ final class ActiveWorkoutViewModel: ObservableObject {
         }
     }
     
+    func deleteSet(from entry: WorkoutEntry, at index: Int) {
+        guard let modelContext = modelContext else { return }
+        
+        var sets = entry.getSets()
+        guard index < sets.count else { return }
+        sets.remove(at: index)
+        
+        // Renumber remaining sets
+        for index in sets.indices {
+            sets[index].setNumber = index + 1
+        }
+        
+        if sets.isEmpty {
+            // Last set deleted, remove exercise
+            deleteExercise(entry)
+        } else {
+            entry.setSets(sets)
+            do {
+                try modelContext.save()
+            } catch {
+                print("Error deleting set: \(error)")
+            }
+        }
+    }
+    
+    func deleteExercise(_ entry: WorkoutEntry) {
+        guard let modelContext = modelContext,
+              let workout = activeWorkout else { return }
+        
+        workout.entries?.removeAll { $0.id == entry.id }
+        modelContext.delete(entry)
+        
+        do {
+            try modelContext.save()
+        } catch {
+            print("Error deleting exercise: \(error)")
+        }
+    }
+    
+    func reorderSets(in entry: WorkoutEntry, from source: IndexSet, to destination: Int) {
+        print("🔄 reorderSets CALLED - Source: \(source), Destination: \(destination)")
+        guard let modelContext = modelContext else {
+            print("🔴 No modelContext available")
+            return
+        }
+        
+        var sets = entry.getSets().sorted { $0.setNumber < $1.setNumber }
+        print("🔄 Sets before move: \(sets.map { ($0.setNumber, $0.id) })")
+        print("🔄 Moving from offsets: \(Array(source)), to offset: \(destination)")
+        
+        sets.move(fromOffsets: source, toOffset: destination)
+        
+        print("🔄 Sets after move: \(sets.map { ($0.setNumber, $0.id) })")
+        
+        // Renumber sets to match new order
+        for (index, _) in sets.enumerated() {
+            sets[index].setNumber = index + 1
+        }
+        
+        print("🔄 Sets after renumbering: \(sets.map { ($0.setNumber, $0.id) })")
+        
+        entry.setSets(sets)
+        
+        do {
+            try modelContext.save()
+            print("✅ Sets reordered and saved successfully")
+        } catch {
+            print("🔴 Error reordering sets: \(error)")
+        }
+    }
+    
+    func updateSetLabel(in entry: WorkoutEntry, set: SetRecord, label: SetLabel) {
+        guard let modelContext = modelContext else { return }
+        
+        var sets = entry.getSets()
+        if let index = sets.firstIndex(where: { $0.id == set.id }) {
+            sets[index].label = label
+            entry.setSets(sets)
+            
+            do {
+                try modelContext.save()
+            } catch {
+                print("Error updating set label: \(error)")
+            }
+        }
+    }
+    
+    func updateExerciseNotes(in entry: WorkoutEntry, notes: String?) {
+        guard let modelContext = modelContext else { return }
+        
+        entry.notes = notes
+        
+        do {
+            try modelContext.save()
+        } catch {
+            print("Error updating exercise notes: \(error)")
+        }
+    }
+    
     func finishWorkout() {
         finishWorkout(effortRating: nil, notes: nil)
     }
@@ -317,7 +412,6 @@ final class ActiveWorkoutViewModel: ObservableObject {
         do {
             try modelContext.save()
             activeWorkout = nil
-            stopTimer()
         } catch {
             print("Error finishing workout: \(error)")
         }
@@ -332,33 +426,8 @@ final class ActiveWorkoutViewModel: ObservableObject {
         do {
             try modelContext.save()
             activeWorkout = nil
-            stopTimer()
         } catch {
             print("Error canceling workout: \(error)")
         }
-    }
-    
-    private func startTimer() {
-        stopTimer()
-        timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] _ in
-            self?.updateElapsedTime()
-        }
-    }
-    
-    private func stopTimer() {
-        timer?.invalidate()
-        timer = nil
-    }
-    
-    private func updateElapsedTime() {
-        guard let workout = activeWorkout else {
-            elapsedTime = 0
-            return
-        }
-        elapsedTime = Date().timeIntervalSince(workout.startedAt)
-    }
-    
-    deinit {
-        stopTimer()
     }
 }

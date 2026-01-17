@@ -10,6 +10,7 @@ import SwiftData
 
 struct HomeView: View {
     @Environment(\.modelContext) private var modelContext
+    @Environment(\.colorScheme) private var colorScheme
     @EnvironmentObject private var workoutState: WorkoutStateManager
     @StateObject private var templateViewModel = TemplateViewModel()
     @StateObject private var workoutViewModel = ActiveWorkoutViewModel()
@@ -57,12 +58,23 @@ struct HomeView: View {
                 EmptyView()
             }
         }
-        .onAppear {
+        .task {
             templateViewModel.setModelContext(modelContext)
             workoutViewModel.setModelContext(modelContext)
             progressViewModel.setModelContext(modelContext)
             loadUserProfile()
             calculateWeeklyStats()
+        }
+        .onAppear {
+            // Refresh stats whenever the view appears (e.g., when switching tabs)
+            calculateWeeklyStats()
+        }
+        .onChange(of: workoutState.activeWorkout) { oldValue, newValue in
+            // Refresh stats when active workout changes (e.g., when a workout is completed)
+            if oldValue != nil && newValue == nil {
+                // Workout was just completed, refresh stats
+                calculateWeeklyStats()
+            }
         }
         .alert("Start Workout", isPresented: Binding(
             get: { selectedTemplate != nil },
@@ -108,11 +120,11 @@ struct HomeView: View {
     
     private var logoSection: some View {
         HStack(spacing: 12) {
-            Image("FlowStateLogo")
+            Image(colorScheme == .dark ? "FlowStateLogoDark" : "FlowStateLogo")
                 .resizable()
                 .aspectRatio(contentMode: .fit)
                 .frame(height: 45)
-            
+
             Text("FlowState")
                 .font(.system(size: 28, weight: .bold, design: .rounded))
                 .foregroundStyle(.primary)
@@ -217,29 +229,49 @@ struct HomeView: View {
     private func calculateWeeklyStats() {
         let calendar = Calendar.current
         let now = Date()
-        let startOfWeek = calendar.date(from: calendar.dateComponents([.yearForWeekOfYear, .weekOfYear], from: now)) ?? now
         
+        // Get the start of the current week (Sunday)
+        guard let startOfWeek = calendar.date(from: calendar.dateComponents([.yearForWeekOfYear, .weekOfYear], from: now)) else {
+            print("Error: Could not calculate start of week")
+            weeklyStats = WeeklyStatsData(workoutsCount: 0, totalTime: 0, currentStreak: calculateStreak())
+            return
+        }
+        
+        // Normalize to start of day for accurate comparison
+        let normalizedStartOfWeek = calendar.startOfDay(for: startOfWeek)
+        
+        // Fetch all completed workouts (SwiftData doesn't support forced unwrap in predicates)
         let workoutDescriptor = FetchDescriptor<Workout>(
             predicate: #Predicate<Workout> { workout in
-                workout.completedAt != nil && workout.completedAt! >= startOfWeek
-            }
+                workout.completedAt != nil
+            },
+            sortBy: [SortDescriptor(\.completedAt, order: .reverse)]
         )
         
         do {
-            let workouts = try modelContext.fetch(workoutDescriptor)
+            let allCompletedWorkouts = try modelContext.fetch(workoutDescriptor)
+            
+            // Filter workouts from this week in Swift (after fetching)
+            let workoutsThisWeek = allCompletedWorkouts.filter { workout in
+                guard let completedAt = workout.completedAt else { return false }
+                return completedAt >= normalizedStartOfWeek
+            }
+            
             var totalTime: TimeInterval = 0
             
-            for workout in workouts {
+            for workout in workoutsThisWeek {
                 if let completedAt = workout.completedAt {
                     totalTime += completedAt.timeIntervalSince(workout.startedAt)
                 }
             }
             
             weeklyStats = WeeklyStatsData(
-                workoutsCount: workouts.count,
+                workoutsCount: workoutsThisWeek.count,
                 totalTime: totalTime,
                 currentStreak: calculateStreak()
             )
+            
+            print("📊 Weekly stats calculated: \(workoutsThisWeek.count) workouts, \(Int(totalTime/60)) minutes")
         } catch {
             print("Error calculating weekly stats: \(error)")
             weeklyStats = WeeklyStatsData(workoutsCount: 0, totalTime: 0, currentStreak: calculateStreak())

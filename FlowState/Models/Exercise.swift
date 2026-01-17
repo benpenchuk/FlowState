@@ -39,15 +39,33 @@ enum Equipment: String, Codable, CaseIterable {
     case none
 }
 
-struct ExerciseInstructions: Sendable, Codable {
+struct ExerciseInstructions: Codable, Sendable {
     var setup: String
     var execution: String
     var tips: String
     
-    init(setup: String = "", execution: String = "", tips: String = "") {
+    nonisolated init(setup: String = "", execution: String = "", tips: String = "") {
         self.setup = setup
         self.execution = execution
         self.tips = tips
+    }
+    
+    nonisolated init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        setup = try container.decode(String.self, forKey: .setup)
+        execution = try container.decode(String.self, forKey: .execution)
+        tips = try container.decode(String.self, forKey: .tips)
+    }
+    
+    nonisolated func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(setup, forKey: .setup)
+        try container.encode(execution, forKey: .execution)
+        try container.encode(tips, forKey: .tips)
+    }
+    
+    enum CodingKeys: String, CodingKey {
+        case setup, execution, tips
     }
 }
 
@@ -79,7 +97,7 @@ nonisolated final class Exercise {
         equipment: [Equipment] = [],
         primaryMuscles: [String] = [],
         secondaryMuscles: [String] = [],
-        instructions: ExerciseInstructions = ExerciseInstructions(),
+        instructions: ExerciseInstructions? = nil,
         isCustom: Bool = false,
         isFavorite: Bool = false,
         createdAt: Date = Date()
@@ -91,23 +109,32 @@ nonisolated final class Exercise {
         self.equipment = equipment
         self.primaryMuscles = primaryMuscles
         self.secondaryMuscles = secondaryMuscles
-        self.instructionsData = try? JSONEncoder().encode(instructions)
+        // Create default instructions in nonisolated context
+        let finalInstructions = instructions ?? ExerciseInstructions(setup: "", execution: "", tips: "")
+        // Encode in nonisolated context by explicitly creating encoder
+        let encoder = JSONEncoder()
+        self.instructionsData = try? encoder.encode(finalInstructions)
         self.isCustom = isCustom
         self.isFavorite = isFavorite
         self.createdAt = createdAt
     }
     
     // Helper method to get instructions as ExerciseInstructions
-    func getInstructions() -> ExerciseInstructions {
-        guard let data = instructionsData,
-              let decoded = try? JSONDecoder().decode(ExerciseInstructions.self, from: data) else {
-            return ExerciseInstructions()
+    nonisolated func getInstructions() -> ExerciseInstructions {
+        guard let data = instructionsData else {
+            return ExerciseInstructions(setup: "", execution: "", tips: "")
+        }
+        // Decode in nonisolated context by explicitly creating decoder
+        let decoder = JSONDecoder()
+        guard let decoded = try? decoder.decode(ExerciseInstructions.self, from: data) else {
+            return ExerciseInstructions(setup: "", execution: "", tips: "")
         }
         return decoded
     }
     
     // Helper method to set instructions
-    func setInstructions(_ instructions: ExerciseInstructions) {
-        instructionsData = try? JSONEncoder().encode(instructions)
+    nonisolated func setInstructions(_ instructions: ExerciseInstructions) {
+        let encoder = JSONEncoder()
+        instructionsData = try? encoder.encode(instructions)
     }
 }

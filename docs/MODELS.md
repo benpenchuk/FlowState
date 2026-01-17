@@ -105,6 +105,8 @@ Junction between Workout and Exercise. Represents one exercise in a workout.
 - `id: UUID` - Unique identifier
 - `order: Int` - Order in workout (0-based)
 - `setsData: Data?` - JSON-encoded `[SetRecord]` array
+- `notes: String?` - Optional per-exercise notes during workout
+- `isExpanded: Bool` - Whether exercise is expanded in workout view (default: true)
 
 **Relationships:**
 - `exercise: Exercise?` - Reference to Exercise model
@@ -117,6 +119,8 @@ Junction between Workout and Exercise. Represents one exercise in a workout.
 **Usage:**
 - Created when adding exercise to workout
 - Stores all sets for that exercise in this workout
+- Stores per-exercise notes (separate from workout-level notes)
+- Tracks expansion state for UI (expand/collapse exercises)
 - Sets stored as JSON, not SwiftData relationships
 
 ---
@@ -214,6 +218,7 @@ Represents a single set within a workout entry. Stored as JSON in `WorkoutEntry.
 - `equipment: String?` - Optional: which equipment was used this set
 - `isCompleted: Bool` - Whether set was completed
 - `completedAt: Date?` - When this set was marked complete (for analyzing workout pace)
+- `label: String?` - Optional set label (Warmup, Failure, Drop Set, PR Attempt)
 
 **Why Not a SwiftData Model?**
 

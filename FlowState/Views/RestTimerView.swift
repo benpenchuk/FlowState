@@ -99,12 +99,35 @@ struct RestTimerView: View {
                 .disabled(!viewModel.isRunning)
             }
             .padding(.horizontal)
+            
+            // Sound toggle button
+            Button {
+                viewModel.toggleSound()
+            } label: {
+                HStack(spacing: 6) {
+                    Image(systemName: viewModel.soundEnabled ? "speaker.wave.2.fill" : "speaker.slash.fill")
+                        .font(.subheadline)
+                    Text(viewModel.soundEnabled ? "Sound On" : "Sound Off")
+                        .font(.caption)
+                }
+                .foregroundStyle(viewModel.soundEnabled ? .primary : .secondary)
+                .padding(.horizontal, 12)
+                .padding(.vertical, 6)
+                .background(Color(.systemGray5))
+                .cornerRadius(8)
+            }
         }
         .padding()
         .background(
             RoundedRectangle(cornerRadius: 16)
                 .fill(Color(.systemGray6))
         )
+        .onAppear {
+            // Update timer immediately when view appears (e.g., after app comes to foreground)
+            if viewModel.isRunning {
+                viewModel.refreshRemainingTime()
+            }
+        }
     }
 }
 

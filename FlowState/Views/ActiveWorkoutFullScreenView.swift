@@ -8,6 +8,22 @@
 import SwiftUI
 import SwiftData
 
+// PreferenceKey for tracking scroll offset
+struct ScrollOffsetPreferenceKey: PreferenceKey {
+    static var defaultValue: CGFloat = 0
+    static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {
+        // When multiple preferences are merged, prefer non-default values
+        // If nextValue() returns non-zero, use it. Otherwise keep current value.
+        let newValue = nextValue()
+        // Use newValue only if it's not the default (0), otherwise keep existing value
+        // This prevents default values from overwriting actual scroll positions
+        if abs(newValue) > 0.001 {
+            value = newValue
+        }
+        // If both are zero or defaults, that's fine - we keep value
+    }
+}
+
 struct ActiveWorkoutFullScreenView: View {
     @EnvironmentObject private var workoutState: WorkoutStateManager
     @Environment(\.modelContext) private var modelContext
@@ -17,14 +33,13 @@ struct ActiveWorkoutFullScreenView: View {
     @StateObject private var profileViewModel = ProfileViewModel()
     @State private var showingCancelAlert = false
     @State private var showingAddExercise = false
-    @State private var workoutName: String
     @State private var showingCompletedTimer: Bool = false
     @State private var showingCompletionSheet = false
+    @State private var scrollOffset: CGFloat = 0
     
     init() {
         let vm = ActiveWorkoutViewModel()
         _viewModel = StateObject(wrappedValue: vm)
-        _workoutName = State(initialValue: "")
     }
     
     private var workout: Workout? {
@@ -32,11 +47,17 @@ struct ActiveWorkoutFullScreenView: View {
     }
     
     var body: some View {
-        Group {
-            if let workout = workout {
-                workoutContentView(workout: workout)
-            } else {
-                EmptyView()
+        ZStack {
+            // Solid background to prevent anything showing through
+            Color(.systemBackground)
+                .ignoresSafeArea()
+            
+            Group {
+                if let workout = workout {
+                    workoutContentView(workout: workout)
+                } else {
+                    EmptyView()
+                }
             }
         }
         .onAppear {
@@ -45,13 +66,11 @@ struct ActiveWorkoutFullScreenView: View {
             workoutState.showWorkoutFullScreen()
             if let workout = workout {
                 viewModel.activeWorkout = workout
-                workoutName = workout.name ?? ""
             }
         }
         .onChange(of: workoutState.activeWorkout?.id) { oldValue, newValue in
             if let workout = workoutState.activeWorkout {
                 viewModel.activeWorkout = workout
-                workoutName = workout.name ?? ""
             }
         }
     }
@@ -59,12 +78,62 @@ struct ActiveWorkoutFullScreenView: View {
     @ViewBuilder
     private func workoutContentView(workout: Workout) -> some View {
         NavigationStack {
-            ScrollView {
-                workoutContentBody(workout: workout)
+            ZStack {
+                // Solid background
+                Color(.systemBackground)
+                    .ignoresSafeArea()
+                
+                VStack(spacing: 0) {
+                    // Dynamic header (full or compact based on scroll)
+                    Group {
+                        if scrollOffset < 50 {
+                            fullHeaderView(workout: workout)
+                        } else {
+                            compactPillsView(workout: workout)
+                        }
+                    }
+                    .animation(.spring(response: 0.3, dampingFraction: 0.8), value: scrollOffset)
+                    
+                    // Scrollable content area
+                    ScrollView {
+                        VStack(spacing: 0) {
+                            workoutContentBody(workout: workout)
+                        }
+                        .background(GeometryReader { geometry in
+                            Color.clear.preference(
+                                key: ScrollOffsetPreferenceKey.self,
+                                value: geometry.frame(in: .named("scroll")).minY
+                            )
+                        })
+                    }
+                    .coordinateSpace(name: "scroll")
+                    .onPreferenceChange(ScrollOffsetPreferenceKey.self) { newValue in
+                        // At top: minY ≈ 0 or positive  
+                        // Scrolled down: minY becomes negative
+                        // scrollOffset increases as user scrolls down
+                        scrollOffset = max(0, -newValue)
+                    }
+                    .background(
+                        Color.clear
+                            .contentShape(Rectangle())
+                            .simultaneousGesture(
+                                TapGesture().onEnded {
+                                    hideKeyboard()
+                                }
+                            )
+                    )
+                }
             }
             .navigationTitle("Active Workout")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
+                ToolbarItemGroup(placement: .keyboard) {
+                    Spacer()
+                    Button("Done") {
+                        hideKeyboard()
+                    }
+                    .tint(.orange)
+                }
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button {
                         workoutState.minimizeWorkout()
@@ -117,8 +186,8 @@ struct ActiveWorkoutFullScreenView: View {
     }
     
     @ViewBuilder
-    private func workoutContentBody(workout: Workout) -> some View {
-        VStack(spacing: 20) {
+    private func fullHeaderView(workout: Workout) -> some View {
+        VStack(spacing: 12) {
             // Timer
             timerView
             
@@ -126,7 +195,93 @@ struct ActiveWorkoutFullScreenView: View {
             if workoutState.restTimerViewModel.isRunning || showingCompletedTimer {
                 restTimerView
             }
+        }
+        .padding(.horizontal)
+        .padding(.top, 8)
+        .padding(.bottom, 12)
+        .background(
+            Color(.systemBackground)
+                .shadow(color: .black.opacity(0.05), radius: 4, y: 2)
+        )
+        .animation(.spring(response: 0.3, dampingFraction: 0.8), value: scrollOffset)
+    }
+    
+    @ViewBuilder
+    private func compactPillsView(workout: Workout) -> some View {
+        HStack(spacing: 8) {
+            // Duration pill
+            compactDurationPill
             
+            // Rest timer pill (if active)
+            if workoutState.restTimerViewModel.isRunning || showingCompletedTimer {
+                compactRestTimerPill
+            }
+        }
+        .padding(.horizontal)
+        .padding(.vertical, 8)
+        .background(
+            Color(.systemBackground)
+                .shadow(color: .black.opacity(0.05), radius: 2, y: 1)
+        )
+        .animation(.spring(response: 0.3, dampingFraction: 0.8), value: scrollOffset)
+    }
+    
+    private var compactDurationPill: some View {
+        HStack(spacing: 6) {
+            Image(systemName: "timer")
+                .font(.system(size: 12, weight: .medium))
+                .foregroundStyle(.orange)
+            Text("Duration: \(formatElapsedTime(workoutState.elapsedTime))")
+                .font(.system(size: 14, weight: .semibold, design: .monospaced))
+                .foregroundStyle(.primary)
+        }
+        .padding(.horizontal, 12)
+        .padding(.vertical, 8)
+        .background(Color(.systemGray6))
+        .cornerRadius(12)
+    }
+    
+    private var compactRestTimerPill: some View {
+        HStack(spacing: 6) {
+            // Tiny circular progress indicator
+            ZStack {
+                Circle()
+                    .stroke(Color(.systemGray5), lineWidth: 2)
+                    .frame(width: 16, height: 16)
+                
+                let progress = workoutState.restTimerViewModel.totalSeconds > 0 ?
+                    Double(workoutState.restTimerViewModel.remainingSeconds) / Double(workoutState.restTimerViewModel.totalSeconds) : 0
+                
+                Circle()
+                    .trim(from: 0, to: progress)
+                    .stroke(Color.orange, style: StrokeStyle(lineWidth: 2, lineCap: .round))
+                    .frame(width: 16, height: 16)
+                    .rotationEffect(.degrees(-90))
+            }
+            
+            Text("Rest: \(formatRestTime(workoutState.restTimerViewModel.remainingSeconds))")
+                .font(.system(size: 14, weight: .semibold, design: .monospaced))
+                .foregroundStyle(.orange)
+        }
+        .padding(.horizontal, 12)
+        .padding(.vertical, 8)
+        .background(Color(.systemGray6))
+        .cornerRadius(12)
+    }
+    
+    private func formatRestTime(_ seconds: Int) -> String {
+        if seconds >= 60 {
+            let minutes = seconds / 60
+            let secs = seconds % 60
+            return String(format: "%d:%02d", minutes, secs)
+        } else {
+            return "\(seconds)s"
+        }
+    }
+    
+    @ViewBuilder
+    private func workoutContentBody(workout: Workout) -> some View {
+        VStack(spacing: ActiveWorkoutLayout.workoutSectionSpacing) {
             // Workout name
             workoutNameField(workout: workout)
             
@@ -139,7 +294,8 @@ struct ActiveWorkoutFullScreenView: View {
             // Finish Workout button
             finishWorkoutButton
         }
-        .padding()
+        .padding(ActiveWorkoutLayout.contentPadding)
+        .frame(maxWidth: .infinity)
     }
     
     private var restTimerView: some View {
@@ -164,15 +320,9 @@ struct ActiveWorkoutFullScreenView: View {
     }
     
     private func workoutNameField(workout: Workout) -> some View {
-        TextField("Workout Name", text: $workoutName)
+        Text(workout.name ?? "Workout")
             .font(.title2)
-            .fontWeight(.semibold)
-            .multilineTextAlignment(.center)
-            .textFieldStyle(.plain)
-            .onChange(of: workoutName) { oldValue, newValue in
-                workout.name = newValue.isEmpty ? nil : newValue
-                try? modelContext.save()
-            }
+            .fontWeight(.bold)
     }
     
     @ViewBuilder
@@ -268,5 +418,11 @@ struct ActiveWorkoutFullScreenView: View {
         let minutes = Int(timeInterval) / 60
         let seconds = Int(timeInterval) % 60
         return String(format: "%02d:%02d", minutes, seconds)
+    }
+}
+
+extension View {
+    func hideKeyboard() {
+        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
     }
 }

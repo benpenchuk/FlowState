@@ -42,6 +42,8 @@ FlowState/
 │   ├── CreateTemplateView.swift         # Template creation
 │   ├── RestTimerView.swift              # Rest timer UI
 │   ├── SetRowView.swift                 # Individual set input row
+│   ├── CustomNumPadView.swift           # Custom number pad component
+│   ├── LabelPickerSheet.swift           # Set label selection sheet
 │   └── [Various sheet views]            # Modals for adding/editing
 │
 ├── FlowStateApp.swift   # App entry point with ModelContainer setup
@@ -144,6 +146,14 @@ FlowState/
 - `RestTimerViewModel` manages countdown logic
 - Circular progress indicator with skip/+30s/-30s controls
 - Stops when new set is started or workout is finished/cancelled
+
+### Custom Input Components
+
+- `CustomNumPadView` replaces native keyboard for better UX during workouts
+- Built-in "Done" button eliminates keyboard dismissal friction
+- Supports different input types (decimal weights, whole number reps)
+- Consistent styling and behavior across the app
+- Used for weight/reps input and exercise notes
 
 ## Persistence
 
