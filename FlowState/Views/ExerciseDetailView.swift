@@ -18,6 +18,7 @@ struct ExerciseDetailView: View {
     @State private var progressionData: [(date: Date, weight: Double)] = []
     @State private var prs: [PersonalRecord] = []
     @State private var history: [(date: Date, maxWeight: Double, sets: [SetRecord])] = []
+    @State private var isLoading = false
     
     var body: some View {
         ScrollView {
@@ -265,7 +266,9 @@ struct ExerciseDetailView: View {
                     .font(.headline)
             }
             
-            if let pr = currentPR {
+            if isLoading {
+                SkeletonPRCard()
+            } else if let pr = currentPR {
                 HStack(spacing: 16) {
                     VStack(alignment: .leading, spacing: 4) {
                         let displayWeight = profileViewModel.profile?.units == .kg ? pr.weight / 2.20462 : pr.weight
@@ -334,7 +337,11 @@ struct ExerciseDetailView: View {
                     .font(.headline)
             }
             
-            if history.isEmpty {
+            if isLoading {
+                ForEach(0..<3, id: \.self) { _ in
+                    SkeletonWorkoutHistoryCard()
+                }
+            } else if history.isEmpty {
                 Text("No workout history yet")
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
@@ -356,6 +363,8 @@ struct ExerciseDetailView: View {
     }
     
     private func loadData() {
+        isLoading = true
+        
         currentPR = progressViewModel.calculatePR(for: exercise)
         progressionData = progressViewModel.getWeightProgression(for: exercise)
         
@@ -373,6 +382,8 @@ struct ExerciseDetailView: View {
         }
         
         history = progressViewModel.getExerciseHistory(for: exercise, limit: 10)
+        
+        isLoading = false
     }
     
     private func formatDate(_ date: Date) -> String {

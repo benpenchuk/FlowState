@@ -14,7 +14,9 @@ final class ProfileViewModel: ObservableObject {
     @Published var totalWorkouts: Int = 0
     @Published var totalPRs: Int = 0
     @Published var currentStreak: Int = 0
+    @Published var totalVolume: Double = 0 // Total volume in lbs across all workouts
     @Published var recentPRs: [PersonalRecord] = []
+    @Published var isLoading = false
     
     private var modelContext: ModelContext?
     
@@ -54,6 +56,8 @@ final class ProfileViewModel: ObservableObject {
     func calculateStats() {
         guard let modelContext = modelContext else { return }
         
+        isLoading = true
+        
         // Total workouts completed
         let workoutDescriptor = FetchDescriptor<Workout>(
             predicate: #Predicate<Workout> { workout in
@@ -64,9 +68,13 @@ final class ProfileViewModel: ObservableObject {
         do {
             let completedWorkouts = try modelContext.fetch(workoutDescriptor)
             totalWorkouts = completedWorkouts.count
+            
+            // Total volume (sum of totalVolume across all completed workouts)
+            totalVolume = completedWorkouts.compactMap { $0.totalVolume }.reduce(0, +)
         } catch {
             print("Error fetching workouts: \(error)")
             totalWorkouts = 0
+            totalVolume = 0
         }
         
         // Total PRs
@@ -85,6 +93,8 @@ final class ProfileViewModel: ObservableObject {
         
         // Recent PRs (last 3)
         loadRecentPRs(limit: 3)
+        
+        isLoading = false
     }
     
     private func calculateStreak() -> Int {

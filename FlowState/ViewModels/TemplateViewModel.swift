@@ -12,6 +12,7 @@ import Combine
 
 final class TemplateViewModel: ObservableObject {
     @Published var templates: [WorkoutTemplate] = []
+    @Published var isLoading = false
     
     private var modelContext: ModelContext?
     
@@ -22,6 +23,8 @@ final class TemplateViewModel: ObservableObject {
     
     func fetchAllTemplates() {
         guard let modelContext = modelContext else { return }
+        
+        isLoading = true
         
         let descriptor = FetchDescriptor<WorkoutTemplate>(
             sortBy: [SortDescriptor(\.createdAt, order: .reverse)]
@@ -45,6 +48,8 @@ final class TemplateViewModel: ObservableObject {
             print("Error fetching templates: \(error)")
             templates = []
         }
+        
+        isLoading = false
     }
     
     func createTemplate(name: String, exercises: [(Exercise, defaultSets: Int, defaultReps: Int, defaultWeight: Double?)]) {
@@ -152,5 +157,38 @@ final class TemplateViewModel: ObservableObject {
     func markTemplateUsed(_ template: WorkoutTemplate) {
         template.lastUsedAt = Date()
         updateTemplate(template)
+    }
+    
+    func duplicateTemplate(_ template: WorkoutTemplate) {
+        guard let modelContext = modelContext else { return }
+        
+        // Create new template with " (Copy)" suffix
+        let newTemplate = WorkoutTemplate(name: "\(template.name) (Copy)", createdAt: Date())
+        modelContext.insert(newTemplate)
+        
+        // Duplicate all exercises
+        if let exercises = template.exercises?.sorted(by: { $0.order < $1.order }) {
+            var newExercises: [TemplateExercise] = []
+            for exercise in exercises {
+                let newTemplateExercise = TemplateExercise(
+                    exercise: exercise.exercise!,
+                    order: exercise.order,
+                    defaultSets: exercise.defaultSets,
+                    defaultReps: exercise.defaultReps,
+                    defaultWeight: exercise.defaultWeight
+                )
+                newTemplateExercise.template = newTemplate
+                newExercises.append(newTemplateExercise)
+                modelContext.insert(newTemplateExercise)
+            }
+            newTemplate.exercises = newExercises
+        }
+        
+        do {
+            try modelContext.save()
+            fetchAllTemplates()
+        } catch {
+            print("Error duplicating template: \(error)")
+        }
     }
 }

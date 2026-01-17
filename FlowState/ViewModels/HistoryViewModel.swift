@@ -12,6 +12,7 @@ import Combine
 
 final class HistoryViewModel: ObservableObject {
     @Published var completedWorkouts: [Workout] = []
+    @Published var isLoading = false
     
     private var modelContext: ModelContext?
     
@@ -22,6 +23,8 @@ final class HistoryViewModel: ObservableObject {
     
     func fetchCompletedWorkouts() {
         guard let modelContext = modelContext else { return }
+        
+        isLoading = true
         
         let descriptor = FetchDescriptor<Workout>(
             predicate: #Predicate<Workout> { workout in
@@ -36,6 +39,8 @@ final class HistoryViewModel: ObservableObject {
             print("Error fetching completed workouts: \(error)")
             completedWorkouts = []
         }
+        
+        isLoading = false
     }
     
     func deleteWorkout(_ workout: Workout) {
@@ -123,6 +128,24 @@ final class HistoryViewModel: ObservableObject {
             totalCompleted += sets.filter { $0.isCompleted }.count
         }
         return totalCompleted
+    }
+    
+    // Format volume with units conversion and comma separator
+    func formatVolume(_ volumeInLbs: Double?, preferredUnits: Units) -> String? {
+        guard let volume = volumeInLbs, volume > 0 else { return nil }
+        
+        let displayVolume = preferredUnits == .kg ? volume / 2.20462 : volume
+        let unit = preferredUnits == .kg ? "kg" : "lbs"
+        
+        // Format with comma separator, no decimals
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        formatter.maximumFractionDigits = 0
+        
+        if let formatted = formatter.string(from: NSNumber(value: displayVolume)) {
+            return "\(formatted) \(unit)"
+        }
+        return "\(Int(displayVolume)) \(unit)"
     }
     
     // Format workout for export as shareable text

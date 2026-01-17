@@ -11,6 +11,7 @@ import Combine
 
 final class ProgressViewModel: ObservableObject {
     @Published var recentPRs: [PersonalRecord] = []
+    @Published var isLoading = false
     
     private var modelContext: ModelContext?
     
@@ -174,7 +175,9 @@ final class ProgressViewModel: ObservableObject {
     }
     
     private func loadRecentPRs() {
+        isLoading = true
         recentPRs = getRecentPRs()
+        isLoading = false
     }
     
     /// Get exercise history (last N times performed)

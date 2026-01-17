@@ -409,6 +409,20 @@ final class ActiveWorkoutViewModel: ObservableObject {
         workout.effortRating = effortRating
         workout.notes = notes
         
+        // Calculate total volume (sum of weight × reps for all completed sets with weight > 0)
+        var totalVolume: Double = 0
+        if let entries = workout.entries {
+            for entry in entries {
+                let sets = entry.getSets()
+                for set in sets {
+                    if set.isCompleted, let weight = set.weight, weight > 0, let reps = set.reps {
+                        totalVolume += weight * Double(reps)
+                    }
+                }
+            }
+        }
+        workout.totalVolume = totalVolume > 0 ? totalVolume : nil
+        
         do {
             try modelContext.save()
             activeWorkout = nil

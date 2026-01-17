@@ -22,6 +22,9 @@ struct HomeView: View {
     @State private var startingEmpty = false
     @State private var userProfile: UserProfile?
     @State private var weeklyStats = WeeklyStatsData(workoutsCount: 0, totalTime: 0, currentStreak: 0)
+    @State private var templateToEdit: WorkoutTemplate? = nil
+    @State private var templateToDelete: WorkoutTemplate? = nil
+    @State private var showingDeleteConfirmation = false
     
     private struct WeeklyStatsData {
         var workoutsCount: Int
@@ -116,6 +119,26 @@ struct HomeView: View {
         } message: {
             Text("You have an active workout. Discard it and start a new one?")
         }
+        .sheet(item: $templateToEdit) { template in
+            NavigationStack {
+                TemplateDetailView(template: template, viewModel: templateViewModel)
+            }
+        }
+        .alert("Delete Template", isPresented: $showingDeleteConfirmation) {
+            Button("Cancel", role: .cancel) {
+                templateToDelete = nil
+            }
+            Button("Delete", role: .destructive) {
+                if let template = templateToDelete {
+                    templateViewModel.deleteTemplate(template)
+                    templateToDelete = nil
+                }
+            }
+        } message: {
+            if let template = templateToDelete {
+                Text("Are you sure you want to delete \"\(template.name)\"? This action cannot be undone.")
+            }
+        }
     }
     
     private var logoSection: some View {
@@ -129,7 +152,7 @@ struct HomeView: View {
                 .font(.system(size: 28, weight: .bold, design: .rounded))
                 .foregroundStyle(.primary)
         }
-        .padding(.bottom, 4)
+        .padding(.bottom, 2)
     }
     
     private var greetingSection: some View {
@@ -362,7 +385,16 @@ struct HomeView: View {
                 }
             }
             
-            if templateViewModel.templates.isEmpty {
+            if templateViewModel.isLoading {
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack(spacing: 16) {
+                        ForEach(0..<3, id: \.self) { _ in
+                            SkeletonTemplateCard()
+                        }
+                    }
+                    .padding(.horizontal, 4)
+                }
+            } else if templateViewModel.templates.isEmpty {
                 VStack(spacing: 8) {
                     Text("No templates yet")
                         .font(.subheadline)
@@ -382,9 +414,22 @@ struct HomeView: View {
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing: 16) {
                         ForEach(Array(templateViewModel.templates.prefix(5))) { template in
-                            TemplateCardView(template: template) {
-                                selectedTemplate = template
-                            }
+                            TemplateCardView(
+                                template: template,
+                                onTap: {
+                                    selectedTemplate = template
+                                },
+                                onEdit: {
+                                    templateToEdit = template
+                                },
+                                onDuplicate: {
+                                    templateViewModel.duplicateTemplate(template)
+                                },
+                                onDelete: {
+                                    templateToDelete = template
+                                    showingDeleteConfirmation = true
+                                }
+                            )
                         }
                     }
                     .padding(.horizontal, 4)
@@ -418,7 +463,13 @@ struct HomeView: View {
                     .fontWeight(.semibold)
             }
             
-            if progressViewModel.recentPRs.isEmpty {
+            if progressViewModel.isLoading {
+                VStack(spacing: 12) {
+                    ForEach(0..<3, id: \.self) { _ in
+                        SkeletonPRCard()
+                    }
+                }
+            } else if progressViewModel.recentPRs.isEmpty {
                 VStack(spacing: 8) {
                     Text("No recent PRs")
                         .font(.subheadline)
@@ -500,36 +551,124 @@ struct HomeView: View {
     }
 }
 
+// MARK: - Helper Functions
+private func formatShortRelativeDate(_ date: Date) -> String {
+    let diff = Int(Date().timeIntervalSince(date))
+    if diff < 60 { return "now" }
+    if diff < 3600 { return "\(diff / 60)m ago" }
+    if diff < 86400 { return "\(diff / 3600)h ago" }
+    if diff < 604800 { return "\(diff / 86400)d ago" }
+    return date.formatted(.dateTime.month().day())
+}
+
 struct TemplateCardView: View {
     let template: WorkoutTemplate
     let onTap: () -> Void
+    let onEdit: () -> Void
+    let onDuplicate: () -> Void
+    let onDelete: () -> Void
 
     var body: some View {
         Button {
             onTap()
         } label: {
-            VStack(alignment: .leading, spacing: 8) {
-                Text(template.name)
-                    .font(.headline)
-                    .lineLimit(2)
-                    .foregroundStyle(.primary)
-
-                HStack {
-                    Label("\(template.exercises?.count ?? 0)", systemImage: "dumbbell")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-
+            VStack(alignment: .leading, spacing: 0) {
+                HStack(alignment: .center) {
+                    Text(template.name)
+                        .font(.headline)
+                        .lineLimit(1)
+                        .foregroundStyle(.primary)
+                    
                     Spacer()
+                    
+                    Image(systemName: "play.circle.fill")
+                        .foregroundStyle(Color.accentColor.opacity(0.8))
+                        .font(.subheadline)
+                }
+                .padding(.bottom, 10)
+                
+                VStack(alignment: .leading, spacing: 6) {
+                    let exercises = template.exercises?.sorted(by: { $0.order < $1.order }) ?? []
+                    let displayCount = min(3, exercises.count)
+                    
+                    ForEach(exercises.prefix(displayCount), id: \.id) { exercise in
+                        HStack(spacing: 4) {
+                            Text("•")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                            Text(exercise.exercise?.name ?? "Unknown")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                                .lineLimit(1)
+                            
+                            Spacer()
+                            
+                            Text("\(exercise.defaultSets)×\(exercise.defaultReps)")
+                                .font(.caption2)
+                                .foregroundStyle(.tertiary)
+                                .fontWeight(.medium)
+                        }
+                    }
+                    
+                    if exercises.count > displayCount {
+                        Text("+\(exercises.count - displayCount) more")
+                            .font(.caption2)
+                            .foregroundStyle(.tertiary)
+                            .padding(.top, 2)
+                            .padding(.leading, 8)
+                    }
+                }
+                
+                Spacer(minLength: 8)
+                
+                HStack {
+                    if let lastUsed = template.lastUsedAt {
+                        let shortDate = formatShortRelativeDate(lastUsed)
+                        Text("Last used \(shortDate)")
+                            .font(.caption2)
+                            .foregroundStyle(.secondary)
+                    } else {
+                        Text("Never used")
+                            .font(.caption2)
+                            .foregroundStyle(.secondary.opacity(0.7))
+                    }
+                    
+                    Spacer()
+                    
+                    Label("\(template.exercises?.count ?? 0)", systemImage: "dumbbell")
+                        .font(.caption2)
+                        .foregroundStyle(.secondary)
                 }
             }
-            .padding()
-            .frame(width: 160, height: 100)
+            .padding(14)
+            .frame(width: 220, height: 150, alignment: .topLeading)
             .background(
                 RoundedRectangle(cornerRadius: 12)
                     .fill(Color(.systemGray6))
             )
         }
         .buttonStyle(.plain)
+        .contextMenu {
+            Button {
+                onEdit()
+            } label: {
+                Label("Edit Template", systemImage: "pencil")
+            }
+            
+            Button {
+                onDuplicate()
+            } label: {
+                Label("Duplicate", systemImage: "doc.on.doc")
+            }
+            
+            Divider()
+            
+            Button(role: .destructive) {
+                onDelete()
+            } label: {
+                Label("Delete", systemImage: "trash")
+            }
+        }
     }
 }
 

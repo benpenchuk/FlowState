@@ -14,7 +14,9 @@ struct HistoryView: View {
     
     var body: some View {
         Group {
-            if viewModel.completedWorkouts.isEmpty {
+            if viewModel.isLoading {
+                skeletonList
+            } else if viewModel.completedWorkouts.isEmpty {
                 emptyStateView
             } else {
                 workoutHistoryList
@@ -23,6 +25,14 @@ struct HistoryView: View {
         .navigationTitle("History")
         .onAppear {
             viewModel.setModelContext(modelContext)
+        }
+    }
+    
+    private var skeletonList: some View {
+        List {
+            ForEach(0..<5, id: \.self) { _ in
+                SkeletonWorkoutHistoryCard()
+            }
         }
     }
     

@@ -22,6 +22,23 @@ struct WorkoutCompletionView: View {
     @State private var selectedEffort: Int? = nil
     @State private var notes: String = ""
     @State private var checkmarkScale: CGFloat = 0.5
+    @StateObject private var profileViewModel = ProfileViewModel()
+    
+    // Calculate volume from workout (weight × reps for completed sets with weight > 0)
+    private var calculatedVolume: Double? {
+        var totalVolume: Double = 0
+        if let entries = workout.entries {
+            for entry in entries {
+                let sets = entry.getSets()
+                for set in sets {
+                    if set.isCompleted, let weight = set.weight, weight > 0, let reps = set.reps {
+                        totalVolume += weight * Double(reps)
+                    }
+                }
+            }
+        }
+        return totalVolume > 0 ? totalVolume : nil
+    }
     
     var body: some View {
         NavigationStack {
@@ -67,6 +84,7 @@ struct WorkoutCompletionView: View {
             }
         }
         .onAppear {
+            profileViewModel.setModelContext(modelContext)
             // Animate checkmark on appear
             withAnimation(.spring(response: 0.6, dampingFraction: 0.6)) {
                 checkmarkScale = 1.0
@@ -113,6 +131,14 @@ struct WorkoutCompletionView: View {
             StatItem(value: "\(exerciseCount)", label: "Exercises", icon: "dumbbell")
             
             StatItem(value: "\(completedSetCount)", label: "Sets", icon: "checkmark.circle")
+            
+            if let volume = calculatedVolume {
+                StatItem(
+                    value: formatVolume(volume),
+                    label: "Volume",
+                    icon: "scalemass"
+                )
+            }
             
             StatItem(
                 value: "\(prCount)",
@@ -223,6 +249,21 @@ struct WorkoutCompletionView: View {
         } else {
             return "\(minutes) min"
         }
+    }
+    
+    private func formatVolume(_ volumeInLbs: Double) -> String {
+        let preferredUnits = profileViewModel.profile?.units ?? .lbs
+        let displayVolume = preferredUnits == .kg ? volumeInLbs / 2.20462 : volumeInLbs
+        
+        // Format with comma separator, no decimals
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        formatter.maximumFractionDigits = 0
+        
+        if let formatted = formatter.string(from: NSNumber(value: displayVolume)) {
+            return formatted
+        }
+        return "\(Int(displayVolume))"
     }
 }
 

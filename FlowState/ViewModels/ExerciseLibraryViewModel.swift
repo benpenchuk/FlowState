@@ -13,6 +13,7 @@ import Combine
 final class ExerciseLibraryViewModel: ObservableObject {
     @Published var exercises: [Exercise] = []
     @Published var searchText: String = ""
+    @Published var isLoading = false
     
     private var modelContext: ModelContext?
     
@@ -24,6 +25,8 @@ final class ExerciseLibraryViewModel: ObservableObject {
     
     func loadAllExercises() {
         guard let modelContext = modelContext else { return }
+        
+        isLoading = true
         
         let descriptor = FetchDescriptor<Exercise>(
             sortBy: [SortDescriptor(\.name)]
@@ -41,6 +44,8 @@ final class ExerciseLibraryViewModel: ObservableObject {
             print("Error loading exercises: \(error)")
             exercises = []
         }
+        
+        isLoading = false
     }
     
     func addCustomExercise(

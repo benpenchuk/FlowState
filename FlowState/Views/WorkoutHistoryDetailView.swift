@@ -105,6 +105,14 @@ struct WorkoutHistoryDetailView: View {
                     title: "Sets",
                     value: "\(viewModel.countCompletedSets(in: workout))"
                 )
+                
+                if let volumeText = viewModel.formatVolume(workout.totalVolume, preferredUnits: profileViewModel.profile?.units ?? .lbs) {
+                    InfoBadge(
+                        icon: "scalemass",
+                        title: "Volume",
+                        value: volumeText
+                    )
+                }
             }
             
             // Effort Rating

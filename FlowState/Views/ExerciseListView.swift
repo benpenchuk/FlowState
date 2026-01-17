@@ -49,6 +49,53 @@ struct ExerciseListView: View {
     }
     
     var body: some View {
+        Group {
+            if viewModel.isLoading {
+                skeletonList
+            } else {
+                exerciseList
+            }
+        }
+        .navigationTitle("Exercises")
+        .searchable(text: $viewModel.searchText, prompt: "Search exercises")
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button {
+                    showingAddExercise = true
+                } label: {
+                    Image(systemName: "plus")
+                }
+            }
+            
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button {
+                    showingEquipmentFilter.toggle()
+                } label: {
+                    Image(systemName: selectedEquipment.isEmpty ? "line.3.horizontal.decrease.circle" : "line.3.horizontal.decrease.circle.fill")
+                        .foregroundStyle(selectedEquipment.isEmpty ? .primary : Color.accentColor)
+                }
+            }
+        }
+        .sheet(isPresented: $showingAddExercise) {
+            AddExerciseSheet(viewModel: viewModel)
+        }
+        .sheet(isPresented: $showingEquipmentFilter) {
+            EquipmentFilterSheet(selectedEquipment: $selectedEquipment, exerciseType: selectedExerciseType)
+        }
+        .onAppear {
+            viewModel.setModelContext(modelContext)
+        }
+    }
+    
+    private var skeletonList: some View {
+        List {
+            ForEach(0..<10, id: \.self) { _ in
+                SkeletonExerciseRow()
+            }
+        }
+    }
+    
+    private var exerciseList: some View {
         List {
             // Favorites section
             if !favoriteExercises.isEmpty {
@@ -100,25 +147,6 @@ struct ExerciseListView: View {
                 }
             }
         }
-        .searchable(text: $viewModel.searchText, prompt: "Search exercises")
-        .navigationTitle("Exercises")
-        .toolbar {
-            ToolbarItem(placement: .navigationBarTrailing) {
-                HStack {
-                    Button {
-                        showingEquipmentFilter = true
-                    } label: {
-                        Image(systemName: selectedEquipment.isEmpty ? "line.3.horizontal.decrease.circle" : "line.3.horizontal.decrease.circle.fill")
-                    }
-                    
-                    Button {
-                        showingAddExercise = true
-                    } label: {
-                        Image(systemName: "plus")
-                    }
-                }
-            }
-        }
         .safeAreaInset(edge: .top) {
             Picker("Exercise Type", selection: $selectedExerciseType) {
                 Text("Strength").tag(ExerciseType.strength)
@@ -127,15 +155,6 @@ struct ExerciseListView: View {
             .pickerStyle(.segmented)
             .padding()
             .background(Color(.systemBackground))
-        }
-        .sheet(isPresented: $showingAddExercise) {
-            AddExerciseSheet(viewModel: viewModel)
-        }
-        .sheet(isPresented: $showingEquipmentFilter) {
-            EquipmentFilterSheet(selectedEquipment: $selectedEquipment, exerciseType: selectedExerciseType)
-        }
-        .onAppear {
-            viewModel.setModelContext(modelContext)
         }
     }
     

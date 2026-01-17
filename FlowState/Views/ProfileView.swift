@@ -121,10 +121,19 @@ struct ProfileView: View {
             Text("Stats")
                 .font(.headline)
             
-            HStack(spacing: 8) {
-                StatCard(icon: "figure.walk", value: "\(viewModel.totalWorkouts)", label: "Workouts")
-                StatCard(icon: "star.fill", value: "\(viewModel.totalPRs)", label: "PRs")
-                StatCard(icon: "flame.fill", value: "\(viewModel.currentStreak)", label: "Streak")
+            if viewModel.isLoading {
+                SkeletonStatsCard()
+            } else {
+                VStack(spacing: 8) {
+                    HStack(spacing: 8) {
+                        StatCard(icon: "figure.walk", value: "\(viewModel.totalWorkouts)", label: "Workouts")
+                        StatCard(icon: "star.fill", value: "\(viewModel.totalPRs)", label: "PRs")
+                    }
+                    HStack(spacing: 8) {
+                        StatCard(icon: "flame.fill", value: "\(viewModel.currentStreak)", label: "Streak")
+                        StatCard(icon: "scalemass", value: formatTotalVolume(viewModel.totalVolume), label: "Volume")
+                    }
+                }
             }
         }
     }
@@ -213,6 +222,21 @@ struct ProfileView: View {
         formatter.dateStyle = short ? .short : .medium
         formatter.timeStyle = .none
         return formatter.string(from: date)
+    }
+    
+    private func formatTotalVolume(_ volumeInLbs: Double) -> String {
+        let preferredUnits = viewModel.profile?.units ?? .lbs
+        let displayVolume = preferredUnits == .kg ? volumeInLbs / 2.20462 : volumeInLbs
+        
+        // Format with comma separator, no decimals
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        formatter.maximumFractionDigits = 0
+        
+        if let formatted = formatter.string(from: NSNumber(value: displayVolume)) {
+            return formatted
+        }
+        return "\(Int(displayVolume))"
     }
 }
 
