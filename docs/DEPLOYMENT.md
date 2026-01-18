@@ -46,6 +46,6 @@ git push
 ## Editing
 ```bash
 git add .
-git commit -m "fixed activeworkout view and added documentation"
+git commit -m "lots of updates"
 git push
 ```
