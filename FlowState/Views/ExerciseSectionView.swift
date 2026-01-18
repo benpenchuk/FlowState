@@ -155,7 +155,8 @@ struct ExerciseSectionView: View {
                                         viewModel.updateSet(in: entry, set: updatedSet, reps: reps, weight: weight, isCompleted: isCompleted)
                                         if !wasCompleted && isCompleted { 
                                             onSetCompleted?()
-                                            viewModel.autoAdvance(from: entry, completedSet: updatedSet)
+                                            // Temporarily disabled auto-advance scrolling
+                                            // viewModel.autoAdvance(from: entry, completedSet: updatedSet)
                                         }
                                     },
                                     onDelete: {
