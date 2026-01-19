@@ -29,28 +29,28 @@ struct RestTimerView: View {
     }
     
     var body: some View {
-        VStack(spacing: 16) {
+        HStack(spacing: 16) {
             // Circular progress ring with time
             ZStack {
                 // Background circle
                 Circle()
-                    .stroke(Color(.systemGray5), lineWidth: 8)
-                    .frame(width: 100, height: 100)
+                    .stroke(Color(.systemGray5), lineWidth: 6)
+                    .frame(width: 60, height: 60)
                 
                 // Progress circle
                 Circle()
                     .trim(from: 0, to: progress)
                     .stroke(
                         Color.accentColor,
-                        style: StrokeStyle(lineWidth: 8, lineCap: .round)
+                        style: StrokeStyle(lineWidth: 6, lineCap: .round)
                     )
-                    .frame(width: 100, height: 100)
+                    .frame(width: 60, height: 60)
                     .rotationEffect(.degrees(-90))
                     .animation(.linear(duration: 1.0), value: viewModel.remainingSeconds)
                 
                 // Time text
                 Text(formattedTime)
-                    .font(.system(size: 24, weight: .bold, design: .monospaced))
+                    .font(.system(size: 16, weight: .bold, design: .monospaced))
                     .foregroundStyle(.primary)
             }
             .scaleEffect(scale)
@@ -69,14 +69,15 @@ struct RestTimerView: View {
                 }
             }
             
-            // Controls
-            HStack(spacing: 20) {
+            // Controls - inline horizontal
+            HStack(spacing: 16) {
                 Button {
                     viewModel.subtract30Seconds()
                 } label: {
                     Label("-30s", systemImage: "minus.circle.fill")
                         .font(.subheadline)
                         .fontWeight(.medium)
+                        .labelStyle(.titleAndIcon)
                 }
                 .disabled(!viewModel.isRunning || viewModel.remainingSeconds == 0)
                 
@@ -87,6 +88,7 @@ struct RestTimerView: View {
                         .font(.subheadline)
                         .fontWeight(.medium)
                         .foregroundStyle(.red)
+                        .labelStyle(.titleAndIcon)
                 }
                 
                 Button {
@@ -95,33 +97,25 @@ struct RestTimerView: View {
                     Label("+30s", systemImage: "plus.circle.fill")
                         .font(.subheadline)
                         .fontWeight(.medium)
+                        .labelStyle(.titleAndIcon)
                 }
                 .disabled(!viewModel.isRunning)
             }
-            .padding(.horizontal)
             
-            // Sound toggle button
+            Spacer()
+            
+            // Sound toggle button (icon only)
             Button {
                 viewModel.toggleSound()
             } label: {
-                HStack(spacing: 6) {
-                    Image(systemName: viewModel.soundEnabled ? "speaker.wave.2.fill" : "speaker.slash.fill")
-                        .font(.subheadline)
-                    Text(viewModel.soundEnabled ? "Sound On" : "Sound Off")
-                        .font(.caption)
-                }
-                .foregroundStyle(viewModel.soundEnabled ? .primary : .secondary)
-                .padding(.horizontal, 12)
-                .padding(.vertical, 6)
-                .background(Color(.systemGray5))
-                .cornerRadius(8)
+                Image(systemName: viewModel.soundEnabled ? "speaker.wave.2.fill" : "speaker.slash.fill")
+                    .font(.system(size: 18))
+                    .foregroundStyle(viewModel.soundEnabled ? .orange : .secondary)
+                    .frame(width: 32, height: 32)
             }
         }
-        .padding()
-        .background(
-            RoundedRectangle(cornerRadius: 16)
-                .fill(Color(.systemGray6))
-        )
+        .padding(.horizontal, 16)
+        .padding(.vertical, 12)
         .onAppear {
             // Update timer immediately when view appears (e.g., after app comes to foreground)
             if viewModel.isRunning {

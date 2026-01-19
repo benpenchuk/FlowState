@@ -80,6 +80,7 @@ struct ActiveWorkoutFullScreenView: View {
     private func workoutContentView(workout: Workout) -> some View {
         NavigationStack {
             ZStack(alignment: .bottom) {
+                // Main content
                 VStack(spacing: 0) {
                     // Dynamic header (full or compact based on scroll)
                     Group {
@@ -133,35 +134,56 @@ struct ActiveWorkoutFullScreenView: View {
                             )
                     )
                 }
-            }
-            .navigationTitle("Active Workout")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItemGroup(placement: .keyboard) {
-                    Spacer()
-                    Button("Done") {
-                        hideKeyboard()
-                    }
-                    .tint(.orange)
-                }
-                ToolbarItem(placement: .navigationBarLeading) {
-                    Button {
-                        workoutState.minimizeWorkout()
-                        dismiss()
-                    } label: {
-                        Image(systemName: "chevron.down")
-                    }
-                }
                 
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button(role: .destructive) {
-                        showingCancelAlert = true
-                    } label: {
-                        Text("Cancel")
+                // Floating navigation controls
+                VStack {
+                    HStack {
+                        // Minimize button (top-left)
+                        Button {
+                            workoutState.minimizeWorkout()
+                            dismiss()
+                        } label: {
+                            Image(systemName: "chevron.down")
+                                .font(.system(size: 20, weight: .semibold))
+                                .foregroundStyle(.primary)
+                                .frame(width: 44, height: 44)
+                                .background(Color(.systemBackground).opacity(0.9))
+                                .clipShape(Circle())
+                                .shadow(color: .black.opacity(0.1), radius: 4, x: 0, y: 2)
+                        }
+                        
+                        Spacer()
+                        
+                        // Cancel button (top-right)
+                        Button(role: .destructive) {
+                            showingCancelAlert = true
+                        } label: {
+                            Text("Cancel")
+                                .font(.system(size: 16, weight: .semibold))
+                                .foregroundStyle(.red)
+                                .padding(.horizontal, 16)
+                                .padding(.vertical, 10)
+                                .background(Color(.systemBackground).opacity(0.9))
+                                .clipShape(Capsule())
+                                .shadow(color: .black.opacity(0.1), radius: 4, x: 0, y: 2)
+                        }
                     }
+                    .padding(.horizontal, 16)
+                    .padding(.top, 8)
+                    
+                    Spacer()
                 }
             }
-            .alert("Cancel Workout", isPresented: $showingCancelAlert) {
+            .toolbar {
+            ToolbarItemGroup(placement: .keyboard) {
+                Spacer()
+                Button("Done") {
+                    hideKeyboard()
+                }
+                .tint(.orange)
+            }
+        }
+        .alert("Cancel Workout", isPresented: $showingCancelAlert) {
                 Button("Keep Workout", role: .cancel) {}
                 Button("Discard Workout", role: .destructive) {
                     workoutState.cancelWorkout()
@@ -206,42 +228,9 @@ struct ActiveWorkoutFullScreenView: View {
     
     @ViewBuilder
     private func fullHeaderView(workout: Workout) -> some View {
-        VStack(spacing: 12) {
-            // Progress Section
-            let progress = exerciseProgress
-            if progress.total > 0 {
-                VStack(spacing: 6) {
-                    HStack {
-                        Text("Workout Progress")
-                            .font(.caption2)
-                            .fontWeight(.bold)
-                            .foregroundStyle(.secondary)
-                            .textCase(.uppercase)
-                        Spacer()
-                        Text("\(progress.completed)/\(progress.total) Exercises")
-                            .font(.caption2)
-                            .fontWeight(.bold)
-                            .foregroundStyle(.secondary)
-                    }
-                    
-                    ZStack(alignment: .leading) {
-                        Capsule()
-                            .fill(Color(.systemGray5))
-                            .frame(height: 6)
-                        
-                        GeometryReader { geo in
-                            Capsule()
-                                .fill(Color.orange)
-                                .frame(width: geo.size.width * CGFloat(Double(progress.completed) / Double(progress.total)))
-                        }
-                    }
-                    .frame(height: 6)
-                }
-                .padding(.horizontal, 4)
-            }
-
-            // Timer
-            timerView
+        VStack(spacing: 8) {
+            // Compact stats row
+            compactStatsRow(workout: workout)
             
             // Rest Timer (shown when active)
             if workoutState.restTimerViewModel.isRunning || showingCompletedTimer {
@@ -249,10 +238,57 @@ struct ActiveWorkoutFullScreenView: View {
             }
         }
         .padding(.horizontal, ActiveWorkoutLayout.contentPadding)
-        .padding(.top, 8)
+        .padding(.top, 52)  // Extra padding for floating nav buttons
         .padding(.bottom, 12)
         .background(Color(.systemBackground))
         .animation(.spring(response: 0.3, dampingFraction: 0.8), value: scrollOffset)
+    }
+    
+    @ViewBuilder
+    private func compactStatsRow(workout: Workout) -> some View {
+        HStack(spacing: 16) {
+            // Progress section
+            let progress = exerciseProgress
+            if progress.total > 0 {
+                HStack(spacing: 8) {
+                    Text("\(progress.completed)/\(progress.total)")
+                        .font(.system(size: 16, weight: .semibold))
+                        .foregroundStyle(.primary)
+                    
+                    Text("Exercises")
+                        .font(.system(size: 14, weight: .medium))
+                        .foregroundStyle(.secondary)
+                    
+                    // Inline progress bar
+                    ZStack(alignment: .leading) {
+                        Capsule()
+                            .fill(Color(.systemGray5))
+                            .frame(width: 60, height: 4)
+                        
+                        Capsule()
+                            .fill(Color.orange)
+                            .frame(width: 60 * CGFloat(Double(progress.completed) / Double(progress.total)), height: 4)
+                    }
+                }
+            }
+            
+            Spacer()
+            
+            // Duration section
+            HStack(spacing: 6) {
+                Image(systemName: "timer")
+                    .font(.system(size: 14, weight: .medium))
+                    .foregroundStyle(.orange)
+                
+                Text(formatElapsedTime(workoutState.elapsedTime))
+                    .font(.system(size: 18, weight: .bold, design: .monospaced))
+                    .foregroundStyle(.primary)
+            }
+        }
+        .padding(.horizontal, 12)
+        .padding(.vertical, 12)
+        .background(Color(.secondarySystemGroupedBackground))
+        .cornerRadius(12)
     }
     
     @ViewBuilder
@@ -273,7 +309,8 @@ struct ActiveWorkoutFullScreenView: View {
             }
         }
         .padding(.horizontal, ActiveWorkoutLayout.contentPadding)
-        .padding(.vertical, 8)
+        .padding(.top, 60)  // Extra padding for floating nav buttons
+        .padding(.bottom, 8)
         .background(Color(.systemBackground))
         .animation(.spring(response: 0.3, dampingFraction: 0.8), value: scrollOffset)
     }
@@ -499,22 +536,6 @@ struct ActiveWorkoutFullScreenView: View {
         }
     }
     
-    private var timerView: some View {
-        VStack(spacing: 4) {
-            Text("Duration")
-                .font(.caption)
-                .fontWeight(.medium)
-                .foregroundStyle(.secondary)
-            
-            Text(formatElapsedTime(workoutState.elapsedTime))
-                .font(.system(size: 36, weight: .bold, design: .rounded))
-                .foregroundStyle(.primary)
-        }
-        .padding(.vertical, 16)
-        .frame(maxWidth: .infinity)
-        .background(Color(.secondarySystemGroupedBackground))
-        .cornerRadius(12)
-    }
     
     private func formatElapsedTime(_ timeInterval: TimeInterval) -> String {
         let minutes = Int(timeInterval) / 60
