@@ -15,22 +15,16 @@ struct HomeView: View {
     @StateObject private var templateViewModel = TemplateViewModel()
     @StateObject private var workoutViewModel = ActiveWorkoutViewModel()
     @StateObject private var progressViewModel = ProgressViewModel()
+    @StateObject private var statsViewModel = HomeStatsViewModel()
     @State private var showingTemplates = false
     @State private var selectedTemplate: WorkoutTemplate? = nil
     @State private var showingExistingWorkoutAlert = false
     @State private var templateToStart: WorkoutTemplate? = nil
     @State private var startingEmpty = false
     @State private var userProfile: UserProfile?
-    @State private var weeklyStats = WeeklyStatsData(workoutsCount: 0, totalTime: 0, currentStreak: 0)
     @State private var templateToEdit: WorkoutTemplate? = nil
     @State private var templateToDelete: WorkoutTemplate? = nil
     @State private var showingDeleteConfirmation = false
-    
-    private struct WeeklyStatsData {
-        var workoutsCount: Int
-        var totalTime: TimeInterval
-        var currentStreak: Int
-    }
     
     var body: some View {
         ScrollView {
@@ -65,18 +59,18 @@ struct HomeView: View {
             templateViewModel.setModelContext(modelContext)
             workoutViewModel.setModelContext(modelContext)
             progressViewModel.setModelContext(modelContext)
+            statsViewModel.setModelContext(modelContext)
             loadUserProfile()
-            calculateWeeklyStats()
         }
         .onAppear {
             // Refresh stats whenever the view appears (e.g., when switching tabs)
-            calculateWeeklyStats()
+            statsViewModel.refreshStats()
         }
         .onChange(of: workoutState.activeWorkout) { oldValue, newValue in
             // Refresh stats when active workout changes (e.g., when a workout is completed)
             if oldValue != nil && newValue == nil {
                 // Workout was just completed, refresh stats
-                calculateWeeklyStats()
+                statsViewModel.refreshStats()
             }
         }
         .alert("Start Workout", isPresented: Binding(
@@ -161,7 +155,7 @@ struct HomeView: View {
                 .font(.title2)
                 .fontWeight(.semibold)
             
-            Text("You've completed \(weeklyStats.workoutsCount) \(weeklyStats.workoutsCount == 1 ? "workout" : "workouts") this week")
+            Text("Keep up the momentum!")
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
         }
@@ -169,57 +163,97 @@ struct HomeView: View {
     
     private var weeklyStatsCard: some View {
         VStack(spacing: 16) {
-            HStack(spacing: 0) {
-                // Workouts Count
-                VStack(spacing: 8) {
-                    Text("\(weeklyStats.workoutsCount)")
-                        .font(.system(size: 32, weight: .bold, design: .rounded))
-                        .foregroundStyle(Color.accentColor)
-                    Text("Workouts")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
+            // Period Selector
+            Picker("Period", selection: $statsViewModel.selectedPeriod) {
+                ForEach(StatsPeriod.allCases, id: \.self) { period in
+                    Text(period.rawValue).tag(period)
                 }
-                .frame(maxWidth: .infinity)
-                
-                Divider()
-                    .frame(height: 50)
-                
-                // Total Time
-                VStack(spacing: 8) {
-                    Text(formatTime(weeklyStats.totalTime))
-                        .font(.system(size: 32, weight: .bold, design: .rounded))
-                        .foregroundStyle(Color.accentColor)
-                    Text("Total Time")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
+            }
+            .pickerStyle(.segmented)
+            
+            // Stats Content
+            if statsViewModel.isLoading {
+                SkeletonStatsCard()
+            } else {
+                HStack(spacing: 0) {
+                    // Workouts Count
+                    Button {
+                        // Action for workouts - could navigate to history
+                    } label: {
+                        StatItemView(
+                            value: "\(statsViewModel.workoutsCount)",
+                            label: "Workouts",
+                            previousValue: statsViewModel.previousWorkoutsCount,
+                            currentValue: statsViewModel.workoutsCount
+                        )
+                    }
+                    .buttonStyle(.plain)
+                    .frame(maxWidth: .infinity)
+                    .contentShape(Rectangle())
+                    
+                    Divider()
+                        .frame(height: 50)
+                    
+                    // Total Time
+                    Button {
+                        // Action for time
+                    } label: {
+                        StatItemView(
+                            value: formatTime(statsViewModel.totalTime),
+                            label: "Total Time",
+                            previousValue: Int(statsViewModel.previousTotalTime / 60),
+                            currentValue: Int(statsViewModel.totalTime / 60),
+                            isTime: true
+                        )
+                    }
+                    .buttonStyle(.plain)
+                    .frame(maxWidth: .infinity)
+                    .contentShape(Rectangle())
+                    
+                    Divider()
+                        .frame(height: 50)
+                    
+                    // Current Streak
+                    Button {
+                        // Action for streak - could show mini-calendar
+                    } label: {
+                        VStack(spacing: 4) {
+                            Text("\(statsViewModel.currentStreak)")
+                                .font(.system(size: 32, weight: .bold, design: .rounded))
+                                .foregroundStyle(Color.accentColor)
+                                .contentTransition(.numericText())
+                            
+                            Text("Day Streak")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                            
+                            // Mini-calendar dots (last 7 days)
+                            HStack(spacing: 3) {
+                                ForEach(0..<statsViewModel.last7DaysActivity.count, id: \.self) { index in
+                                    Circle()
+                                        .fill(statsViewModel.last7DaysActivity[index] ? Color.accentColor : Color(.systemGray5))
+                                        .frame(width: 4, height: 4)
+                                }
+                            }
+                            .padding(.top, 2)
+                        }
+                    }
+                    .buttonStyle(.plain)
+                    .frame(maxWidth: .infinity)
+                    .contentShape(Rectangle())
                 }
-                .frame(maxWidth: .infinity)
-                
-                Divider()
-                    .frame(height: 50)
-                
-                // Current Streak
-                VStack(spacing: 8) {
-                    Text("\(weeklyStats.currentStreak)")
-                        .font(.system(size: 32, weight: .bold, design: .rounded))
-                        .foregroundStyle(Color.accentColor)
-                    Text("Day Streak")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                }
-                .frame(maxWidth: .infinity)
+                .padding()
+                .background(
+                    RoundedRectangle(cornerRadius: 16)
+                        .fill(Color(.systemBackground))
+                        .shadow(color: .black.opacity(0.05), radius: 8, x: 0, y: 2)
+                )
+                .overlay(
+                    RoundedRectangle(cornerRadius: 16)
+                        .stroke(Color(.systemGray5), lineWidth: 0.5)
+                )
             }
         }
-        .padding()
-        .background(
-            RoundedRectangle(cornerRadius: 16)
-                .fill(Color(.systemBackground))
-                .shadow(color: .black.opacity(0.05), radius: 8, x: 0, y: 2)
-        )
-        .overlay(
-            RoundedRectangle(cornerRadius: 16)
-                .stroke(Color(.systemGray5), lineWidth: 0.5)
-        )
     }
     
     private var greetingText: String {
@@ -249,119 +283,15 @@ struct HomeView: View {
         }
     }
     
-    private func calculateWeeklyStats() {
-        let calendar = Calendar.current
-        let now = Date()
-        
-        // Get the start of the current week (Sunday)
-        guard let startOfWeek = calendar.date(from: calendar.dateComponents([.yearForWeekOfYear, .weekOfYear], from: now)) else {
-            print("Error: Could not calculate start of week")
-            weeklyStats = WeeklyStatsData(workoutsCount: 0, totalTime: 0, currentStreak: calculateStreak())
-            return
-        }
-        
-        // Normalize to start of day for accurate comparison
-        let normalizedStartOfWeek = calendar.startOfDay(for: startOfWeek)
-        
-        // Fetch all completed workouts (SwiftData doesn't support forced unwrap in predicates)
-        let workoutDescriptor = FetchDescriptor<Workout>(
-            predicate: #Predicate<Workout> { workout in
-                workout.completedAt != nil
-            },
-            sortBy: [SortDescriptor(\.completedAt, order: .reverse)]
-        )
-        
-        do {
-            let allCompletedWorkouts = try modelContext.fetch(workoutDescriptor)
-            
-            // Filter workouts from this week in Swift (after fetching)
-            let workoutsThisWeek = allCompletedWorkouts.filter { workout in
-                guard let completedAt = workout.completedAt else { return false }
-                return completedAt >= normalizedStartOfWeek
-            }
-            
-            var totalTime: TimeInterval = 0
-            
-            for workout in workoutsThisWeek {
-                if let completedAt = workout.completedAt {
-                    totalTime += completedAt.timeIntervalSince(workout.startedAt)
-                }
-            }
-            
-            weeklyStats = WeeklyStatsData(
-                workoutsCount: workoutsThisWeek.count,
-                totalTime: totalTime,
-                currentStreak: calculateStreak()
-            )
-            
-            print("📊 Weekly stats calculated: \(workoutsThisWeek.count) workouts, \(Int(totalTime/60)) minutes")
-        } catch {
-            print("Error calculating weekly stats: \(error)")
-            weeklyStats = WeeklyStatsData(workoutsCount: 0, totalTime: 0, currentStreak: calculateStreak())
-        }
-    }
-    
-    private func calculateStreak() -> Int {
-        let workoutDescriptor = FetchDescriptor<Workout>(
-            predicate: #Predicate<Workout> { workout in
-                workout.completedAt != nil
-            }
-        )
-        
-        do {
-            let completedWorkouts = try modelContext.fetch(workoutDescriptor)
-            guard !completedWorkouts.isEmpty else { return 0 }
-            
-            let calendar = Calendar.current
-            let today = calendar.startOfDay(for: Date())
-            
-            // Get unique workout dates
-            var workoutDates = Set<Date>()
-            for workout in completedWorkouts {
-                guard let completedAt = workout.completedAt else { continue }
-                workoutDates.insert(calendar.startOfDay(for: completedAt))
-            }
-            
-            // Calculate streak starting from today
-            var streak = 0
-            var checkDate = today
-            
-            // Check if today has a workout
-            if workoutDates.contains(checkDate) {
-                streak = 1
-            } else {
-                // If no workout today, check yesterday
-                checkDate = calendar.date(byAdding: .day, value: -1, to: checkDate) ?? checkDate
-                if workoutDates.contains(checkDate) {
-                    streak = 1
-                } else {
-                    return 0 // No streak if no workout today or yesterday
-                }
-            }
-            
-            // Continue checking previous days
-            while true {
-                checkDate = calendar.date(byAdding: .day, value: -1, to: checkDate) ?? checkDate
-                if workoutDates.contains(checkDate) {
-                    streak += 1
-                } else {
-                    break // Gap found, streak ends
-                }
-            }
-            
-            return streak
-        } catch {
-            print("Error calculating streak: \(error)")
-            return 0
-        }
-    }
-    
     private func formatTime(_ timeInterval: TimeInterval) -> String {
+        if timeInterval == 0 {
+            return "—"
+        }
         let hours = Int(timeInterval) / 3600
         let minutes = (Int(timeInterval) % 3600) / 60
         
         if hours > 0 {
-            return "\(hours)h"
+            return minutes > 0 ? "\(hours)h \(minutes)m" : "\(hours)h"
         } else {
             return "\(minutes)m"
         }
@@ -727,6 +657,44 @@ struct PRCardView: View {
         let calendar = Calendar.current
         let components = calendar.dateComponents([.day], from: date, to: Date())
         return components.day
+    }
+}
+
+struct StatItemView: View {
+    let value: String
+    let label: String
+    let previousValue: Int
+    let currentValue: Int
+    var isTime: Bool = false
+    
+    var body: some View {
+        VStack(spacing: 4) {
+            Text(value)
+                .font(.system(size: 32, weight: .bold, design: .rounded))
+                .foregroundStyle(Color.accentColor)
+                .contentTransition(.numericText())
+            
+            Text(label)
+                .font(.caption)
+                .foregroundStyle(.secondary)
+            
+            // Comparison indicator
+            let diff = currentValue - previousValue
+            if diff != 0 {
+                HStack(spacing: 2) {
+                    Image(systemName: diff > 0 ? "arrow.up" : "arrow.down")
+                        .font(.caption2)
+                    Text(abs(diff) == diff ? "+\(abs(diff))" : "\(diff)")
+                        .font(.caption2)
+                }
+                .foregroundStyle(diff > 0 ? .green : .red)
+            } else if currentValue > 0 || previousValue > 0 {
+                // If there was activity but no change, show a neutral indicator
+                Text("No change")
+                    .font(.caption2)
+                    .foregroundStyle(.secondary.opacity(0.5))
+            }
+        }
     }
 }
 

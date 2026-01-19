@@ -2,7 +2,7 @@
 //  SkeletonStatsCard.swift
 //  FlowState
 //
-//  Created by Ben Penchuk on 1/17/26.
+//  Created by Ben Penchuk on 1/19/26.
 //
 
 import SwiftUI
@@ -11,11 +11,12 @@ struct SkeletonStatsCard: View {
     var body: some View {
         VStack(spacing: 16) {
             HStack(spacing: 0) {
-                // Workouts Count
+                // Workouts Count Skeleton
                 VStack(spacing: 8) {
                     RoundedRectangle(cornerRadius: 6)
                         .fill(Color(.systemGray5))
-                        .frame(width: 40, height: 32)
+                        .frame(width: 50, height: 32)
+                    
                     RoundedRectangle(cornerRadius: 3)
                         .fill(Color(.systemGray5))
                         .frame(width: 60, height: 12)
@@ -25,28 +26,30 @@ struct SkeletonStatsCard: View {
                 Divider()
                     .frame(height: 50)
                 
-                // Total Time
+                // Total Time Skeleton
                 VStack(spacing: 8) {
                     RoundedRectangle(cornerRadius: 6)
                         .fill(Color(.systemGray5))
-                        .frame(width: 50, height: 32)
+                        .frame(width: 60, height: 32)
+                    
                     RoundedRectangle(cornerRadius: 3)
                         .fill(Color(.systemGray5))
-                        .frame(width: 70, height: 12)
+                        .frame(width: 60, height: 12)
                 }
                 .frame(maxWidth: .infinity)
                 
                 Divider()
                     .frame(height: 50)
                 
-                // Current Streak
+                // Current Streak Skeleton
                 VStack(spacing: 8) {
                     RoundedRectangle(cornerRadius: 6)
                         .fill(Color(.systemGray5))
                         .frame(width: 40, height: 32)
+                    
                     RoundedRectangle(cornerRadius: 3)
                         .fill(Color(.systemGray5))
-                        .frame(width: 65, height: 12)
+                        .frame(width: 60, height: 12)
                 }
                 .frame(maxWidth: .infinity)
             }

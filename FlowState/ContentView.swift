@@ -12,50 +12,40 @@ struct ContentView: View {
     @EnvironmentObject private var workoutState: WorkoutStateManager
     @Environment(\.modelContext) private var modelContext
     @StateObject private var profileViewModel = ProfileViewModel()
+    @StateObject private var keyboardObserver = KeyboardObserver()
     @State private var appearanceMode: AppearanceMode = .system
     @State private var showingResumeWorkoutAlert = false
     @State private var incompleteWorkout: Workout? = nil
+    @State private var isModalPresented = false
     
     var body: some View {
-        ZStack(alignment: .bottom) {
-            TabView {
-                NavigationStack {
-                    HomeView()
-                }
-                .tabItem {
-                    Label("Home", systemImage: "house")
-                }
-                
-                NavigationStack {
-                    HistoryView()
-                }
-                .tabItem {
-                    Label("History", systemImage: "clock")
-                }
-                
-                NavigationStack {
-                    ExerciseListView()
-                }
-                .tabItem {
-                    Label("Exercises", systemImage: "dumbbell")
-                }
-                
-                NavigationStack {
-                    ProfileView()
-                }
-                .tabItem {
-                    Label("Profile", systemImage: "person.circle")
-                }
+        TabView {
+            tabRoot {
+                HomeView()
             }
-            .tint(.flowStateOrange)
-            .preferredColorScheme(appearanceMode == .system ? nil : (appearanceMode == .dark ? .dark : .light))
+            .tabItem {
+                Label("Home", systemImage: "house")
+            }
             
-            // Floating workout pill (shown when workout is active but minimized)
-            if workoutState.activeWorkout != nil && !workoutState.isWorkoutFullScreen {
-                FloatingWorkoutPill(workoutState: workoutState) {
-                    workoutState.showWorkoutFullScreen()
-                }
-                .zIndex(1)
+            tabRoot {
+                HistoryView()
+            }
+            .tabItem {
+                Label("History", systemImage: "clock")
+            }
+            
+            tabRoot {
+                ExerciseListView()
+            }
+            .tabItem {
+                Label("Exercises", systemImage: "dumbbell")
+            }
+            
+            tabRoot {
+                ProfileView()
+            }
+            .tabItem {
+                Label("Profile", systemImage: "person.circle")
             }
         }
         .fullScreenCover(isPresented: $workoutState.isWorkoutFullScreen) {
@@ -67,6 +57,9 @@ struct ContentView: View {
                     .environmentObject(workoutState)
             }
         }
+        .tint(.flowStateOrange)
+        .preferredColorScheme(appearanceMode == .system ? nil : (appearanceMode == .dark ? .dark : .light))
+        .background(ModalPresentationObserver(isPresented: $isModalPresented))
         .onAppear {
             profileViewModel.setModelContext(modelContext)
             updateAppearanceMode()
@@ -100,6 +93,27 @@ struct ContentView: View {
         }
         .onChange(of: profileViewModel.profile?.appearanceMode) { oldValue, newValue in
             updateAppearanceMode()
+        }
+    }
+
+    private var shouldShowWorkoutPill: Bool {
+        workoutState.activeWorkout != nil &&
+            !workoutState.isWorkoutFullScreen &&
+            !keyboardObserver.isVisible &&
+            !isModalPresented
+    }
+    
+    @ViewBuilder
+    private func tabRoot<Content: View>(@ViewBuilder content: () -> Content) -> some View {
+        NavigationStack {
+            content()
+        }
+        .safeAreaInset(edge: .bottom) {
+            if shouldShowWorkoutPill {
+                FloatingWorkoutPill(workoutState: workoutState) {
+                    workoutState.showWorkoutFullScreen()
+                }
+            }
         }
     }
     
