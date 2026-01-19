@@ -1,51 +1,109 @@
-# Deployment & Git Commands
+# Git Workflow Reference
 
-## Save Your Work (End of Session)
+## Repository
+**URL:** https://github.com/benpenchuk/FlowState
+
+## Daily Workflow
+
+### Start Working
 ```bash
-cd ~/path/to/FlowState
-git add .
-git commit -m "Your message here"
-git push
+cd ~/Documents/Learning/FlowState/FlowState
+git status                    # Check current state
+git pull                      # Get latest changes
 ```
 
-## Quick Reference
+### Save Your Work
+```bash
+git add .                     # Stage all changes
+git commit -m "description"   # Commit with message
+git push                      # Push to remote
+```
+
+## Branching Workflow
+
+### Create & Switch to New Branch
+```bash
+git checkout -b branch-name   # Create and switch to new branch
+git push --set-upstream origin branch-name  # Push and set upstream
+```
+
+### Switch Between Branches
+```bash
+git checkout main             # Switch to main branch
+git checkout branch-name      # Switch to feature branch
+```
+
+### Stash Work in Progress
+```bash
+git stash                     # Save uncommitted changes
+git stash pop                 # Restore stashed changes
+git stash list                # See saved stashes
+```
+
+## Essential Commands
 
 | Action | Command |
 |--------|---------|
 | Check status | `git status` |
-| See what changed | `git diff` |
-| Save everything | `git add .` |
-| Commit with message | `git commit -m "message"` |
-| Push to GitHub | `git push` |
+| See changes | `git diff` |
+| Stage all files | `git add .` |
+| Commit changes | `git commit -m "message"` |
+| Push commits | `git push` |
 | Pull latest | `git pull` |
+| Create branch | `git checkout -b name` |
+| Switch branch | `git checkout name` |
+| Stash changes | `git stash` |
+| Restore stash | `git stash pop` |
 
 ## Commit Message Examples
 
-- `"Add profile tab and settings"`
-- `"Fix rest timer bug"`
-- `"Update exercise instructions"`
-- `"Phase 7 complete - profile and settings"`
+- `"rest timer"` - Feature implementation
+- `"add comments"` - Documentation
+- `"fix bug"` - Bug fixes
+- `"update UI"` - UI improvements
 
-## Your Repository
+## Common Scenarios
 
-https://github.com/benpenchuk/FlowState
-
-## Before Each Session
+### Working on a Feature
 ```bash
-cd ~/path/to/FlowState
+# Start new feature
+git checkout -b feature-name
+git push --set-upstream origin feature-name
+
+# Work and commit
+git add .
+git commit -m "feature work"
+git push
+
+# Switch back to main when done
+git checkout main
 git pull
 ```
 
-## End of Each Session
+### Switching Branches with Uncommitted Changes
 ```bash
-git add .
-git commit -m "Describe what you did"
-git push
+# Save current work
+git stash
+
+# Switch branches
+git checkout other-branch
+
+# Restore work (if needed)
+git stash pop
 ```
 
-## Editing
+### Pushing New Branch First Time
 ```bash
+git checkout -b new-branch
+# Make changes...
 git add .
-git commit -m "lots of updates"
-git push
+git commit -m "changes"
+git push --set-upstream origin new-branch
 ```
+
+## Tips
+
+- Always `git pull` before starting work
+- Use descriptive branch names (e.g., `scrolling-feature`, `bug-fix-timer`)
+- Commit often with clear messages
+- Use `git status` frequently to check your state
