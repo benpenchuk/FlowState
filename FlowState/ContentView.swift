@@ -12,11 +12,9 @@ struct ContentView: View {
     @EnvironmentObject private var workoutState: WorkoutStateManager
     @Environment(\.modelContext) private var modelContext
     @StateObject private var profileViewModel = ProfileViewModel()
-    @StateObject private var keyboardObserver = KeyboardObserver()
     @State private var appearanceMode: AppearanceMode = .system
     @State private var showingResumeWorkoutAlert = false
     @State private var incompleteWorkout: Workout? = nil
-    @State private var isModalPresented = false
     
     var body: some View {
         TabView {
@@ -59,7 +57,6 @@ struct ContentView: View {
         }
         .tint(.flowStateOrange)
         .preferredColorScheme(appearanceMode == .system ? nil : (appearanceMode == .dark ? .dark : .light))
-        .background(ModalPresentationObserver(isPresented: $isModalPresented))
         .onAppear {
             profileViewModel.setModelContext(modelContext)
             updateAppearanceMode()
@@ -98,9 +95,7 @@ struct ContentView: View {
 
     private var shouldShowWorkoutPill: Bool {
         workoutState.activeWorkout != nil &&
-            !workoutState.isWorkoutFullScreen &&
-            !keyboardObserver.isVisible &&
-            !isModalPresented
+            !workoutState.isWorkoutFullScreen
     }
     
     @ViewBuilder
@@ -148,6 +143,7 @@ struct ContentView: View {
             // Ensure model context is set before resuming
             workoutState.setModelContext(modelContext)
             workoutState.setActiveWorkout(workout)
+            workoutState.showWorkoutFullScreen()
             incompleteWorkout = nil
         }
     }

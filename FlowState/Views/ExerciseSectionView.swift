@@ -7,28 +7,29 @@
 
 import SwiftUI
 import SwiftData
-import UniformTypeIdentifiers
 
 struct ExerciseSectionView: View {
+    @Environment(\.colorScheme) private var colorScheme
+
     let entry: WorkoutEntry
     @ObservedObject var viewModel: ActiveWorkoutViewModel
-    var isActive: Bool = false
     var onSetCompleted: (() -> Void)? = nil
     var preferredUnits: Units = .lbs
     
     @State private var showingDeleteExerciseAlert = false
     @State private var showingDeleteLastSetAlert = false
     @State private var pendingSetIndex: Int? = nil
-    @State private var isExpanded: Bool = true
     @State private var showingNotes: Bool = false
     @State private var showingInstructions: Bool = false
     @State private var notesText: String = ""
-    @State private var draggedSetId: UUID? = nil
-    @State private var dropTargetSetId: UUID? = nil
-    @State private var currentDragId: UUID? = nil
+    @State private var showingReorderSets = false
     @State private var showingExerciseDetails = false
     @State private var showingExerciseHistory = false
     @State private var lastSessionSets: [SetRecord] = []
+
+    private var isCollapsed: Bool {
+        viewModel.isEntryCollapsed(entry.id)
+    }
     
     private var equipmentIcon: String? {
         guard let exercise = entry.exercise,
@@ -77,28 +78,60 @@ struct ExerciseSectionView: View {
         VStack(alignment: .leading, spacing: 12) {
             // Exercise header
             HStack(spacing: 8) {
-                if let iconName = equipmentIcon {
-                    Image(systemName: iconName)
-                        .font(.system(size: 16, weight: .medium))
+                Button {
+                    withAnimation(.spring(response: 0.28, dampingFraction: 0.85)) {
+                        viewModel.toggleEntryCollapsed(entry.id)
+                    }
+                } label: {
+                    HStack(spacing: 8) {
+                        if let iconName = equipmentIcon {
+                            Image(systemName: iconName)
+                                .font(.system(size: 16, weight: .medium))
+                                .foregroundStyle(.secondary)
+                                .frame(width: 24)
+                        }
+                        
+                        Text(entry.exercise?.name ?? "Unknown Exercise")
+                            .font(.title3)
+                            .fontWeight(.bold)
+                            .foregroundStyle(.primary)
+                        
+                        if allSetsCompleted && !sets.isEmpty {
+                            Image(systemName: "checkmark.circle.fill")
+                                .foregroundStyle(.green)
+                                .font(.subheadline)
+                        }
+                        
+                        Spacer()
+                    }
+                    .contentShape(Rectangle())
+                }
+                .buttonStyle(.plain)
+                .accessibilityLabel(isCollapsed ? "Expand exercise" : "Collapse exercise")
+                
+                Button {
+                    withAnimation(.spring(response: 0.28, dampingFraction: 0.85)) {
+                        viewModel.toggleEntryCollapsed(entry.id)
+                    }
+                } label: {
+                    Image(systemName: isCollapsed ? "chevron.right" : "chevron.down")
+                        .font(.system(size: 14, weight: .semibold))
                         .foregroundStyle(.secondary)
-                        .frame(width: 24)
+                        .frame(width: 32, height: 32)
+                        .contentShape(Rectangle())
                 }
-                
-                Text(entry.exercise?.name ?? "Unknown Exercise")
-                    .font(.title3)
-                    .fontWeight(.bold)
-                
-                if allSetsCompleted && !sets.isEmpty {
-                    Image(systemName: "checkmark.circle.fill")
-                        .foregroundStyle(.green)
-                        .font(.subheadline)
-                }
-                
-                Spacer()
+                .buttonStyle(.plain)
+                .accessibilityHidden(true)
                 
                 Menu {
                     Button { showingExerciseDetails = true } label: {
                         Label("Exercise Info", systemImage: "info.circle")
+                    }
+                    
+                    if sets.count > 1 {
+                        Button { showingReorderSets = true } label: {
+                            Label("Reorder Sets", systemImage: "arrow.up.arrow.down")
+                        }
                     }
                     
                     Button(role: .destructive) { showingDeleteExerciseAlert = true } label: {
@@ -112,12 +145,12 @@ struct ExerciseSectionView: View {
             }
             .padding(.horizontal, 4)
             
-            if isExpanded {
+            if !isCollapsed {
                 if !sets.isEmpty {
                     // Column Headers
                     HStack(spacing: 0) {
-                        // Space for drag handle (20) + spacing (8) + set number (22) = 50
-                        Color.clear.frame(width: 50) 
+                        // Space for set number (22) + spacing (8) = 30
+                        Color.clear.frame(width: 30)
                         
                         Text("WEIGHT")
                             .font(.system(size: 10, weight: .bold))
@@ -176,44 +209,10 @@ struct ExerciseSectionView: View {
                                 )
                                 .id(set.id)
                                 .contentShape(Rectangle())
-                                .opacity(draggedSetId == set.id ? 0.5 : 1.0)
-                                .overlay(
-                                    Group {
-                                        if dropTargetSetId == set.id && draggedSetId != set.id {
-                                            RoundedRectangle(cornerRadius: ActiveWorkoutLayout.exerciseCardCornerRadius)
-                                                .stroke(Color.orange, lineWidth: 2)
-                                                .padding(-4)
-                                        }
-                                    }
-                                )
-                                .onDrag {
-                                    draggedSetId = set.id
-                                    currentDragId = set.id
-                                    let uuidString = set.id.uuidString
-                                    let itemProvider = NSItemProvider()
-                                    itemProvider.registerDataRepresentation(forTypeIdentifier: "public.text", visibility: .all) { completion in
-                                        completion(uuidString.data(using: .utf8), nil)
-                                        return nil
-                                    }
-                                    return itemProvider
-                                } preview: {
-                                    SetRowView(viewModel: viewModel, set: set, preferredUnits: preferredUnits, onUpdate: { _, _, _, _ in }, onDelete: {}, onLabelUpdate: nil)
-                                        .frame(width: 350)
-                                        .background(Color(.systemBackground))
-                                }
-                                .onDrop(of: [.text], delegate: SetDropDelegate(
-                                    destinationSet: set,
-                                    sets: sets,
-                                    entry: entry,
-                                    viewModel: viewModel,
-                                    draggedSetId: $draggedSetId,
-                                    dropTargetSetId: $dropTargetSetId,
-                                    currentDragId: $currentDragId
-                                ))
                                 
                                 if index < sets.count - 1 {
                                     Divider()
-                                        .padding(.leading, 50) // Align with set number
+                                        .padding(.leading, 30) // Align with set number
                                 }
                             }
                         }
@@ -314,8 +313,24 @@ struct ExerciseSectionView: View {
             }
         }
         .padding(ActiveWorkoutLayout.exerciseCardPadding)
-        .background(Color(.secondarySystemGroupedBackground))
-        .cornerRadius(ActiveWorkoutLayout.exerciseCardCornerRadius)
+        .background(
+            RoundedRectangle(cornerRadius: ActiveWorkoutLayout.exerciseCardCornerRadius, style: .continuous)
+                .fill(Color(.systemBackground))
+        )
+        .overlay(
+            RoundedRectangle(cornerRadius: ActiveWorkoutLayout.exerciseCardCornerRadius, style: .continuous)
+                .stroke(
+                    Color(.systemGray5),
+                    lineWidth: 1
+                )
+        )
+        .shadow(
+            color: (colorScheme == .dark ? Color.black.opacity(0.35) : Color.black.opacity(0.08)),
+            radius: 10,
+            x: 0,
+            y: 4
+        )
+        .animation(.spring(response: 0.28, dampingFraction: 0.85), value: isCollapsed)
         .onAppear { 
             notesText = entry.notes ?? "" 
             if let exercise = entry.exercise {
@@ -347,44 +362,9 @@ struct ExerciseSectionView: View {
                 ExerciseHistorySheet(exercise: exercise, preferredUnits: preferredUnits)
             }
         }
-    }
-}
-
-// Support Structures
-struct SetDropDelegate: DropDelegate {
-    let destinationSet: SetRecord
-    let sets: [SetRecord]
-    let entry: WorkoutEntry
-    let viewModel: ActiveWorkoutViewModel
-    @Binding var draggedSetId: UUID?
-    @Binding var dropTargetSetId: UUID?
-    @Binding var currentDragId: UUID?
-    
-    func performDrop(info: DropInfo) -> Bool {
-        if let sourceId = currentDragId {
-            performReorder(sourceId: sourceId)
+        .sheet(isPresented: $showingReorderSets) {
+            ReorderSetsSheet(entry: entry, viewModel: viewModel, preferredUnits: preferredUnits)
         }
-        dropTargetSetId = nil
-        draggedSetId = nil
-        currentDragId = nil
-        return true
-    }
-    
-    func dropEntered(info: DropInfo) {
-        if let sourceId = currentDragId {
-            performReorder(sourceId: sourceId, showFeedback: true)
-        }
-    }
-    
-    private func performReorder(sourceId: UUID, showFeedback: Bool = false) {
-        guard let sourceIndex = sets.firstIndex(where: { $0.id == sourceId }),
-              let destinationIndex = sets.firstIndex(where: { $0.id == destinationSet.id }),
-              sourceIndex != destinationIndex else { return }
-        
-        if showFeedback { dropTargetSetId = destinationSet.id }
-        
-        let adjustedDestination = (sourceIndex < destinationIndex && destinationIndex == sets.count - 1) ? sets.count : destinationIndex
-        viewModel.reorderSets(in: entry, from: IndexSet(integer: sourceIndex), to: adjustedDestination)
     }
 }
 

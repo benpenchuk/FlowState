@@ -42,7 +42,6 @@ struct SetRowView: View {
     
     var body: some View {
         HStack(spacing: 8) {
-            dragHandle
             setNumber
 
             HStack(spacing: 6) {
@@ -108,15 +107,6 @@ struct SetRowView: View {
             .presentationDetents([.height(300)])
             .presentationDragIndicator(.visible)
         }
-    }
-
-    private var dragHandle: some View {
-        Image(systemName: "line.3.horizontal")
-            .font(.system(size: 14, weight: .medium))
-            .foregroundStyle(.secondary.opacity(0.4))
-            .frame(width: 20, height: 44)
-            .contentShape(Rectangle())
-            .accessibilityHidden(true)
     }
 
     private var setNumber: some View {

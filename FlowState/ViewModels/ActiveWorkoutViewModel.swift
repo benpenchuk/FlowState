@@ -15,14 +15,35 @@ enum ActiveWorkoutField {
 }
 
 final class ActiveWorkoutViewModel: ObservableObject {
-    @Published var activeWorkout: Workout?
+    @Published var activeWorkout: Workout? {
+        didSet {
+            // Collapse state is per active workout session.
+            // Reset when switching to a different workout.
+            if oldValue?.id != activeWorkout?.id {
+                collapsedEntryIds.removeAll()
+            }
+        }
+    }
     @Published var detectedPR: PersonalRecord? = nil // PR detected when set is completed
     @Published var focusedSetId: UUID? = nil
     @Published var focusedField: ActiveWorkoutField? = nil
     @Published var scrollToSetId: UUID? = nil
+    @Published private(set) var collapsedEntryIds: Set<UUID> = []
     
     private var modelContext: ModelContext?
     private var progressViewModel: ProgressViewModel?
+
+    func isEntryCollapsed(_ entryId: UUID) -> Bool {
+        collapsedEntryIds.contains(entryId)
+    }
+
+    func toggleEntryCollapsed(_ entryId: UUID) {
+        if collapsedEntryIds.contains(entryId) {
+            collapsedEntryIds.remove(entryId)
+        } else {
+            collapsedEntryIds.insert(entryId)
+        }
+    }
     
     func setModelContext(_ context: ModelContext) {
         self.modelContext = context
@@ -413,6 +434,40 @@ final class ActiveWorkoutViewModel: ObservableObject {
             try modelContext.save()
         } catch {
             print("Error deleting exercise: \(error)")
+        }
+    }
+
+    /// Persist set order by `SetRecord.id` and renumber `setNumber` to 1...N.
+    func applySetOrder(in entry: WorkoutEntry, orderedSetIds: [UUID]) {
+        guard let modelContext = modelContext else { return }
+
+        let existingSets = entry.getSets()
+        guard !existingSets.isEmpty else { return }
+
+        let setsById = Dictionary(uniqueKeysWithValues: existingSets.map { ($0.id, $0) })
+
+        // Build ordered list from IDs first.
+        var reordered: [SetRecord] = orderedSetIds.compactMap { setsById[$0] }
+
+        // Safety: append any sets not represented in `orderedSetIds`.
+        if reordered.count != existingSets.count {
+            let existingIdSet = Set(existingSets.map(\.id))
+            let orderedIdSet = Set(orderedSetIds)
+            let missingIds = existingIdSet.subtracting(orderedIdSet)
+            reordered.append(contentsOf: existingSets.filter { missingIds.contains($0.id) })
+        }
+
+        // Renumber.
+        for idx in reordered.indices {
+            reordered[idx].setNumber = idx + 1
+        }
+
+        entry.setSets(reordered)
+
+        do {
+            try modelContext.save()
+        } catch {
+            print("Error applying set order: \(error)")
         }
     }
     

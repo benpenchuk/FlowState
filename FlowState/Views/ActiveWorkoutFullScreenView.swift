@@ -141,7 +141,6 @@ struct ActiveWorkoutFullScreenView: View {
                         // Minimize button (top-left)
                         Button {
                             workoutState.minimizeWorkout()
-                            dismiss()
                         } label: {
                             Image(systemName: "chevron.down")
                                 .font(.system(size: 20, weight: .semibold))
@@ -153,20 +152,6 @@ struct ActiveWorkoutFullScreenView: View {
                         }
                         
                         Spacer()
-                        
-                        // Cancel button (top-right)
-                        Button(role: .destructive) {
-                            showingCancelAlert = true
-                        } label: {
-                            Text("Cancel")
-                                .font(.system(size: 16, weight: .semibold))
-                                .foregroundStyle(.red)
-                                .padding(.horizontal, 16)
-                                .padding(.vertical, 10)
-                                .background(Color(.systemBackground).opacity(0.9))
-                                .clipShape(Capsule())
-                                .shadow(color: .black.opacity(0.1), radius: 4, x: 0, y: 2)
-                        }
                     }
                     .padding(.horizontal, 16)
                     .padding(.top, 8)
@@ -394,11 +379,8 @@ struct ActiveWorkoutFullScreenView: View {
             // Exercises
             exercisesSection(workout: workout)
             
-            // Add Exercise button
-            addExerciseButton
-            
-            // Finish Workout button
-            finishWorkoutButton
+            // Bottom action buttons
+            actionButtonsSection
         }
         .padding(ActiveWorkoutLayout.contentPadding)
         .frame(maxWidth: .infinity)
@@ -439,36 +421,32 @@ struct ActiveWorkoutFullScreenView: View {
     @ViewBuilder
     private func exercisesSection(workout: Workout) -> some View {
         if let entries = workout.entries?.sorted(by: { $0.order < $1.order }), !entries.isEmpty {
-            let firstIncompleteId = entries.first(where: { entry in
-                let sets = entry.getSets()
-                return sets.isEmpty || !sets.allSatisfy { $0.isCompleted }
-            })?.id
-            
-            ForEach(entries) { entry in
-                ExerciseSectionView(
-                    entry: entry,
-                    viewModel: viewModel,
-                    isActive: entry.id == firstIncompleteId,
-                    onSetCompleted: {
-                        // Get default rest duration from user settings
-                        let defaultRestDuration = profileViewModel.profile?.defaultRestTime ?? 90
-                        showingCompletedTimer = false // Reset completion state
-                        workoutState.restTimerViewModel.stop() // Stop current timer
-                        workoutState.startRestTimer(duration: defaultRestDuration)
-                        
-                        // Pulse animation for the rest timer indicator
-                        withAnimation(.spring(response: 0.3, dampingFraction: 0.6)) {
-                            restTimerPulse = true
-                        }
-                        
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                            withAnimation(.easeOut(duration: 0.2)) {
-                                restTimerPulse = false
+            VStack(spacing: 12) {
+                ForEach(entries) { entry in
+                    ExerciseSectionView(
+                        entry: entry,
+                        viewModel: viewModel,
+                        onSetCompleted: {
+                            // Get default rest duration from user settings
+                            let defaultRestDuration = profileViewModel.profile?.defaultRestTime ?? 90
+                            showingCompletedTimer = false // Reset completion state
+                            workoutState.restTimerViewModel.stop() // Stop current timer
+                            workoutState.startRestTimer(duration: defaultRestDuration)
+
+                            // Pulse animation for the rest timer indicator
+                            withAnimation(.spring(response: 0.3, dampingFraction: 0.6)) {
+                                restTimerPulse = true
                             }
-                        }
-                    },
-                    preferredUnits: profileViewModel.profile?.units ?? .lbs
-                )
+
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                                withAnimation(.easeOut(duration: 0.2)) {
+                                    restTimerPulse = false
+                                }
+                            }
+                        },
+                        preferredUnits: profileViewModel.profile?.units ?? .lbs
+                    )
+                }
             }
         } else {
             Text("No exercises yet")
@@ -482,12 +460,8 @@ struct ActiveWorkoutFullScreenView: View {
             showingAddExercise = true
         } label: {
             Label("Add Exercise", systemImage: "plus.circle.fill")
-                .font(.headline)
-                .frame(maxWidth: .infinity)
-                .padding()
-                .background(Color(.secondarySystemGroupedBackground))
-                .cornerRadius(12)
         }
+        .buttonStyle(FullWidthOutlinedButtonStyle(tint: .orange))
     }
     
     private var finishWorkoutButton: some View {
@@ -502,7 +476,23 @@ struct ActiveWorkoutFullScreenView: View {
                 .background(Color.accentColor)
                 .cornerRadius(12)
         }
-        .padding(.top, 8)
+    }
+    
+    private var cancelWorkoutButton: some View {
+        Button(role: .destructive) {
+            showingCancelAlert = true
+        } label: {
+            Text("Cancel Workout")
+        }
+        .buttonStyle(FullWidthOutlinedButtonStyle(tint: .red))
+    }
+
+    private var actionButtonsSection: some View {
+        VStack(spacing: 12) {
+            addExerciseButton
+            cancelWorkoutButton
+            finishWorkoutButton
+        }
     }
     
     private var cancelAlertMessage: String {
@@ -541,6 +531,25 @@ struct ActiveWorkoutFullScreenView: View {
         let minutes = Int(timeInterval) / 60
         let seconds = Int(timeInterval) % 60
         return String(format: "%02d:%02d", minutes, seconds)
+    }
+}
+
+private struct FullWidthOutlinedButtonStyle: ButtonStyle {
+    let tint: Color
+
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .font(.headline)
+            .foregroundStyle(tint)
+            .frame(maxWidth: .infinity)
+            .padding()
+            .background(Color(.systemBackground))
+            .overlay(
+                RoundedRectangle(cornerRadius: 12)
+                    .stroke(tint.opacity(0.25), lineWidth: 1)
+            )
+            .cornerRadius(12)
+            .opacity(configuration.isPressed ? 0.7 : 1.0)
     }
 }
 
