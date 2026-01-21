@@ -16,6 +16,9 @@ struct WorkoutHistoryDetailView: View {
     @ObservedObject var viewModel: HistoryViewModel
     @StateObject private var profileViewModel = ProfileViewModel()
     @State private var showingDeleteAlert = false
+    @State private var showingTemplateSavedAlert = false
+    @State private var showingTemplateSaveErrorAlert = false
+    @State private var templateSaveErrorMessage = ""
     
     private var duration: TimeInterval {
         guard let completedAt = workout.completedAt else { return 0 }
@@ -49,6 +52,12 @@ struct WorkoutHistoryDetailView: View {
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
                 HStack(spacing: 16) {
+                    Button {
+                        saveAsTemplate()
+                    } label: {
+                        Image(systemName: "bookmark")
+                    }
+                    
                     ShareLink(item: viewModel.formatWorkoutForExport(workout, preferredUnits: profileViewModel.profile?.units ?? .lbs)) {
                         Image(systemName: "square.and.arrow.up")
                     }
@@ -69,6 +78,16 @@ struct WorkoutHistoryDetailView: View {
             }
         } message: {
             Text("Are you sure you want to delete this workout? This action cannot be undone.")
+        }
+        .alert("Template Saved", isPresented: $showingTemplateSavedAlert) {
+            Button("OK", role: .cancel) {}
+        } message: {
+            Text("Saved as a new template.")
+        }
+        .alert("Couldn't Save Template", isPresented: $showingTemplateSaveErrorAlert) {
+            Button("OK", role: .cancel) {}
+        } message: {
+            Text(templateSaveErrorMessage)
         }
         .onAppear {
             profileViewModel.setModelContext(modelContext)
@@ -183,6 +202,41 @@ struct WorkoutHistoryDetailView: View {
             return "\(minutes) min \(seconds) sec"
         } else {
             return "\(seconds) sec"
+        }
+    }
+    
+    private func saveAsTemplate() {
+        let baseName = workout.name ?? "Workout"
+        let template = WorkoutTemplate(name: "\(baseName) (Copy)", createdAt: Date())
+        modelContext.insert(template)
+        
+        let entries = (workout.entries ?? []).sorted { $0.order < $1.order }
+        var templateExercises: [TemplateExercise] = []
+        templateExercises.reserveCapacity(entries.count)
+        
+        for entry in entries {
+            guard let exercise = entry.exercise else { continue }
+            let setCount = entry.getSets().count
+            let templateExercise = TemplateExercise(
+                exercise: exercise,
+                order: entry.order,
+                defaultSets: setCount,
+                defaultReps: 10,
+                defaultWeight: nil
+            )
+            templateExercise.template = template
+            modelContext.insert(templateExercise)
+            templateExercises.append(templateExercise)
+        }
+        
+        template.exercises = templateExercises
+        
+        do {
+            try modelContext.save()
+            showingTemplateSavedAlert = true
+        } catch {
+            templateSaveErrorMessage = error.localizedDescription
+            showingTemplateSaveErrorAlert = true
         }
     }
 }

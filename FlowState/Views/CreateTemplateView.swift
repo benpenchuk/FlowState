@@ -11,12 +11,17 @@ import SwiftData
 struct CreateTemplateView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var modelContext
+    @Environment(\.editMode) private var editMode
     @ObservedObject var viewModel: TemplateViewModel
     
     @State private var templateName: String = ""
     @State private var templateExercises: [TemplateExercise] = []
     @State private var showingAddExercise = false
     @State private var showingEditExercise: TemplateExercise? = nil
+    
+    private var isEditing: Bool {
+        editMode?.wrappedValue.isEditing ?? false
+    }
     
     var body: some View {
         NavigationStack {
@@ -36,14 +41,16 @@ struct CreateTemplateView: View {
                         ForEach(templateExercises.sorted { $0.order < $1.order }) { templateExercise in
                             TemplateExerciseRowView(
                                 templateExercise: templateExercise,
+                                isEditable: true,
                                 onTap: {
                                     showingEditExercise = templateExercise
                                 }
                             )
                         }
-                        .onDelete { indexSet in
-                            deleteExercises(at: indexSet)
-                        }
+                        .onMove(perform: moveExercises)
+                        .onDelete(perform: deleteExercises)
+                        .moveDisabled(!isEditing)
+                        .deleteDisabled(!isEditing)
                     }
                 } header: {
                     Text("Exercises")
@@ -75,6 +82,10 @@ struct CreateTemplateView: View {
                         createTemplate()
                     }
                     .disabled(templateName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
+                }
+                
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    EditButton()
                 }
             }
             .sheet(isPresented: $showingAddExercise) {
@@ -118,6 +129,20 @@ struct CreateTemplateView: View {
         } catch {
             print("Error creating template: \(error)")
         }
+    }
+    
+    private func moveExercises(from source: IndexSet, to destination: Int) {
+        let sorted = templateExercises.sorted { $0.order < $1.order }
+        var reordered = sorted
+        
+        reordered.move(fromOffsets: source, toOffset: destination)
+        
+        // Update orders
+        for (index, exercise) in reordered.enumerated() {
+            exercise.order = index
+        }
+        
+        templateExercises = reordered
     }
     
     private func deleteExercises(at offsets: IndexSet) {

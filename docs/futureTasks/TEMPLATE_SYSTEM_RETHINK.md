@@ -619,3 +619,68 @@ If adding “suggested weight,” ensure conversion is consistent.
 - Auto-progression algorithms (beyond simple suggested weights)
 - Cloud sync / multi-device conflict resolution
 
+---
+
+## Current template creation flow (today, in the shipped code)
+
+This section documents the **current user-facing flow** for creating a template *as implemented today* (see `TemplateListView`, `CreateTemplateView`, and the add/edit sheets).
+
+### Flow A: Create a brand-new template (from Template Library)
+
+**Entry point**
+- User navigates to **Templates** (Template Library screen: `TemplateListView`).
+- User taps **+** (top-right) → presents **“New Template”** (`CreateTemplateView`) as a sheet.
+
+**Step-by-step (what the user does)**
+- **Name**
+  - User enters a **Template Name** (TextField).
+  - The **Create** button is **disabled until the name is non-empty** (trimmed for whitespace on save).
+- **Exercises**
+  - User taps **Add Exercise** → presents **Add Exercises** sheet (`AddExerciseToNewTemplateSheet`).
+  - User can **search** the exercise library and **multi-select** exercises across categories.
+  - User taps **Done**:
+    - The selected exercises are appended to the in-memory list for this new template.
+    - Each selected exercise becomes a `TemplateExercise` with defaults:
+      - `defaultSets = 3`
+      - `defaultReps = 10`
+      - `defaultWeight = nil`
+    - The sheet dismisses back to “New Template”.
+- **Optional: adjust exercise defaults**
+  - User taps an exercise row → opens `EditTemplateExerciseSheet` in **temporary mode** (`isTemporary = true`).
+  - User can edit **sets / reps / weight** for that template exercise; changes are applied to the in-memory objects for the new template.
+- **Optional: remove exercises**
+  - User can swipe-delete exercises from the list (removes them from the in-memory list).
+- **Create**
+  - User taps **Create** → the template and its exercises are persisted.
+
+**Persistence semantics (what the code does)**
+- On **Create** (`CreateTemplateView.createTemplate()`):
+  - A new `WorkoutTemplate(name: createdAt:)` is inserted into SwiftData.
+  - All in-memory `TemplateExercise`s are:
+    - re-ordered to contiguous `order = 0...n-1`
+    - linked (`templateExercise.template = template`)
+    - inserted into SwiftData
+  - `template.exercises = templateExercises`
+  - `modelContext.save()` is called; on success the sheet dismisses and the template list refreshes.
+
+### Flow B: Create a template by duplicating an existing template
+
+This flow exists as a **faster “copy then tweak”** option (implemented in `TemplateViewModel.duplicateTemplate(_:)`).
+
+**Entry point**
+- User triggers **Duplicate** from a template management surface (e.g., the template list/detail, or Home template card context menu).
+
+**What happens**
+- A new template is created with name: `"\(original.name) (Copy)"`.
+- All `TemplateExercise`s are duplicated (same exercise reference, order, sets/reps, and optional weight).
+- The duplicated template is saved immediately and appears in the template list.
+- User can then open the new template and edit it in **Edit Template** (`TemplateDetailView`) like any other template.
+
+### Related: “Add exercises” behavior differs between new vs existing templates
+
+- **New template (`CreateTemplateView` / `AddExerciseToNewTemplateSheet`)**
+  - Adding exercises only mutates an in-memory list until the user taps **Create** (then everything is saved at once).
+- **Existing template (`TemplateDetailView` / `AddExerciseToTemplateSheet`)**
+  - Adding exercises appends to the local list *and* inserts the new `TemplateExercise`s into SwiftData immediately (then saves).
+  - The template’s `exercises` array is formally re-assigned on **Save** in `TemplateDetailView`.
+
