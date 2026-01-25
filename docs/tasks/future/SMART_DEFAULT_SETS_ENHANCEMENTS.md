@@ -898,6 +898,6 @@ The smart default sets feature has a strong foundation. These enhancements can b
 ---
 
 **Related Documentation:**
-- [FEATURES.md](../FEATURES.md) - Current feature documentation
+- [FEATURES.md](../../development/FEATURES.md) - Current feature documentation
 - [AUTO_POPULATE_EXERCISE_SETS.md](./AUTO_POPULATE_EXERCISE_SETS.md) - Original feature spec
 - [MODELS.md](../MODELS.md) - Data model documentation

@@ -14,37 +14,70 @@
 FlowState/
 ├── Models/              # SwiftData models and data structures
 │   ├── Exercise.swift            # Exercise entity with categories
-│   ├── SetRecord.swift           # Codable struct (stored as JSON)
-│   ├── Workout.swift             # Workout entity
-│   ├── WorkoutEntry.swift        # Junction between Workout and Exercise
-│   ├── WorkoutTemplate.swift     # Template for quick workout creation
-│   └── TemplateExercise.swift    # Exercise configuration in templates
+│   ├── ExerciseFilters.swift    # Filter enums (MuscleGroupFilter, EquipmentChip)
+│   ├── PersonalRecord.swift    # Personal record model
+│   ├── SetRecord.swift          # Codable struct (stored as JSON)
+│   ├── TemplateExercise.swift   # Exercise configuration in templates
+│   ├── UserProfile.swift        # User profile and preferences
+│   ├── Workout.swift            # Workout entity
+│   ├── WorkoutEntry.swift       # Junction between Workout and Exercise
+│   └── WorkoutTemplate.swift    # Template for quick workout creation
 │
 ├── ViewModels/          # Business logic and state management
-│   ├── WorkoutStateManager.swift    # @EnvironmentObject for app-wide state
-│   ├── ActiveWorkoutViewModel.swift # Active workout operations
-│   ├── HistoryViewModel.swift       # Completed workout queries
-│   ├── TemplateViewModel.swift      # Template CRUD operations
-│   ├── ExerciseLibraryViewModel.swift # Exercise library management
-│   └── RestTimerViewModel.swift     # Rest timer logic
+│   ├── ActiveWorkoutViewModel.swift    # Active workout operations
+│   ├── ExerciseLibraryViewModel.swift  # Exercise library management
+│   ├── HistoryViewModel.swift          # Completed workout queries
+│   ├── HomeStatsViewModel.swift        # Home dashboard statistics
+│   ├── ProfileViewModel.swift          # Profile and settings management
+│   ├── ProgressViewModel.swift         # Progress tracking and PR detection
+│   ├── RestTimerViewModel.swift        # Rest timer logic
+│   ├── TemplateViewModel.swift         # Template CRUD operations
+│   └── WorkoutStateManager.swift       # @EnvironmentObject for app-wide state
 │
 ├── Views/               # SwiftUI views
 │   ├── ContentView.swift                # Root view with TabView
 │   ├── HomeView.swift                   # Home dashboard
-│   ├── ActiveWorkoutView.swift          # Active workout UI (non-fullscreen)
-│   ├── ActiveWorkoutFullScreenView.swift # Full-screen workout mode
+│   ├── ActiveWorkoutFullScreenView.swift # Full-screen workout mode (contains workout UI)
+│   ├── ActiveWorkoutLayout.swift        # Centralized layout constants
+│   ├── ExerciseSectionView.swift        # Exercise section in workout
 │   ├── FloatingWorkoutPill.swift        # Minimized workout indicator
 │   ├── HistoryView.swift                # Workout history list
 │   ├── WorkoutHistoryDetailView.swift   # Individual workout details
+│   ├── WorkoutCompletionView.swift     # Workout completion feedback
 │   ├── ExerciseListView.swift           # Exercise library
+│   ├── ExerciseDetailView.swift         # Exercise details with PR and chart
+│   ├── ExerciseProgressChartView.swift # Progress chart UI
+│   ├── ExerciseRowCard.swift            # Exercise row card component
+│   ├── ExerciseFilterBar.swift          # Exercise filter bar component
+│   ├── ExerciseSectionView.swift        # Exercise section in workout
+│   ├── AddExerciseSheet.swift           # Create custom exercise
+│   ├── EditExerciseSheet.swift          # Edit exercise sheet
 │   ├── TemplateListView.swift           # Template list
 │   ├── TemplateDetailView.swift         # Template editing
 │   ├── CreateTemplateView.swift         # Template creation
+│   ├── AddExerciseToTemplateSheet.swift # Add exercise to template
+│   ├── EditTemplateExerciseSheet.swift  # Edit exercise in template
+│   ├── AddExerciseToWorkoutSheet.swift  # Add exercise to workout
 │   ├── RestTimerView.swift              # Rest timer UI
 │   ├── SetRowView.swift                 # Individual set input row
+│   ├── ReorderSetsSheet.swift           # Reorder sets sheet
 │   ├── CustomNumPadView.swift           # Custom number pad component
 │   ├── LabelPickerSheet.swift           # Set label selection sheet
-│   └── [Various sheet views]            # Modals for adding/editing
+│   ├── PRNotificationView.swift         # PR celebration notification
+│   ├── ProfileView.swift                # Profile display
+│   └── SettingsView.swift               # Settings screen
+│   └── Skeletons/                       # Skeleton loading views
+│       ├── SkeletonExerciseRow.swift    # Exercise row skeleton
+│       ├── SkeletonPRCard.swift         # PR card skeleton
+│       ├── SkeletonStatsCard.swift      # Stats card skeleton
+│       ├── SkeletonTemplateCard.swift   # Template card skeleton
+│       └── SkeletonWorkoutHistoryCard.swift # Workout history card skeleton
+│
+├── Extensions/          # Utility extensions
+│   ├── Colors.swift                    # Color extensions
+│   ├── KeyboardObserver.swift          # Keyboard observation utilities
+│   ├── ModalPresentationObserver.swift # Modal presentation observation
+│   └── NumberFormatter.swift          # Number formatting utilities
 │
 ├── FlowStateApp.swift   # App entry point with ModelContainer setup
 └── Assets.xcassets/     # App icons and colors
@@ -95,7 +128,8 @@ FlowState/
 4. If from template, copies `TemplateExercise` → `WorkoutEntry` with default sets
 5. ViewModel saves to SwiftData `ModelContext`
 6. `WorkoutStateManager.setActiveWorkout()` updates app-wide state
-7. `ContentView` shows full-screen workout via `fullScreenCover`
+7. `HomeStatsViewModel` refreshes stats to reflect new workout
+8. `ContentView` shows full-screen workout via `fullScreenCover`
 
 ### Logging Sets
 
@@ -159,5 +193,16 @@ FlowState/
 
 - SwiftData automatically persists to device storage
 - Model schema defined in `FlowStateApp.swift` with `Schema()`
-- Models include: `Exercise`, `Workout`, `WorkoutEntry`, `WorkoutTemplate`, `TemplateExercise`
+- Models include: `Exercise`, `Workout`, `WorkoutEntry`, `WorkoutTemplate`, `TemplateExercise`, `PersonalRecord`, `UserProfile`
 - No manual migration needed for schema changes (SwiftData handles it)
+
+## Extensions
+
+The `Extensions/` folder contains utility extensions used throughout the app:
+
+- **Colors.swift** - Custom color extensions (e.g., `.flowStateOrange`)
+- **KeyboardObserver.swift** - Utilities for observing keyboard show/hide events
+- **ModalPresentationObserver.swift** - Utilities for observing modal presentation state
+- **NumberFormatter.swift** - Reusable number formatting utilities for consistent display
+
+These extensions provide shared functionality and reduce code duplication across views.

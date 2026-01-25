@@ -710,7 +710,7 @@ FlowStateTests/ActiveWorkoutViewModelTests.swift
 
 **Documentation:**
 ```
-docs/FEATURES.md
+docs/development/FEATURES.md
 - Document auto-copy behavior
 ```
 
@@ -843,6 +843,6 @@ Auto-copying set values is a low-complexity, high-impact feature that will:
 
 **Related Documentation:**
 - [AUTO_POPULATE_EXERCISE_SETS.md](AUTO_POPULATE_EXERCISE_SETS.md) - Synergistic feature
-- [FEATURES.md](../FEATURES.md)
-- [MODELS.md](../MODELS.md)
+- [FEATURES.md](../../development/FEATURES.md)
+- [MODELS.md](../../architecture/MODELS.md)
 - [KNOWN_ISSUES.md](KNOWN_ISSUES.md) - Auto-advance feature

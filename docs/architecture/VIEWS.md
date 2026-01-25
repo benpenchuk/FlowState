@@ -26,24 +26,32 @@ All SwiftUI views in the app, organized by purpose.
 
 ### HomeView.swift
 
-**Description:** Home dashboard showing templates, recent PRs, and quick start options
+**Description:** Home dashboard showing templates, recent PRs, weekly stats, and quick start options
 
 **ViewModel:** 
 - `@StateObject templateViewModel: TemplateViewModel`
 - `@StateObject workoutViewModel: ActiveWorkoutViewModel`
 - `@StateObject progressViewModel: ProgressViewModel`
+- `@StateObject statsViewModel: HomeStatsViewModel`
 - `@EnvironmentObject workoutState: WorkoutStateManager`
 
 **Key Features:**
+- Weekly stats card with workouts count, total time, and streak
+- Activity calendar showing last 7 days of workouts
+- Period selector (Last 7 Days / Last 30 Days) for stats
 - Templates section with horizontal scrolling cards
 - Recent PRs section (last 7 days)
 - "See All" link to template list
 - Quick start empty workout button
 - Alerts for starting workouts (handles active workout conflicts)
+- Skeleton loading states for stats and cards
 
 **Contains:**
 - `TemplateCardView` - Template cards
 - `PRCardView` - PR display cards
+- `SkeletonStatsCard` - Stats loading skeleton
+- `SkeletonTemplateCard` - Template card loading skeleton
+- `SkeletonPRCard` - PR card loading skeleton
 
 **Presents:**
 - `TemplateListView` (sheet)
@@ -68,44 +76,54 @@ All SwiftUI views in the app, organized by purpose.
 - Embedded `ActiveWorkoutView` for workout content
 - Shows rest timer when active
 - Can be dismissed to minimized state
+- Uses `ActiveWorkoutLayout` constants for consistent spacing
+- Scroll offset tracking for header collapse/expand
 
 **Contains:**
-- `ActiveWorkoutView`
+- `ExerciseSectionView` (multiple, expandable/collapsible)
+- `SetRowView` (within ExerciseSectionView)
+- `RestTimerView` (conditionally shown)
+- `PRNotificationView` (conditionally shown when PR detected)
+
+**Presents:**
+- `AddExerciseToWorkoutSheet` (sheet)
+- `ReorderSetsSheet` (sheet)
+- `WorkoutCompletionView` (sheet)
+- `CustomNumPadView` (overlay for input)
 
 **Navigation:**
 - Presented via `fullScreenCover` from `ContentView`
 
 ---
 
-### ActiveWorkoutView.swift
+### ActiveWorkoutLayout.swift
 
-**Description:** Main workout UI for logging sets and managing exercises
+**Description:** Centralized layout constants for active workout UI
 
-**ViewModel:** `@ObservedObject viewModel: ActiveWorkoutViewModel`
+**ViewModel:** None (static constants)
 
 **Key Features:**
-- Timer display (elapsed time)
-- Workout name display (not editable during workout)
-- Exercise sections with expand/collapse functionality
-- Per-exercise notes (collapsible text field)
-- Add exercise button
-- Finish workout button
-- Cancel workout option
-- Trash icon for deleting exercises
-- Visual indicators for exercise completion state
+- Content padding constants
+- Exercise card padding and corner radius
+- Workout section spacing
+- Header collapse/expand thresholds (hysteresis)
+- Bottom scroll buffer
 
-**Contains:**
-- `ExerciseSectionView` (multiple, expandable/collapsible)
-- `SetRowView` (within ExerciseSectionView)
+**Usage:**
+- Prevents conflicting nested padding
+- Reduces horizontal clipping on smaller devices
+- Ensures consistent spacing across workout views
+- Used by `ActiveWorkoutFullScreenView`, `ActiveWorkoutView`, and related components
 
-**Presents:**
-- `AddExerciseToWorkoutSheet` (sheet)
-- `CustomNumPadView` (overlay for input)
+**Constants:**
+- `contentPadding: CGFloat = 16`
+- `exerciseCardPadding: CGFloat = 16`
+- `workoutSectionSpacing: CGFloat = 20`
+- `exerciseCardCornerRadius: CGFloat = 16`
+- `headerCollapseThreshold: CGFloat = 60`
+- `headerExpandThreshold: CGFloat = 40`
+- `bottomScrollBuffer: CGFloat = 32`
 
-**Navigation:**
-- Embedded in `ActiveWorkoutFullScreenView`
-
----
 
 ### FloatingWorkoutPill.swift
 
@@ -175,14 +193,33 @@ All SwiftUI views in the app, organized by purpose.
 - Reps input field (optional)
 - Checkmark to mark complete
 - Delete button (swipe-to-delete)
-- Drag handle for reordering sets within exercise
 - Set labels with colored badges (Warmup, Failure, Drop Set, PR Attempt)
 - Visual styling for completed sets
 - Converts weight for display (lbs ↔ kg) based on user preference
 - Stores all weights internally as lbs
+- Uses `ActiveWorkoutLayout` constants for spacing
 
 **Navigation:**
 - Embedded in `ExerciseSectionView` within `ActiveWorkoutView`
+
+---
+
+### ReorderSetsSheet.swift
+
+**Description:** Dedicated sheet for reordering sets within an exercise
+
+**ViewModel:** `@ObservedObject viewModel: ActiveWorkoutViewModel`
+
+**Key Features:**
+- List view with drag handles for reordering
+- Shows all sets for the exercise
+- Displays set number, weight, and reps
+- Always in edit mode (reorder controls always visible)
+- Footer explaining the reorder functionality
+- Updates set order when dismissed
+
+**Navigation:**
+- Presented as sheet from `ActiveWorkoutFullScreenView` or `ExerciseSectionView`
 
 ---
 
@@ -269,19 +306,24 @@ All SwiftUI views in the app, organized by purpose.
 - Strength exercises grouped by category (Chest, Back, Shoulders, Arms, Legs, Core)
 - Cardio exercises grouped by category (Running, Cycling, Rowing, Stair Climber, Jump Rope, Swimming, Walking, HIIT)
 - Search bar (searches within selected type)
+- Muscle group filter bar (`ExerciseFilterBar`) with quick filter chips
 - Equipment filter button (multi-select)
 - Favorite toggle on each exercise row (star icon)
 - Favorites section at top of list (if any exist)
 - Equipment tags displayed on each exercise row
 - Add custom exercise button
 - Swipe to delete custom exercises
+- Skeleton loading states
 
 **Contains:**
-- `ExerciseRowView` - Individual exercise row with favorite button and equipment tags
+- `ExerciseRowCard` - Individual exercise row card component
+- `ExerciseFilterBar` - Horizontal filter bar with muscle group chips
+- `SkeletonExerciseRow` - Exercise row loading skeleton
 - `EquipmentFilterSheet` - Equipment multi-select filter
 
 **Presents:**
 - `AddExerciseSheet` (sheet)
+- `EditExerciseSheet` (sheet)
 - `EquipmentFilterSheet` (sheet)
 
 **Navigation:**
@@ -294,7 +336,7 @@ All SwiftUI views in the app, organized by purpose.
 
 **Description:** Sheet for creating custom exercise with comprehensive data
 
-**ViewModel:** None (calls `ExerciseLibraryViewModel.addCustomExercise()`)
+**ViewModel:** `@ObservedObject viewModel: ExerciseLibraryViewModel`
 
 **Key Features:**
 - Exercise name input
@@ -312,6 +354,77 @@ All SwiftUI views in the app, organized by purpose.
 
 **Navigation:**
 - Presented from `ExerciseListView` (sheet)
+
+---
+
+### EditExerciseSheet.swift
+
+**Description:** Sheet for editing existing custom exercises
+
+**ViewModel:** `@ObservedObject viewModel: ExerciseLibraryViewModel`
+
+**Key Features:**
+- Pre-populated with exercise data
+- Exercise name editing
+- Exercise type picker (Strength or Cardio)
+- Category picker (dynamic based on type)
+- Equipment multi-select (with equipment picker sheet)
+- Primary muscles multi-select (for strength exercises)
+- Secondary muscles multi-select (for strength exercises)
+- Instructions text fields (setup, execution, tips - all editable)
+- Save/cancel buttons
+- Updates exercise via ViewModel
+
+**Contains:**
+- `EquipmentMultiSelectSheet` - Equipment selection sheet
+- `MuscleMultiSelectSheet` - Muscle selection sheet
+
+**Navigation:**
+- Presented from `ExerciseListView` (sheet)
+
+---
+
+### ExerciseRowCard.swift
+
+**Description:** Reusable card component for displaying exercise rows in lists
+
+**ViewModel:** None (receives exercise data as parameter)
+
+**Key Features:**
+- Exercise name display
+- Category badge
+- Equipment tags display
+- Favorite toggle button (star icon)
+- Tap to navigate to exercise details
+- Consistent styling across exercise lists
+- Supports custom actions via callbacks
+
+**Navigation:**
+- Embedded in `ExerciseListView`
+- Navigates to `ExerciseDetailView` on tap
+
+---
+
+### ExerciseFilterBar.swift
+
+**Description:** Horizontal filter bar with muscle group filter chips
+
+**ViewModel:** None (uses bindings for filter state)
+
+**Key Features:**
+- Horizontal scrolling filter chips
+- Muscle group filters (Chest, Back, Legs, Shoulders, Arms, Core)
+- Each chip shows icon and title
+- Selected state visual feedback
+- "More Filters" button showing active filter count
+- Tap to toggle filter selection
+- Calls callback when "More Filters" is tapped
+
+**Contains:**
+- `FilterChip` - Individual filter chip component
+
+**Navigation:**
+- Embedded in `ExerciseListView`
 
 ---
 
@@ -566,12 +679,61 @@ All SwiftUI views in the app, organized by purpose.
 
 ---
 
+## Skeleton Loading Views
+
+### Skeletons/
+
+Skeleton loading views provide visual feedback while data is loading.
+
+#### SkeletonExerciseRow.swift
+
+**Description:** Skeleton loading state for exercise rows
+
+**Usage:** Shown in `ExerciseListView` while exercises are loading
+
+---
+
+#### SkeletonPRCard.swift
+
+**Description:** Skeleton loading state for PR cards
+
+**Usage:** Shown in `HomeView` while recent PRs are loading
+
+---
+
+#### SkeletonStatsCard.swift
+
+**Description:** Skeleton loading state for stats cards
+
+**Usage:** Shown in `HomeView` while statistics are calculating
+
+---
+
+#### SkeletonTemplateCard.swift
+
+**Description:** Skeleton loading state for template cards
+
+**Usage:** Shown in `HomeView` and `TemplateListView` while templates are loading
+
+---
+
+#### SkeletonWorkoutHistoryCard.swift
+
+**Description:** Skeleton loading state for workout history cards
+
+**Usage:** Shown in `HistoryView` while workout history is loading
+
+---
+
 ## View Hierarchy
 
 ```
 ContentView
 ├── TabView
 │   ├── HomeView
+│   │   ├── SkeletonStatsCard (conditional)
+│   │   ├── SkeletonTemplateCard (conditional)
+│   │   ├── SkeletonPRCard (conditional)
 │   │   └── TemplateListView (sheet)
 │   │       └── CreateTemplateView (sheet)
 │   │           └── AddExerciseToTemplateSheet (sheet)
@@ -580,10 +742,15 @@ ContentView
 │   │           └── EditTemplateExerciseSheet (sheet)
 │   │
 │   ├── HistoryView
+│   │   ├── SkeletonWorkoutHistoryCard (conditional)
 │   │   └── WorkoutHistoryDetailView
 │   │
 │   ├── ExerciseListView
-│   │   └── AddExerciseSheet (sheet)
+│   │   ├── ExerciseFilterBar
+│   │   ├── ExerciseRowCard (multiple)
+│   │   ├── SkeletonExerciseRow (conditional)
+│   │   ├── AddExerciseSheet (sheet)
+│   │   └── EditExerciseSheet (sheet)
 │   │
 │   └── ProfileView
 │       └── SettingsView (sheet)
@@ -591,13 +758,12 @@ ContentView
 ├── FloatingWorkoutPill (conditional overlay)
 │
 └── ActiveWorkoutFullScreenView (fullScreenCover)
-    ├── ActiveWorkoutView
-    │   ├── ExerciseSectionView
-    │   │   └── SetRowView (multiple)
-    │   └── AddExerciseToWorkoutSheet (sheet)
-    │
+    ├── ExerciseSectionView (multiple)
+    │   └── SetRowView (multiple)
+    ├── AddExerciseToWorkoutSheet (sheet)
+    ├── ReorderSetsSheet (sheet)
     ├── RestTimerView (conditional)
-    │
+    ├── PRNotificationView (conditional)
     └── WorkoutCompletionView (sheet)
 ```
 

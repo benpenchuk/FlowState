@@ -1167,8 +1167,8 @@ For development, show scroll state:
 
 - [SCROLL_TRACKING_FIX.md](../SCROLL_TRACKING_FIX.md) - Previous fix for PreferenceKey
 - [DRAG_HANDLE_LOCATION.md](DRAG_HANDLE_LOCATION.md) - Related animation issues
-- [ACTIVE_WORKOUT_LAYOUT_COMPACTION.md](../pastTasks/ACTIVE_WORKOUT_LAYOUT_COMPACTION.md) - Layout structure
-- [ACTIVE_WORKOUT_REFACTOR.md](../pastTasks/ACTIVE_WORKOUT_REFACTOR.md) - Historical context
+- [ACTIVE_WORKOUT_LAYOUT_COMPACTION.md](../completed/ACTIVE_WORKOUT_LAYOUT_COMPACTION.md) - Layout structure
+- [ACTIVE_WORKOUT_REFACTOR.md](../completed/ACTIVE_WORKOUT_REFACTOR.md) - Historical context
 
 ---
 

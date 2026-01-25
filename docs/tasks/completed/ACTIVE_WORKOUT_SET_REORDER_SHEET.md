@@ -25,5 +25,5 @@
 
 ### Follow-ups (tracked separately)
 - There is likely a **smoother** UX we can do later (fewer steps, clearer entry point, better context). See the future task doc:
-  - `docs/futureTasks/ACTIVE_WORKOUT_SET_REORDER_IMPROVEMENTS.md`
+  - `docs/tasks/future/ACTIVE_WORKOUT_SET_REORDER_IMPROVEMENTS.md`
 

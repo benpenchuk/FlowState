@@ -202,6 +202,58 @@ Enum defining appearance mode preference.
 
 ---
 
+### MuscleGroupFilter
+
+Enum defining muscle group filters for exercise filtering.
+
+**Location:** `Models/ExerciseFilters.swift`
+
+**Values:**
+- `chest` - Chest exercises
+- `back` - Back exercises
+- `legs` - Leg exercises
+- `shoulders` - Shoulder exercises
+- `arms` - Arm exercises
+- `core` - Core exercises
+
+**Properties:**
+- `id: String` - Unique identifier (rawValue)
+- `title: String` - Display title
+- `symbolName: String` - SF Symbol name for icon
+
+**Usage:**
+- Used in `ExerciseFilterBar` for quick muscle group filtering
+- Filters exercises by primary muscle groups worked
+- Visual filter chips with icons
+
+---
+
+### EquipmentChip
+
+Enum defining equipment filter chips for exercise filtering.
+
+**Location:** `Models/ExerciseFilters.swift`
+
+**Values:**
+- `barbell` - Barbell exercises
+- `dumbbell` - Dumbbell exercises
+- `cable` - Cable machine exercises
+- `bodyweight` - Bodyweight exercises
+- `machine` - Machine exercises
+
+**Properties:**
+- `id: String` - Unique identifier (rawValue)
+- `title: String` - Display title
+- `symbolName: String` - SF Symbol name for icon
+- `equipment: Equipment` - Maps to Equipment enum
+
+**Usage:**
+- Used in exercise filtering UI
+- Provides quick access to common equipment filters
+- Maps to full Equipment enum for filtering logic
+
+---
+
 ## Codable Structs (Not SwiftData Models)
 
 ### SetRecord

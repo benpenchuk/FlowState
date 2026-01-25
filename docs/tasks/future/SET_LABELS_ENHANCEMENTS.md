@@ -322,7 +322,7 @@ To validate these enhancements, track:
 
 ## Related Documents
 
-- `docs/FEATURES.md` - Current feature documentation
-- `docs/futureTasks/SET_LABELS_DISCOVERABILITY.md` - Original discoverability problem
+- `docs/development/FEATURES.md` - Current feature documentation
+- `docs/tasks/future/SET_LABELS_DISCOVERABILITY.md` - Original discoverability problem
 - `FlowState/Models/SetRecord.swift` - SetLabel enum definition
 - `FlowState/Views/SetRowView.swift` - Label indicator UI

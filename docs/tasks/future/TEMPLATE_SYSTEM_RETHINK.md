@@ -171,7 +171,7 @@ This missing intent is often the root of “templates feel stressful / too perma
 
 ### UX wins
 - **Fast start**: one tap from Home + a confirmation.
-- **High-signal cards**: exercise preview + last used + count is scannable (see `docs/pastTasks/TEMPLATE_CARDS_AND_LOADING_STATES.md`).
+- **High-signal cards**: exercise preview + last used + count is scannable (see `docs/tasks/completed/TEMPLATE_CARDS_AND_LOADING_STATES.md`).
 - **Works offline & instantly**: local SwiftData operations.
 - **Simple mental model (initially)**: “Pick routine → Start workout.”
 

@@ -28,8 +28,8 @@ This feature has been **successfully implemented** with a smart, history-aware a
 - `FlowState/ViewModels/ActiveWorkoutViewModel.swift`
   - Added `createSmartDefaultSets(for:)` helper method
   - Updated `addExerciseToWorkout(_:)` to use smart defaults
-- `docs/FEATURES.md` - Documented new behavior
-- `docs/futureTasks/SMART_DEFAULT_SETS_ENHANCEMENTS.md` - Future enhancement ideas
+- `docs/development/FEATURES.md` - Documented new behavior
+- `docs/tasks/future/SMART_DEFAULT_SETS_ENHANCEMENTS.md` - Future enhancement ideas
 
 **Related Documentation:**
 - See [SMART_DEFAULT_SETS_ENHANCEMENTS.md](./SMART_DEFAULT_SETS_ENHANCEMENTS.md) for 15+ future enhancement possibilities
@@ -576,8 +576,8 @@ When saving workout as template, use actual set count rather than fixed count.
 - `FlowState/Views/SettingsView.swift` - Maybe add here instead
 
 ### Documentation
-- `docs/FEATURES.md` - Document new behavior
-- `docs/MODELS.md` - Update UserProfile schema
+- `docs/development/FEATURES.md` - Document new behavior
+- `docs/architecture/MODELS.md` - Update UserProfile schema
 
 ## Success Metrics
 
@@ -604,6 +604,6 @@ Auto-populating exercises with 3 sets is a low-complexity, high-impact improveme
 ---
 
 **Related Documentation:**
-- [FEATURES.md](../FEATURES.md)
-- [MODELS.md](../MODELS.md)
-- [ACTIVE_WORKOUT_REFACTOR.md](../pastTasks/ACTIVE_WORKOUT_REFACTOR.md)
+- [FEATURES.md](../../development/FEATURES.md)
+- [MODELS.md](../../architecture/MODELS.md)
+- [ACTIVE_WORKOUT_REFACTOR.md](../completed/ACTIVE_WORKOUT_REFACTOR.md)

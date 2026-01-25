@@ -238,73 +238,6 @@ When adding an exercise to an active workout, the app automatically creates pre-
 
 ---
 
-### ✅ Set Labels
-
-**Status:** Complete
-
-**Description:**
-- Tag sets with labels: Warmup, Failure, Drop Set, PR Attempt
-- Visual indicator (colored pill/badge next to set)
-- Optional labels that don't affect workout data
-- Quick selection via picker sheet
-
-**Implementation:**
-- `Views/LabelPickerSheet.swift` - Label selection UI
-- `Views/SetRowView.swift` - Label display and picker integration
-- `Models/SetRecord.swift` - Label enum and field
-
-**User Flow:**
-1. Tap the label area on a set row (shows current label or "Add Label")
-2. Select from predefined labels (Warmup, Failure, Drop Set, PR Attempt)
-3. Label appears as colored pill next to the set
-4. Tap label to change or remove
-
----
-
-### ✅ Per-Exercise Notes During Workout
-
-**Status:** Complete
-
-**Description:**
-- Add notes to individual exercises during workout
-- Separate from overall workout notes
-- Collapsible text field to save space
-- Useful for tracking form issues, equipment notes, etc.
-
-**Implementation:**
-- `Views/ActiveWorkoutView.swift` - Exercise notes integration
-- `Models/WorkoutEntry.swift` - Notes field per exercise
-
-**User Flow:**
-1. During active workout, look for notes field under each exercise
-2. Tap to expand and enter notes
-3. Notes auto-save as you type
-4. Collapse to save space when not editing
-
----
-
-### ✅ Expand/Collapse Exercises
-
-**Status:** Complete
-
-**Description:**
-- Collapse completed exercises to reduce scrolling
-- Tap exercise header to toggle expansion state
-- Visual indicators show completion status
-- Useful for long workouts with many exercises
-
-**Implementation:**
-- `Views/ActiveWorkoutView.swift` - Exercise expansion state management
-- `Models/WorkoutEntry.swift` - Expanded state tracking
-
-**User Flow:**
-1. During workout, completed exercises can be collapsed
-2. Tap exercise header (name area) to toggle expansion
-3. Collapsed exercises show summary (exercise name, sets completed)
-4. Expand to see all sets and add more
-
----
-
 ### ✅ App State Persistence & Resume
 
 **Status:** Complete
@@ -656,4 +589,4 @@ None currently - all listed features are complete.
 
 ## Not Started
 
-See `TODO.md` for planned features.
+See [TODO.md](../tasks/future/TODO.md) for planned features.

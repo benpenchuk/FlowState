@@ -1,5 +1,7 @@
 # Git Workflow Reference
 
+> **Note:** This document covers Git workflow and version control. For deployment documentation, see the project's deployment guide (if available).
+
 ## Repository
 **URL:** https://github.com/benpenchuk/FlowState
 

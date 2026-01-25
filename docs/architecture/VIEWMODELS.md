@@ -289,6 +289,49 @@ All ViewModels in the app, their responsibilities, and usage.
 
 ---
 
+## HomeStatsViewModel
+
+**Location:** `ViewModels/HomeStatsViewModel.swift`
+
+**Type:** `@StateObject` (view-scoped)
+
+**Responsibility:** Manages home dashboard statistics and activity tracking
+
+**Properties:**
+- `@Published var workoutsCount: Int` - Number of workouts in selected period
+- `@Published var totalTime: TimeInterval` - Total workout time in selected period
+- `@Published var currentStreak: Int` - Current consecutive workout days streak
+- `@Published var previousWorkoutsCount: Int` - Previous period workout count (for comparison)
+- `@Published var previousTotalTime: TimeInterval` - Previous period total time (for comparison)
+- `@Published var isLoading: Bool` - Loading state for stats calculation
+- `@Published var selectedPeriod: StatsPeriod` - Selected time period (.last7Days or .last30Days)
+- `@Published var last7DaysActivity: [Bool]` - Activity calendar for last 7 days
+
+**Key Methods:**
+- `setModelContext(_ context: ModelContext)` - Initialize with SwiftData context
+- `calculateStats(for period: StatsPeriod)` - Calculate stats for selected period (async)
+- `refreshStats()` - Recalculate stats for current period
+- `getDateRange(for period: StatsPeriod) -> (start: Date, end: Date)` - Get date range for period
+- `getPreviousDateRange(for period: StatsPeriod) -> (start: Date, end: Date)` - Get previous period range
+
+**Private Methods:**
+- `calculatePeriodStats(modelContext:startDate:endDate:) -> (count: Int, time: TimeInterval)` - Calculate stats for date range
+- `calculateStreakSync(modelContext:) -> Int` - Calculate current streak
+- `calculateLast7DaysActivity(modelContext:) -> [Bool]` - Calculate activity calendar
+
+**Used By:**
+- `HomeView` - Home dashboard statistics display
+
+**Special Notes:**
+- Uses async/await for stats calculation to avoid blocking UI
+- Calculates stats on background thread, updates UI on main thread
+- Automatically recalculates when `selectedPeriod` changes (via Combine)
+- Provides comparison data (previous period) for showing trends
+- Activity calendar shows which days had workouts in last 7 days
+- Streak calculation allows for workout today or yesterday to start streak
+
+---
+
 ## ViewModel Usage Patterns
 
 ### @EnvironmentObject Pattern
@@ -296,7 +339,7 @@ All ViewModels in the app, their responsibilities, and usage.
 
 ### @StateObject Pattern
 - Used in views that create and own the ViewModel
-- Examples: `HomeView` (TemplateViewModel, ActiveWorkoutViewModel, ProgressViewModel)
+- Examples: `HomeView` (TemplateViewModel, ActiveWorkoutViewModel, ProgressViewModel, HomeStatsViewModel)
 - Examples: `HistoryView` (HistoryViewModel)
 - Examples: `ExerciseListView` (ExerciseLibraryViewModel)
 - Examples: `ExerciseDetailView` (ProgressViewModel)
@@ -357,4 +400,7 @@ ProfileViewModel
 ├── Used by ContentView (appearance mode)
 ├── Used by ActiveWorkoutFullScreenView (default rest time)
 └── Used by various views (units conversion)
+
+HomeStatsViewModel
+└── Used by HomeView (dashboard statistics)
 ```
