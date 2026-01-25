@@ -1,0 +1,39 @@
+{
+  "" : {
+    "diagnostics" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState Watch Watch App.build/Objects-normal/x86_64/FlowState Watch Watch App-primary.dia",
+    "emit-module-dependencies" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState Watch Watch App.build/Objects-normal/x86_64/FlowState Watch Watch App-primary-emit-module.d",
+    "emit-module-diagnostics" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState Watch Watch App.build/Objects-normal/x86_64/FlowState Watch Watch App-primary-emit-module.dia",
+    "pch" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState Watch Watch App.build/Objects-normal/x86_64/FlowState Watch Watch App-primary-Bridging-header.pch",
+    "swift-dependencies" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState Watch Watch App.build/Objects-normal/x86_64/FlowState Watch Watch App-primary.swiftdeps"
+  },
+  "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState Watch Watch App.build/DerivedSources/GeneratedAssetSymbols.swift" : {
+    "const-values" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState Watch Watch App.build/Objects-normal/x86_64/GeneratedAssetSymbols.swiftconstvalues",
+    "dependencies" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState Watch Watch App.build/Objects-normal/x86_64/GeneratedAssetSymbols.d",
+    "diagnostics" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState Watch Watch App.build/Objects-normal/x86_64/GeneratedAssetSymbols.dia",
+    "index-unit-output-path" : "/FlowState.build/Debug-iphonesimulator/FlowState Watch Watch App.build/Objects-normal/x86_64/GeneratedAssetSymbols.o",
+    "llvm-bc" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState Watch Watch App.build/Objects-normal/x86_64/GeneratedAssetSymbols.bc",
+    "object" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState Watch Watch App.build/Objects-normal/x86_64/GeneratedAssetSymbols.o",
+    "swift-dependencies" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState Watch Watch App.build/Objects-normal/x86_64/GeneratedAssetSymbols.swiftdeps",
+    "swiftmodule" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState Watch Watch App.build/Objects-normal/x86_64/GeneratedAssetSymbols~partial.swiftmodule"
+  },
+  "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/FlowState Watch Watch App/ContentView.swift" : {
+    "const-values" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState Watch Watch App.build/Objects-normal/x86_64/ContentView.swiftconstvalues",
+    "dependencies" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState Watch Watch App.build/Objects-normal/x86_64/ContentView.d",
+    "diagnostics" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState Watch Watch App.build/Objects-normal/x86_64/ContentView.dia",
+    "index-unit-output-path" : "/FlowState.build/Debug-iphonesimulator/FlowState Watch Watch App.build/Objects-normal/x86_64/ContentView.o",
+    "llvm-bc" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState Watch Watch App.build/Objects-normal/x86_64/ContentView.bc",
+    "object" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState Watch Watch App.build/Objects-normal/x86_64/ContentView.o",
+    "swift-dependencies" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState Watch Watch App.build/Objects-normal/x86_64/ContentView.swiftdeps",
+    "swiftmodule" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState Watch Watch App.build/Objects-normal/x86_64/ContentView~partial.swiftmodule"
+  },
+  "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/FlowState Watch Watch App/FlowState_WatchApp.swift" : {
+    "const-values" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState Watch Watch App.build/Objects-normal/x86_64/FlowState_WatchApp.swiftconstvalues",
+    "dependencies" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState Watch Watch App.build/Objects-normal/x86_64/FlowState_WatchApp.d",
+    "diagnostics" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState Watch Watch App.build/Objects-normal/x86_64/FlowState_WatchApp.dia",
+    "index-unit-output-path" : "/FlowState.build/Debug-iphonesimulator/FlowState Watch Watch App.build/Objects-normal/x86_64/FlowState_WatchApp.o",
+    "llvm-bc" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState Watch Watch App.build/Objects-normal/x86_64/FlowState_WatchApp.bc",
+    "object" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState Watch Watch App.build/Objects-normal/x86_64/FlowState_WatchApp.o",
+    "swift-dependencies" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState Watch Watch App.build/Objects-normal/x86_64/FlowState_WatchApp.swiftdeps",
+    "swiftmodule" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState Watch Watch App.build/Objects-normal/x86_64/FlowState_WatchApp~partial.swiftmodule"
+  }
+}

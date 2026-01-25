@@ -1,0 +1,559 @@
+{
+  "" : {
+    "diagnostics" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/FlowState-primary.dia",
+    "emit-module-dependencies" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/FlowState-primary-emit-module.d",
+    "emit-module-diagnostics" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/FlowState-primary-emit-module.dia",
+    "pch" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/FlowState-primary-Bridging-header.pch",
+    "swift-dependencies" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/FlowState-primary.swiftdeps"
+  },
+  "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/DerivedSources/GeneratedAssetSymbols.swift" : {
+    "const-values" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/GeneratedAssetSymbols.swiftconstvalues",
+    "dependencies" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/GeneratedAssetSymbols.d",
+    "diagnostics" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/GeneratedAssetSymbols.dia",
+    "index-unit-output-path" : "/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/GeneratedAssetSymbols.o",
+    "llvm-bc" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/GeneratedAssetSymbols.bc",
+    "object" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/GeneratedAssetSymbols.o",
+    "swift-dependencies" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/GeneratedAssetSymbols.swiftdeps",
+    "swiftmodule" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/GeneratedAssetSymbols~partial.swiftmodule"
+  },
+  "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/FlowState/ContentView.swift" : {
+    "const-values" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/ContentView.swiftconstvalues",
+    "dependencies" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/ContentView.d",
+    "diagnostics" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/ContentView.dia",
+    "index-unit-output-path" : "/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/ContentView.o",
+    "llvm-bc" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/ContentView.bc",
+    "object" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/ContentView.o",
+    "swift-dependencies" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/ContentView.swiftdeps",
+    "swiftmodule" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/ContentView~partial.swiftmodule"
+  },
+  "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/FlowState/Extensions/Colors.swift" : {
+    "const-values" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/Colors.swiftconstvalues",
+    "dependencies" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/Colors.d",
+    "diagnostics" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/Colors.dia",
+    "index-unit-output-path" : "/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/Colors.o",
+    "llvm-bc" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/Colors.bc",
+    "object" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/Colors.o",
+    "swift-dependencies" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/Colors.swiftdeps",
+    "swiftmodule" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/Colors~partial.swiftmodule"
+  },
+  "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/FlowState/Extensions/KeyboardObserver.swift" : {
+    "const-values" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/KeyboardObserver.swiftconstvalues",
+    "dependencies" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/KeyboardObserver.d",
+    "diagnostics" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/KeyboardObserver.dia",
+    "index-unit-output-path" : "/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/KeyboardObserver.o",
+    "llvm-bc" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/KeyboardObserver.bc",
+    "object" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/KeyboardObserver.o",
+    "swift-dependencies" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/KeyboardObserver.swiftdeps",
+    "swiftmodule" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/KeyboardObserver~partial.swiftmodule"
+  },
+  "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/FlowState/Extensions/ModalPresentationObserver.swift" : {
+    "const-values" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/ModalPresentationObserver.swiftconstvalues",
+    "dependencies" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/ModalPresentationObserver.d",
+    "diagnostics" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/ModalPresentationObserver.dia",
+    "index-unit-output-path" : "/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/ModalPresentationObserver.o",
+    "llvm-bc" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/ModalPresentationObserver.bc",
+    "object" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/ModalPresentationObserver.o",
+    "swift-dependencies" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/ModalPresentationObserver.swiftdeps",
+    "swiftmodule" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/ModalPresentationObserver~partial.swiftmodule"
+  },
+  "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/FlowState/Extensions/NumberFormatter.swift" : {
+    "const-values" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/NumberFormatter.swiftconstvalues",
+    "dependencies" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/NumberFormatter.d",
+    "diagnostics" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/NumberFormatter.dia",
+    "index-unit-output-path" : "/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/NumberFormatter.o",
+    "llvm-bc" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/NumberFormatter.bc",
+    "object" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/NumberFormatter.o",
+    "swift-dependencies" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/NumberFormatter.swiftdeps",
+    "swiftmodule" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/NumberFormatter~partial.swiftmodule"
+  },
+  "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/FlowState/FlowStateApp.swift" : {
+    "const-values" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/FlowStateApp.swiftconstvalues",
+    "dependencies" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/FlowStateApp.d",
+    "diagnostics" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/FlowStateApp.dia",
+    "index-unit-output-path" : "/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/FlowStateApp.o",
+    "llvm-bc" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/FlowStateApp.bc",
+    "object" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/FlowStateApp.o",
+    "swift-dependencies" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/FlowStateApp.swiftdeps",
+    "swiftmodule" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/FlowStateApp~partial.swiftmodule"
+  },
+  "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/FlowState/Models/Exercise.swift" : {
+    "const-values" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/Exercise.swiftconstvalues",
+    "dependencies" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/Exercise.d",
+    "diagnostics" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/Exercise.dia",
+    "index-unit-output-path" : "/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/Exercise.o",
+    "llvm-bc" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/Exercise.bc",
+    "object" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/Exercise.o",
+    "swift-dependencies" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/Exercise.swiftdeps",
+    "swiftmodule" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/Exercise~partial.swiftmodule"
+  },
+  "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/FlowState/Models/PersonalRecord.swift" : {
+    "const-values" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/PersonalRecord.swiftconstvalues",
+    "dependencies" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/PersonalRecord.d",
+    "diagnostics" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/PersonalRecord.dia",
+    "index-unit-output-path" : "/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/PersonalRecord.o",
+    "llvm-bc" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/PersonalRecord.bc",
+    "object" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/PersonalRecord.o",
+    "swift-dependencies" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/PersonalRecord.swiftdeps",
+    "swiftmodule" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/PersonalRecord~partial.swiftmodule"
+  },
+  "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/FlowState/Models/SetRecord.swift" : {
+    "const-values" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/SetRecord.swiftconstvalues",
+    "dependencies" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/SetRecord.d",
+    "diagnostics" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/SetRecord.dia",
+    "index-unit-output-path" : "/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/SetRecord.o",
+    "llvm-bc" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/SetRecord.bc",
+    "object" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/SetRecord.o",
+    "swift-dependencies" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/SetRecord.swiftdeps",
+    "swiftmodule" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/SetRecord~partial.swiftmodule"
+  },
+  "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/FlowState/Models/TemplateExercise.swift" : {
+    "const-values" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/TemplateExercise.swiftconstvalues",
+    "dependencies" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/TemplateExercise.d",
+    "diagnostics" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/TemplateExercise.dia",
+    "index-unit-output-path" : "/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/TemplateExercise.o",
+    "llvm-bc" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/TemplateExercise.bc",
+    "object" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/TemplateExercise.o",
+    "swift-dependencies" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/TemplateExercise.swiftdeps",
+    "swiftmodule" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/TemplateExercise~partial.swiftmodule"
+  },
+  "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/FlowState/Models/UserProfile.swift" : {
+    "const-values" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/UserProfile.swiftconstvalues",
+    "dependencies" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/UserProfile.d",
+    "diagnostics" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/UserProfile.dia",
+    "index-unit-output-path" : "/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/UserProfile.o",
+    "llvm-bc" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/UserProfile.bc",
+    "object" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/UserProfile.o",
+    "swift-dependencies" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/UserProfile.swiftdeps",
+    "swiftmodule" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/UserProfile~partial.swiftmodule"
+  },
+  "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/FlowState/Models/Workout.swift" : {
+    "const-values" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/Workout.swiftconstvalues",
+    "dependencies" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/Workout.d",
+    "diagnostics" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/Workout.dia",
+    "index-unit-output-path" : "/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/Workout.o",
+    "llvm-bc" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/Workout.bc",
+    "object" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/Workout.o",
+    "swift-dependencies" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/Workout.swiftdeps",
+    "swiftmodule" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/Workout~partial.swiftmodule"
+  },
+  "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/FlowState/Models/WorkoutEntry.swift" : {
+    "const-values" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/WorkoutEntry.swiftconstvalues",
+    "dependencies" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/WorkoutEntry.d",
+    "diagnostics" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/WorkoutEntry.dia",
+    "index-unit-output-path" : "/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/WorkoutEntry.o",
+    "llvm-bc" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/WorkoutEntry.bc",
+    "object" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/WorkoutEntry.o",
+    "swift-dependencies" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/WorkoutEntry.swiftdeps",
+    "swiftmodule" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/WorkoutEntry~partial.swiftmodule"
+  },
+  "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/FlowState/Models/WorkoutTemplate.swift" : {
+    "const-values" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/WorkoutTemplate.swiftconstvalues",
+    "dependencies" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/WorkoutTemplate.d",
+    "diagnostics" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/WorkoutTemplate.dia",
+    "index-unit-output-path" : "/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/WorkoutTemplate.o",
+    "llvm-bc" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/WorkoutTemplate.bc",
+    "object" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/WorkoutTemplate.o",
+    "swift-dependencies" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/WorkoutTemplate.swiftdeps",
+    "swiftmodule" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/WorkoutTemplate~partial.swiftmodule"
+  },
+  "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/FlowState/ViewModels/ActiveWorkoutViewModel.swift" : {
+    "const-values" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/ActiveWorkoutViewModel.swiftconstvalues",
+    "dependencies" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/ActiveWorkoutViewModel.d",
+    "diagnostics" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/ActiveWorkoutViewModel.dia",
+    "index-unit-output-path" : "/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/ActiveWorkoutViewModel.o",
+    "llvm-bc" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/ActiveWorkoutViewModel.bc",
+    "object" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/ActiveWorkoutViewModel.o",
+    "swift-dependencies" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/ActiveWorkoutViewModel.swiftdeps",
+    "swiftmodule" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/ActiveWorkoutViewModel~partial.swiftmodule"
+  },
+  "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/FlowState/ViewModels/ExerciseLibraryViewModel.swift" : {
+    "const-values" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/ExerciseLibraryViewModel.swiftconstvalues",
+    "dependencies" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/ExerciseLibraryViewModel.d",
+    "diagnostics" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/ExerciseLibraryViewModel.dia",
+    "index-unit-output-path" : "/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/ExerciseLibraryViewModel.o",
+    "llvm-bc" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/ExerciseLibraryViewModel.bc",
+    "object" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/ExerciseLibraryViewModel.o",
+    "swift-dependencies" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/ExerciseLibraryViewModel.swiftdeps",
+    "swiftmodule" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/ExerciseLibraryViewModel~partial.swiftmodule"
+  },
+  "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/FlowState/ViewModels/HistoryViewModel.swift" : {
+    "const-values" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/HistoryViewModel.swiftconstvalues",
+    "dependencies" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/HistoryViewModel.d",
+    "diagnostics" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/HistoryViewModel.dia",
+    "index-unit-output-path" : "/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/HistoryViewModel.o",
+    "llvm-bc" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/HistoryViewModel.bc",
+    "object" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/HistoryViewModel.o",
+    "swift-dependencies" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/HistoryViewModel.swiftdeps",
+    "swiftmodule" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/HistoryViewModel~partial.swiftmodule"
+  },
+  "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/FlowState/ViewModels/HomeStatsViewModel.swift" : {
+    "const-values" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/HomeStatsViewModel.swiftconstvalues",
+    "dependencies" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/HomeStatsViewModel.d",
+    "diagnostics" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/HomeStatsViewModel.dia",
+    "index-unit-output-path" : "/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/HomeStatsViewModel.o",
+    "llvm-bc" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/HomeStatsViewModel.bc",
+    "object" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/HomeStatsViewModel.o",
+    "swift-dependencies" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/HomeStatsViewModel.swiftdeps",
+    "swiftmodule" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/HomeStatsViewModel~partial.swiftmodule"
+  },
+  "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/FlowState/ViewModels/ProfileViewModel.swift" : {
+    "const-values" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/ProfileViewModel.swiftconstvalues",
+    "dependencies" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/ProfileViewModel.d",
+    "diagnostics" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/ProfileViewModel.dia",
+    "index-unit-output-path" : "/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/ProfileViewModel.o",
+    "llvm-bc" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/ProfileViewModel.bc",
+    "object" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/ProfileViewModel.o",
+    "swift-dependencies" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/ProfileViewModel.swiftdeps",
+    "swiftmodule" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/ProfileViewModel~partial.swiftmodule"
+  },
+  "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/FlowState/ViewModels/ProgressViewModel.swift" : {
+    "const-values" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/ProgressViewModel.swiftconstvalues",
+    "dependencies" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/ProgressViewModel.d",
+    "diagnostics" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/ProgressViewModel.dia",
+    "index-unit-output-path" : "/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/ProgressViewModel.o",
+    "llvm-bc" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/ProgressViewModel.bc",
+    "object" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/ProgressViewModel.o",
+    "swift-dependencies" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/ProgressViewModel.swiftdeps",
+    "swiftmodule" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/ProgressViewModel~partial.swiftmodule"
+  },
+  "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/FlowState/ViewModels/RestTimerViewModel.swift" : {
+    "const-values" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/RestTimerViewModel.swiftconstvalues",
+    "dependencies" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/RestTimerViewModel.d",
+    "diagnostics" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/RestTimerViewModel.dia",
+    "index-unit-output-path" : "/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/RestTimerViewModel.o",
+    "llvm-bc" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/RestTimerViewModel.bc",
+    "object" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/RestTimerViewModel.o",
+    "swift-dependencies" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/RestTimerViewModel.swiftdeps",
+    "swiftmodule" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/RestTimerViewModel~partial.swiftmodule"
+  },
+  "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/FlowState/ViewModels/TemplateViewModel.swift" : {
+    "const-values" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/TemplateViewModel.swiftconstvalues",
+    "dependencies" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/TemplateViewModel.d",
+    "diagnostics" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/TemplateViewModel.dia",
+    "index-unit-output-path" : "/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/TemplateViewModel.o",
+    "llvm-bc" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/TemplateViewModel.bc",
+    "object" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/TemplateViewModel.o",
+    "swift-dependencies" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/TemplateViewModel.swiftdeps",
+    "swiftmodule" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/TemplateViewModel~partial.swiftmodule"
+  },
+  "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/FlowState/ViewModels/WorkoutStateManager.swift" : {
+    "const-values" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/WorkoutStateManager.swiftconstvalues",
+    "dependencies" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/WorkoutStateManager.d",
+    "diagnostics" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/WorkoutStateManager.dia",
+    "index-unit-output-path" : "/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/WorkoutStateManager.o",
+    "llvm-bc" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/WorkoutStateManager.bc",
+    "object" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/WorkoutStateManager.o",
+    "swift-dependencies" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/WorkoutStateManager.swiftdeps",
+    "swiftmodule" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/WorkoutStateManager~partial.swiftmodule"
+  },
+  "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/FlowState/Views/ActiveWorkoutFullScreenView.swift" : {
+    "const-values" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/ActiveWorkoutFullScreenView.swiftconstvalues",
+    "dependencies" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/ActiveWorkoutFullScreenView.d",
+    "diagnostics" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/ActiveWorkoutFullScreenView.dia",
+    "index-unit-output-path" : "/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/ActiveWorkoutFullScreenView.o",
+    "llvm-bc" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/ActiveWorkoutFullScreenView.bc",
+    "object" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/ActiveWorkoutFullScreenView.o",
+    "swift-dependencies" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/ActiveWorkoutFullScreenView.swiftdeps",
+    "swiftmodule" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/ActiveWorkoutFullScreenView~partial.swiftmodule"
+  },
+  "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/FlowState/Views/ActiveWorkoutLayout.swift" : {
+    "const-values" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/ActiveWorkoutLayout.swiftconstvalues",
+    "dependencies" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/ActiveWorkoutLayout.d",
+    "diagnostics" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/ActiveWorkoutLayout.dia",
+    "index-unit-output-path" : "/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/ActiveWorkoutLayout.o",
+    "llvm-bc" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/ActiveWorkoutLayout.bc",
+    "object" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/ActiveWorkoutLayout.o",
+    "swift-dependencies" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/ActiveWorkoutLayout.swiftdeps",
+    "swiftmodule" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/ActiveWorkoutLayout~partial.swiftmodule"
+  },
+  "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/FlowState/Views/AddExerciseSheet.swift" : {
+    "const-values" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/AddExerciseSheet.swiftconstvalues",
+    "dependencies" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/AddExerciseSheet.d",
+    "diagnostics" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/AddExerciseSheet.dia",
+    "index-unit-output-path" : "/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/AddExerciseSheet.o",
+    "llvm-bc" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/AddExerciseSheet.bc",
+    "object" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/AddExerciseSheet.o",
+    "swift-dependencies" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/AddExerciseSheet.swiftdeps",
+    "swiftmodule" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/AddExerciseSheet~partial.swiftmodule"
+  },
+  "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/FlowState/Views/AddExerciseToTemplateSheet.swift" : {
+    "const-values" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/AddExerciseToTemplateSheet.swiftconstvalues",
+    "dependencies" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/AddExerciseToTemplateSheet.d",
+    "diagnostics" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/AddExerciseToTemplateSheet.dia",
+    "index-unit-output-path" : "/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/AddExerciseToTemplateSheet.o",
+    "llvm-bc" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/AddExerciseToTemplateSheet.bc",
+    "object" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/AddExerciseToTemplateSheet.o",
+    "swift-dependencies" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/AddExerciseToTemplateSheet.swiftdeps",
+    "swiftmodule" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/AddExerciseToTemplateSheet~partial.swiftmodule"
+  },
+  "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/FlowState/Views/AddExerciseToWorkoutSheet.swift" : {
+    "const-values" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/AddExerciseToWorkoutSheet.swiftconstvalues",
+    "dependencies" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/AddExerciseToWorkoutSheet.d",
+    "diagnostics" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/AddExerciseToWorkoutSheet.dia",
+    "index-unit-output-path" : "/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/AddExerciseToWorkoutSheet.o",
+    "llvm-bc" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/AddExerciseToWorkoutSheet.bc",
+    "object" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/AddExerciseToWorkoutSheet.o",
+    "swift-dependencies" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/AddExerciseToWorkoutSheet.swiftdeps",
+    "swiftmodule" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/AddExerciseToWorkoutSheet~partial.swiftmodule"
+  },
+  "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/FlowState/Views/CreateTemplateView.swift" : {
+    "const-values" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/CreateTemplateView.swiftconstvalues",
+    "dependencies" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/CreateTemplateView.d",
+    "diagnostics" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/CreateTemplateView.dia",
+    "index-unit-output-path" : "/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/CreateTemplateView.o",
+    "llvm-bc" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/CreateTemplateView.bc",
+    "object" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/CreateTemplateView.o",
+    "swift-dependencies" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/CreateTemplateView.swiftdeps",
+    "swiftmodule" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/CreateTemplateView~partial.swiftmodule"
+  },
+  "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/FlowState/Views/CustomNumPadView.swift" : {
+    "const-values" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/CustomNumPadView.swiftconstvalues",
+    "dependencies" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/CustomNumPadView.d",
+    "diagnostics" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/CustomNumPadView.dia",
+    "index-unit-output-path" : "/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/CustomNumPadView.o",
+    "llvm-bc" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/CustomNumPadView.bc",
+    "object" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/CustomNumPadView.o",
+    "swift-dependencies" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/CustomNumPadView.swiftdeps",
+    "swiftmodule" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/CustomNumPadView~partial.swiftmodule"
+  },
+  "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/FlowState/Views/EditTemplateExerciseSheet.swift" : {
+    "const-values" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/EditTemplateExerciseSheet.swiftconstvalues",
+    "dependencies" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/EditTemplateExerciseSheet.d",
+    "diagnostics" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/EditTemplateExerciseSheet.dia",
+    "index-unit-output-path" : "/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/EditTemplateExerciseSheet.o",
+    "llvm-bc" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/EditTemplateExerciseSheet.bc",
+    "object" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/EditTemplateExerciseSheet.o",
+    "swift-dependencies" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/EditTemplateExerciseSheet.swiftdeps",
+    "swiftmodule" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/EditTemplateExerciseSheet~partial.swiftmodule"
+  },
+  "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/FlowState/Views/ExerciseDetailView.swift" : {
+    "const-values" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/ExerciseDetailView.swiftconstvalues",
+    "dependencies" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/ExerciseDetailView.d",
+    "diagnostics" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/ExerciseDetailView.dia",
+    "index-unit-output-path" : "/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/ExerciseDetailView.o",
+    "llvm-bc" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/ExerciseDetailView.bc",
+    "object" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/ExerciseDetailView.o",
+    "swift-dependencies" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/ExerciseDetailView.swiftdeps",
+    "swiftmodule" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/ExerciseDetailView~partial.swiftmodule"
+  },
+  "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/FlowState/Views/ExerciseListView.swift" : {
+    "const-values" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/ExerciseListView.swiftconstvalues",
+    "dependencies" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/ExerciseListView.d",
+    "diagnostics" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/ExerciseListView.dia",
+    "index-unit-output-path" : "/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/ExerciseListView.o",
+    "llvm-bc" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/ExerciseListView.bc",
+    "object" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/ExerciseListView.o",
+    "swift-dependencies" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/ExerciseListView.swiftdeps",
+    "swiftmodule" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/ExerciseListView~partial.swiftmodule"
+  },
+  "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/FlowState/Views/ExerciseProgressChartView.swift" : {
+    "const-values" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/ExerciseProgressChartView.swiftconstvalues",
+    "dependencies" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/ExerciseProgressChartView.d",
+    "diagnostics" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/ExerciseProgressChartView.dia",
+    "index-unit-output-path" : "/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/ExerciseProgressChartView.o",
+    "llvm-bc" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/ExerciseProgressChartView.bc",
+    "object" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/ExerciseProgressChartView.o",
+    "swift-dependencies" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/ExerciseProgressChartView.swiftdeps",
+    "swiftmodule" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/ExerciseProgressChartView~partial.swiftmodule"
+  },
+  "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/FlowState/Views/ExerciseSectionView.swift" : {
+    "const-values" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/ExerciseSectionView.swiftconstvalues",
+    "dependencies" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/ExerciseSectionView.d",
+    "diagnostics" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/ExerciseSectionView.dia",
+    "index-unit-output-path" : "/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/ExerciseSectionView.o",
+    "llvm-bc" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/ExerciseSectionView.bc",
+    "object" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/ExerciseSectionView.o",
+    "swift-dependencies" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/ExerciseSectionView.swiftdeps",
+    "swiftmodule" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/ExerciseSectionView~partial.swiftmodule"
+  },
+  "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/FlowState/Views/FloatingWorkoutPill.swift" : {
+    "const-values" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/FloatingWorkoutPill.swiftconstvalues",
+    "dependencies" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/FloatingWorkoutPill.d",
+    "diagnostics" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/FloatingWorkoutPill.dia",
+    "index-unit-output-path" : "/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/FloatingWorkoutPill.o",
+    "llvm-bc" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/FloatingWorkoutPill.bc",
+    "object" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/FloatingWorkoutPill.o",
+    "swift-dependencies" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/FloatingWorkoutPill.swiftdeps",
+    "swiftmodule" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/FloatingWorkoutPill~partial.swiftmodule"
+  },
+  "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/FlowState/Views/HistoryView.swift" : {
+    "const-values" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/HistoryView.swiftconstvalues",
+    "dependencies" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/HistoryView.d",
+    "diagnostics" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/HistoryView.dia",
+    "index-unit-output-path" : "/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/HistoryView.o",
+    "llvm-bc" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/HistoryView.bc",
+    "object" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/HistoryView.o",
+    "swift-dependencies" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/HistoryView.swiftdeps",
+    "swiftmodule" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/HistoryView~partial.swiftmodule"
+  },
+  "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/FlowState/Views/HomeView.swift" : {
+    "const-values" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/HomeView.swiftconstvalues",
+    "dependencies" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/HomeView.d",
+    "diagnostics" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/HomeView.dia",
+    "index-unit-output-path" : "/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/HomeView.o",
+    "llvm-bc" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/HomeView.bc",
+    "object" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/HomeView.o",
+    "swift-dependencies" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/HomeView.swiftdeps",
+    "swiftmodule" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/HomeView~partial.swiftmodule"
+  },
+  "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/FlowState/Views/LabelPickerSheet.swift" : {
+    "const-values" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/LabelPickerSheet.swiftconstvalues",
+    "dependencies" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/LabelPickerSheet.d",
+    "diagnostics" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/LabelPickerSheet.dia",
+    "index-unit-output-path" : "/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/LabelPickerSheet.o",
+    "llvm-bc" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/LabelPickerSheet.bc",
+    "object" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/LabelPickerSheet.o",
+    "swift-dependencies" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/LabelPickerSheet.swiftdeps",
+    "swiftmodule" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/LabelPickerSheet~partial.swiftmodule"
+  },
+  "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/FlowState/Views/PRNotificationView.swift" : {
+    "const-values" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/PRNotificationView.swiftconstvalues",
+    "dependencies" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/PRNotificationView.d",
+    "diagnostics" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/PRNotificationView.dia",
+    "index-unit-output-path" : "/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/PRNotificationView.o",
+    "llvm-bc" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/PRNotificationView.bc",
+    "object" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/PRNotificationView.o",
+    "swift-dependencies" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/PRNotificationView.swiftdeps",
+    "swiftmodule" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/PRNotificationView~partial.swiftmodule"
+  },
+  "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/FlowState/Views/ProfileView.swift" : {
+    "const-values" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/ProfileView.swiftconstvalues",
+    "dependencies" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/ProfileView.d",
+    "diagnostics" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/ProfileView.dia",
+    "index-unit-output-path" : "/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/ProfileView.o",
+    "llvm-bc" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/ProfileView.bc",
+    "object" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/ProfileView.o",
+    "swift-dependencies" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/ProfileView.swiftdeps",
+    "swiftmodule" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/ProfileView~partial.swiftmodule"
+  },
+  "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/FlowState/Views/ReorderSetsSheet.swift" : {
+    "const-values" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/ReorderSetsSheet.swiftconstvalues",
+    "dependencies" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/ReorderSetsSheet.d",
+    "diagnostics" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/ReorderSetsSheet.dia",
+    "index-unit-output-path" : "/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/ReorderSetsSheet.o",
+    "llvm-bc" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/ReorderSetsSheet.bc",
+    "object" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/ReorderSetsSheet.o",
+    "swift-dependencies" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/ReorderSetsSheet.swiftdeps",
+    "swiftmodule" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/ReorderSetsSheet~partial.swiftmodule"
+  },
+  "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/FlowState/Views/RestTimerView.swift" : {
+    "const-values" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/RestTimerView.swiftconstvalues",
+    "dependencies" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/RestTimerView.d",
+    "diagnostics" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/RestTimerView.dia",
+    "index-unit-output-path" : "/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/RestTimerView.o",
+    "llvm-bc" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/RestTimerView.bc",
+    "object" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/RestTimerView.o",
+    "swift-dependencies" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/RestTimerView.swiftdeps",
+    "swiftmodule" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/RestTimerView~partial.swiftmodule"
+  },
+  "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/FlowState/Views/SetRowView.swift" : {
+    "const-values" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/SetRowView.swiftconstvalues",
+    "dependencies" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/SetRowView.d",
+    "diagnostics" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/SetRowView.dia",
+    "index-unit-output-path" : "/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/SetRowView.o",
+    "llvm-bc" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/SetRowView.bc",
+    "object" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/SetRowView.o",
+    "swift-dependencies" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/SetRowView.swiftdeps",
+    "swiftmodule" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/SetRowView~partial.swiftmodule"
+  },
+  "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/FlowState/Views/SettingsView.swift" : {
+    "const-values" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/SettingsView.swiftconstvalues",
+    "dependencies" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/SettingsView.d",
+    "diagnostics" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/SettingsView.dia",
+    "index-unit-output-path" : "/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/SettingsView.o",
+    "llvm-bc" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/SettingsView.bc",
+    "object" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/SettingsView.o",
+    "swift-dependencies" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/SettingsView.swiftdeps",
+    "swiftmodule" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/SettingsView~partial.swiftmodule"
+  },
+  "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/FlowState/Views/Skeletons/SkeletonExerciseRow.swift" : {
+    "const-values" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/SkeletonExerciseRow.swiftconstvalues",
+    "dependencies" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/SkeletonExerciseRow.d",
+    "diagnostics" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/SkeletonExerciseRow.dia",
+    "index-unit-output-path" : "/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/SkeletonExerciseRow.o",
+    "llvm-bc" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/SkeletonExerciseRow.bc",
+    "object" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/SkeletonExerciseRow.o",
+    "swift-dependencies" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/SkeletonExerciseRow.swiftdeps",
+    "swiftmodule" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/SkeletonExerciseRow~partial.swiftmodule"
+  },
+  "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/FlowState/Views/Skeletons/SkeletonPRCard.swift" : {
+    "const-values" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/SkeletonPRCard.swiftconstvalues",
+    "dependencies" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/SkeletonPRCard.d",
+    "diagnostics" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/SkeletonPRCard.dia",
+    "index-unit-output-path" : "/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/SkeletonPRCard.o",
+    "llvm-bc" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/SkeletonPRCard.bc",
+    "object" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/SkeletonPRCard.o",
+    "swift-dependencies" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/SkeletonPRCard.swiftdeps",
+    "swiftmodule" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/SkeletonPRCard~partial.swiftmodule"
+  },
+  "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/FlowState/Views/Skeletons/SkeletonStatsCard.swift" : {
+    "const-values" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/SkeletonStatsCard.swiftconstvalues",
+    "dependencies" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/SkeletonStatsCard.d",
+    "diagnostics" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/SkeletonStatsCard.dia",
+    "index-unit-output-path" : "/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/SkeletonStatsCard.o",
+    "llvm-bc" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/SkeletonStatsCard.bc",
+    "object" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/SkeletonStatsCard.o",
+    "swift-dependencies" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/SkeletonStatsCard.swiftdeps",
+    "swiftmodule" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/SkeletonStatsCard~partial.swiftmodule"
+  },
+  "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/FlowState/Views/Skeletons/SkeletonTemplateCard.swift" : {
+    "const-values" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/SkeletonTemplateCard.swiftconstvalues",
+    "dependencies" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/SkeletonTemplateCard.d",
+    "diagnostics" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/SkeletonTemplateCard.dia",
+    "index-unit-output-path" : "/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/SkeletonTemplateCard.o",
+    "llvm-bc" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/SkeletonTemplateCard.bc",
+    "object" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/SkeletonTemplateCard.o",
+    "swift-dependencies" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/SkeletonTemplateCard.swiftdeps",
+    "swiftmodule" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/SkeletonTemplateCard~partial.swiftmodule"
+  },
+  "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/FlowState/Views/Skeletons/SkeletonWorkoutHistoryCard.swift" : {
+    "const-values" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/SkeletonWorkoutHistoryCard.swiftconstvalues",
+    "dependencies" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/SkeletonWorkoutHistoryCard.d",
+    "diagnostics" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/SkeletonWorkoutHistoryCard.dia",
+    "index-unit-output-path" : "/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/SkeletonWorkoutHistoryCard.o",
+    "llvm-bc" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/SkeletonWorkoutHistoryCard.bc",
+    "object" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/SkeletonWorkoutHistoryCard.o",
+    "swift-dependencies" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/SkeletonWorkoutHistoryCard.swiftdeps",
+    "swiftmodule" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/SkeletonWorkoutHistoryCard~partial.swiftmodule"
+  },
+  "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/FlowState/Views/TemplateDetailView.swift" : {
+    "const-values" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/TemplateDetailView.swiftconstvalues",
+    "dependencies" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/TemplateDetailView.d",
+    "diagnostics" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/TemplateDetailView.dia",
+    "index-unit-output-path" : "/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/TemplateDetailView.o",
+    "llvm-bc" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/TemplateDetailView.bc",
+    "object" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/TemplateDetailView.o",
+    "swift-dependencies" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/TemplateDetailView.swiftdeps",
+    "swiftmodule" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/TemplateDetailView~partial.swiftmodule"
+  },
+  "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/FlowState/Views/TemplateListView.swift" : {
+    "const-values" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/TemplateListView.swiftconstvalues",
+    "dependencies" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/TemplateListView.d",
+    "diagnostics" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/TemplateListView.dia",
+    "index-unit-output-path" : "/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/TemplateListView.o",
+    "llvm-bc" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/TemplateListView.bc",
+    "object" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/TemplateListView.o",
+    "swift-dependencies" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/TemplateListView.swiftdeps",
+    "swiftmodule" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/TemplateListView~partial.swiftmodule"
+  },
+  "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/FlowState/Views/WorkoutCompletionView.swift" : {
+    "const-values" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/WorkoutCompletionView.swiftconstvalues",
+    "dependencies" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/WorkoutCompletionView.d",
+    "diagnostics" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/WorkoutCompletionView.dia",
+    "index-unit-output-path" : "/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/WorkoutCompletionView.o",
+    "llvm-bc" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/WorkoutCompletionView.bc",
+    "object" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/WorkoutCompletionView.o",
+    "swift-dependencies" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/WorkoutCompletionView.swiftdeps",
+    "swiftmodule" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/WorkoutCompletionView~partial.swiftmodule"
+  },
+  "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/FlowState/Views/WorkoutHistoryDetailView.swift" : {
+    "const-values" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/WorkoutHistoryDetailView.swiftconstvalues",
+    "dependencies" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/WorkoutHistoryDetailView.d",
+    "diagnostics" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/WorkoutHistoryDetailView.dia",
+    "index-unit-output-path" : "/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/WorkoutHistoryDetailView.o",
+    "llvm-bc" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/WorkoutHistoryDetailView.bc",
+    "object" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/WorkoutHistoryDetailView.o",
+    "swift-dependencies" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/WorkoutHistoryDetailView.swiftdeps",
+    "swiftmodule" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/FlowState.build/Debug-iphonesimulator/FlowState.build/Objects-normal/x86_64/WorkoutHistoryDetailView~partial.swiftmodule"
+  }
+}

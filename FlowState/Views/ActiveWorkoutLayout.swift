@@ -22,7 +22,13 @@ enum ActiveWorkoutLayout {
     /// Standard corner radius used by exercise cards.
     static let exerciseCardCornerRadius: CGFloat = 16
 
-    /// Scroll offset threshold for switching to compact header
-    static let headerTransitionThreshold: CGFloat = 40
+    /// Header collapse threshold when scrolling down (hysteresis).
+    static let headerCollapseThreshold: CGFloat = 60
+
+    /// Header expand threshold when scrolling back up (hysteresis).
+    static let headerExpandThreshold: CGFloat = 40
+
+    /// Extra bottom space inside the scroll content to avoid "hard bottom" interactions.
+    static let bottomScrollBuffer: CGFloat = 32
 }
 

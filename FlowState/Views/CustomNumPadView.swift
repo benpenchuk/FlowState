@@ -35,6 +35,7 @@ struct CustomNumPadView: View {
     }
     
     var body: some View {
+        GeometryReader { geometry in
         VStack(spacing: 0) {
             // Live display box at top
             VStack(spacing: 8) {
@@ -50,10 +51,9 @@ struct CustomNumPadView: View {
                     .lineLimit(1)
                     .minimumScaleFactor(0.5)
             }
-            .frame(maxWidth: .infinity, alignment: .center)
+            .frame(width: geometry.size.width, alignment: .center)
             .padding(.top, 24)
             .padding(.bottom, 20)
-            .padding(.horizontal, 20)
             .background(Color(.systemBackground))
             .overlay(
                 Rectangle()
@@ -97,7 +97,7 @@ struct CustomNumPadView: View {
                     backspaceButton
                 }
             }
-            .padding(.horizontal, 20)
+            .frame(width: geometry.size.width)
             .padding(.top, 16)
             .padding(.bottom, 12)
             .background(Color(.systemGray6))
@@ -109,15 +109,15 @@ struct CustomNumPadView: View {
                 Text("Done")
                     .font(.headline)
                     .foregroundStyle(.white)
-                    .frame(maxWidth: .infinity)
+                    .frame(width: geometry.size.width)
                     .frame(height: 50)
                     .background(Color.orange)
             }
         }
+        .frame(width: geometry.size.width)
         .background(Color(.systemGray6))
-        .safeAreaInset(edge: .top) {
-            Color.clear.frame(height: 0)
         }
+        .edgesIgnoringSafeArea(.all)
     }
     
     private func numPadButton(_ digit: String) -> some View {

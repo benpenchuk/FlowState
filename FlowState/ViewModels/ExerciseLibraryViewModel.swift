@@ -91,6 +91,35 @@ final class ExerciseLibraryViewModel: ObservableObject {
             print("Error toggling favorite: \(error)")
         }
     }
+
+    func updateCustomExercise(
+        _ exercise: Exercise,
+        name: String,
+        exerciseType: ExerciseType,
+        category: String,
+        equipment: [Equipment] = [],
+        primaryMuscles: [String] = [],
+        secondaryMuscles: [String] = [],
+        instructions: ExerciseInstructions = ExerciseInstructions()
+    ) {
+        guard let modelContext = modelContext,
+              exercise.isCustom else { return }
+        
+        exercise.name = name
+        exercise.exerciseType = exerciseType
+        exercise.category = category
+        exercise.equipment = equipment
+        exercise.primaryMuscles = primaryMuscles
+        exercise.secondaryMuscles = secondaryMuscles
+        exercise.setInstructions(instructions)
+        
+        do {
+            try modelContext.save()
+            loadAllExercises()
+        } catch {
+            print("Error updating exercise: \(error)")
+        }
+    }
     
     func deleteCustomExercise(_ exercise: Exercise) {
         guard let modelContext = modelContext,

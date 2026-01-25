@@ -20,6 +20,7 @@ struct EditTemplateExerciseSheet: View {
     @State private var reps: Int
     @State private var weight: Double?
     @State private var hasWeight: Bool
+    @State private var setLabels: [SetLabel]
     @State private var showingCustomNumPad = false
     @State private var numPadValue: String = ""
     @State private var editingField: EditingField?
@@ -38,6 +39,19 @@ struct EditTemplateExerciseSheet: View {
         _reps = State(initialValue: templateExercise.defaultReps)
         _weight = State(initialValue: templateExercise.defaultWeight)
         _hasWeight = State(initialValue: templateExercise.defaultWeight != nil)
+        
+        // Initialize labels array
+        let existingLabels = templateExercise.getDefaultLabels()
+        var initialLabels = existingLabels
+        // Pad with .none if we have more sets than labels
+        while initialLabels.count < templateExercise.defaultSets {
+            initialLabels.append(.none)
+        }
+        // Trim if we have fewer sets
+        if initialLabels.count > templateExercise.defaultSets {
+            initialLabels = Array(initialLabels.prefix(templateExercise.defaultSets))
+        }
+        _setLabels = State(initialValue: initialLabels)
     }
     
     var body: some View {
@@ -100,8 +114,45 @@ struct EditTemplateExerciseSheet: View {
                 } header: {
                     Text("Defaults")
                 }
+                
+                Section {
+                    ForEach(0..<sets, id: \.self) { index in
+                        HStack {
+                            Text("Set \(index + 1)")
+                            Spacer()
+                            
+                            // Label picker for each set
+                            Menu {
+                                Button("None") {
+                                    updateSetLabel(index: index, label: .none)
+                                }
+                                Button("Warmup") {
+                                    updateSetLabel(index: index, label: .warmup)
+                                }
+                                Button("Drop Set") {
+                                    updateSetLabel(index: index, label: .dropSet)
+                                }
+                            } label: {
+                                HStack(spacing: 4) {
+                                    Text(getSetLabel(index: index).rawValue)
+                                        .foregroundStyle(.secondary)
+                                    Image(systemName: "chevron.up.chevron.down")
+                                        .font(.caption2)
+                                        .foregroundStyle(.tertiary)
+                                }
+                            }
+                        }
+                    }
+                } header: {
+                    Text("Set Labels (Optional)")
+                } footer: {
+                    Text("Assign labels to specific sets (e.g., mark first 2 sets as warmup)")
+                }
             }
             .navigationTitle("Edit Exercise")
+            .onChange(of: sets) { oldValue, newValue in
+                adjustLabelsArray(newCount: newValue)
+            }
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
@@ -147,7 +198,12 @@ struct EditTemplateExerciseSheet: View {
                         }
                     )
                     .presentationDetents([.height(500)])
-                    .presentationDragIndicator(.visible)
+                    .presentationDragIndicator(.hidden)
+                    .interactiveDismissDisabled(false)
+                    .presentationCornerRadius(0)
+                    .presentationBackground(.clear)
+                    .presentationBackgroundInteraction(.enabled)
+                    .presentationContentInteraction(.scrolls)
                 }
             }
         }
@@ -157,6 +213,7 @@ struct EditTemplateExerciseSheet: View {
         templateExercise.defaultSets = sets
         templateExercise.defaultReps = reps
         templateExercise.defaultWeight = hasWeight ? weight : nil
+        templateExercise.setDefaultLabels(setLabels)
         
         // Only save to modelContext if the exercise is already persisted
         // Temporary exercises (not yet in database) don't need saving
@@ -170,6 +227,28 @@ struct EditTemplateExerciseSheet: View {
         
         onSave()
         dismiss()
+    }
+    
+    private func getSetLabel(index: Int) -> SetLabel {
+        guard index < setLabels.count else { return .none }
+        return setLabels[index]
+    }
+    
+    private func updateSetLabel(index: Int, label: SetLabel) {
+        guard index < setLabels.count else { return }
+        setLabels[index] = label
+    }
+    
+    private func adjustLabelsArray(newCount: Int) {
+        if newCount > setLabels.count {
+            // Add .none labels for new sets
+            while setLabels.count < newCount {
+                setLabels.append(.none)
+            }
+        } else if newCount < setLabels.count {
+            // Remove excess labels
+            setLabels = Array(setLabels.prefix(newCount))
+        }
     }
 }
 

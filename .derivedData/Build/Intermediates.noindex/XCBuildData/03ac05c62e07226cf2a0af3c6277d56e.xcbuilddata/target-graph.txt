@@ -1,0 +1,4 @@
+Target dependency graph (2 targets)
+Target 'FlowState' in project 'FlowState'
+➜ Explicit dependency on target 'FlowState Watch Watch App' in project 'FlowState'
+Target 'FlowState Watch Watch App' in project 'FlowState' (no dependencies)

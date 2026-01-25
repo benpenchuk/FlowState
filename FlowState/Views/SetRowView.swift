@@ -90,11 +90,10 @@ struct SetRowView: View {
             .presentationDetents([.height(400)])
             .presentationDragIndicator(.hidden)
             .interactiveDismissDisabled(false)
-            .presentationBackground {
-                Color(.systemBackground)
-                    .ignoresSafeArea()
-            }
-            .presentationCornerRadius(16)
+            .presentationCornerRadius(0)
+            .presentationBackground(.clear)
+            .presentationBackgroundInteraction(.enabled)
+            .presentationContentInteraction(.scrolls)
         }
         .sheet(isPresented: $showingLabelPicker) {
             LabelPickerSheet(
@@ -180,25 +179,44 @@ struct SetRowView: View {
     }
 
     private var labelIndicator: some View {
-        Group {
-            if set.label != .none {
-                Circle()
-                    .fill(labelColor(for: set.label))
-                    .frame(width: 8, height: 8)
-                    .padding(.horizontal, 4)
-            } else {
-                Color.clear
-                    .frame(width: 8, height: 8)
-                    .padding(.horizontal, 4)
-            }
-        }
-        .contentShape(Rectangle())
-        .onLongPressGesture(minimumDuration: 0.3) {
-            let impact = UIImpactFeedbackGenerator(style: .medium)
+        Button {
+            guard onLabelUpdate != nil else { return }
+            let impact = UIImpactFeedbackGenerator(style: .light)
             impact.impactOccurred()
             showingLabelPicker = true
+        } label: {
+            Text(labelText)
+                .font(.system(size: 12, weight: .semibold, design: .rounded))
+                .foregroundStyle(.secondary)
+                .frame(width: 20, height: 44, alignment: .center)
+                .contentShape(Rectangle())
         }
-        .accessibilityLabel("Set label")
+        .buttonStyle(.plain)
+        .disabled(onLabelUpdate == nil)
+        .accessibilityLabel(labelAccessibilityText)
+        .accessibilityHint(onLabelUpdate != nil ? "Tap to change set label" : "")
+    }
+    
+    private var labelText: String {
+        switch set.label {
+        case .none:
+            return ""
+        case .warmup:
+            return "W"
+        case .dropSet:
+            return "D"
+        }
+    }
+    
+    private var labelAccessibilityText: String {
+        switch set.label {
+        case .none:
+            return "No label"
+        case .warmup:
+            return "Warmup set"
+        case .dropSet:
+            return "Drop set"
+        }
     }
 
     private var completionButton: some View {
@@ -215,20 +233,6 @@ struct SetRowView: View {
         .accessibilityLabel(set.isCompleted ? "Mark set incomplete" : "Mark set complete")
     }
     
-    private func labelColor(for label: SetLabel) -> Color {
-        switch label {
-        case .none:
-            return .gray.opacity(0.5)
-        case .warmup:
-            return .cyan
-        case .failure:
-            return .red
-        case .dropSet:
-            return .purple
-        case .prAttempt:
-            return .yellow
-        }
-    }
     
     private func adjustWeight(by amount: Double) {
         let currentWeight = Double(weightText) ?? 0.0
@@ -297,7 +301,7 @@ struct SetRowView: View {
         
         SetRowView(
             viewModel: vm,
-            set: SetRecord(setNumber: 2, reps: 10, weight: 135, isCompleted: true, label: .failure),
+            set: SetRecord(setNumber: 2, reps: 10, weight: 135, isCompleted: true, label: .dropSet),
             preferredUnits: .kg,
             onUpdate: { _, _, _, _ in },
             onDelete: {},
@@ -306,7 +310,7 @@ struct SetRowView: View {
         
         SetRowView(
             viewModel: vm,
-            set: SetRecord(setNumber: 3, reps: 8, weight: 185, isCompleted: false, label: .prAttempt),
+            set: SetRecord(setNumber: 3, reps: 8, weight: 185, isCompleted: false, label: .none),
             preferredUnits: .lbs,
             onUpdate: { _, _, _, _ in },
             onDelete: {},

@@ -8,19 +8,15 @@
 import SwiftUI
 import SwiftData
 
-// PreferenceKey for tracking scroll offset
+// PreferenceKey for tracking scroll offset.
+// Using an Optional default distinguishes "no value emitted" from a real 0.0,
+// which is important when content shrinks and the scroll position clamps to top/bottom.
 struct ScrollOffsetPreferenceKey: PreferenceKey {
-    static var defaultValue: CGFloat = 0
-    static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {
-        // When multiple preferences are merged, prefer non-default values
-        // If nextValue() returns non-zero, use it. Otherwise keep current value.
-        let newValue = nextValue()
-        // Use newValue only if it's not the default (0), otherwise keep existing value
-        // This prevents default values from overwriting actual scroll positions
-        if abs(newValue) > 0.001 {
-            value = newValue
+    static var defaultValue: CGFloat? = nil
+    static func reduce(value: inout CGFloat?, nextValue: () -> CGFloat?) {
+        if let next = nextValue() {
+            value = next
         }
-        // If both are zero or defaults, that's fine - we keep value
     }
 }
 
@@ -29,6 +25,11 @@ struct ActiveWorkoutFullScreenView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
     
+    private enum HeaderState {
+        case full
+        case compact
+    }
+    
     @StateObject private var viewModel: ActiveWorkoutViewModel
     @StateObject private var profileViewModel = ProfileViewModel()
     @State private var showingCancelAlert = false
@@ -36,7 +37,9 @@ struct ActiveWorkoutFullScreenView: View {
     @State private var showingCompletedTimer: Bool = false
     @State private var showingCompletionSheet = false
     @State private var scrollOffset: CGFloat = 0
+    @State private var headerState: HeaderState = .full
     @State private var restTimerPulse = false
+    @State private var pendingHeaderUpdateTask: Task<Void, Never>? = nil
     
     init() {
         let vm = ActiveWorkoutViewModel()
@@ -82,15 +85,16 @@ struct ActiveWorkoutFullScreenView: View {
             ZStack(alignment: .bottom) {
                 // Main content
                 VStack(spacing: 0) {
-                    // Dynamic header (full or compact based on scroll)
+                    // Dynamic header (full or compact based on scroll).
                     Group {
-                        if scrollOffset < ActiveWorkoutLayout.headerTransitionThreshold {
+                        switch headerState {
+                        case .full:
                             fullHeaderView(workout: workout)
-                        } else {
+                        case .compact:
                             compactPillsView(workout: workout)
                         }
                     }
-                    .animation(.spring(response: 0.3, dampingFraction: 0.8), value: scrollOffset)
+                    .animation(.spring(response: 0.3, dampingFraction: 0.8), value: headerState)
                     
                     Divider()
                     
@@ -107,12 +111,23 @@ struct ActiveWorkoutFullScreenView: View {
                                 )
                             })
                         }
+                        // Keep the familiar "Twitter-like" feel even when content fits on one screen.
+                        .scrollBounceBehavior(.always)
                         .coordinateSpace(name: "scroll")
                         .onPreferenceChange(ScrollOffsetPreferenceKey.self) { newValue in
-                            // At top: minY ≈ 0 or positive  
+                            // At top: minY ≈ 0 or positive
                             // Scrolled down: minY becomes negative
                             // scrollOffset increases as user scrolls down
-                            scrollOffset = max(0, -newValue)
+                            guard let minY = newValue else {
+                                scrollOffset = 0
+                                scheduleHeaderStateUpdate()
+                                return
+                            }
+                            let computedOffset = max(0, -minY)
+                            // Avoid the visually weird "-0.00" / tiny jitter around zero.
+                            scrollOffset = computedOffset < 0.01 ? 0 : computedOffset
+                            // Debounce header changes so we don't change header height mid-momentum scroll.
+                            scheduleHeaderStateUpdate()
                         }
                         .onChange(of: viewModel.scrollToSetId) { oldValue, newValue in
                             if let id = newValue {
@@ -159,14 +174,6 @@ struct ActiveWorkoutFullScreenView: View {
                     Spacer()
                 }
             }
-            .toolbar {
-            ToolbarItemGroup(placement: .keyboard) {
-                Spacer()
-                Button("Done") {
-                    hideKeyboard()
-                }
-                .tint(.orange)
-            }
         }
         .alert("Cancel Workout", isPresented: $showingCancelAlert) {
                 Button("Keep Workout", role: .cancel) {}
@@ -199,6 +206,33 @@ struct ActiveWorkoutFullScreenView: View {
             .overlay(alignment: .center) {
                 prNotificationOverlay
             }
+    }
+
+    private func scheduleHeaderStateUpdate() {
+        pendingHeaderUpdateTask?.cancel()
+        pendingHeaderUpdateTask = Task { @MainActor in
+            // Wait briefly for scrolling to settle. As long as scroll events keep coming in,
+            // this task will be cancelled and rescheduled.
+            try? await Task.sleep(nanoseconds: 120_000_000)
+            guard !Task.isCancelled else { return }
+            applyHeaderState(for: scrollOffset)
+        }
+    }
+
+    private func applyHeaderState(for offset: CGFloat) {
+        switch headerState {
+        case .full:
+            if offset > ActiveWorkoutLayout.headerCollapseThreshold {
+                withAnimation(.spring(response: 0.3, dampingFraction: 0.8)) {
+                    headerState = .compact
+                }
+            }
+        case .compact:
+            if offset < ActiveWorkoutLayout.headerExpandThreshold {
+                withAnimation(.spring(response: 0.3, dampingFraction: 0.8)) {
+                    headerState = .full
+                }
+            }
         }
     }
     
@@ -226,7 +260,6 @@ struct ActiveWorkoutFullScreenView: View {
         .padding(.top, 52)  // Extra padding for floating nav buttons
         .padding(.bottom, 12)
         .background(Color(.systemBackground))
-        .animation(.spring(response: 0.3, dampingFraction: 0.8), value: scrollOffset)
     }
     
     @ViewBuilder
@@ -297,7 +330,6 @@ struct ActiveWorkoutFullScreenView: View {
         .padding(.top, 60)  // Extra padding for floating nav buttons
         .padding(.bottom, 8)
         .background(Color(.systemBackground))
-        .animation(.spring(response: 0.3, dampingFraction: 0.8), value: scrollOffset)
     }
     
     private func compactProgressPill(progress: (completed: Int, total: Int)) -> some View {
@@ -383,6 +415,7 @@ struct ActiveWorkoutFullScreenView: View {
             actionButtonsSection
         }
         .padding(ActiveWorkoutLayout.contentPadding)
+        .padding(.bottom, ActiveWorkoutLayout.bottomScrollBuffer)
         .frame(maxWidth: .infinity)
     }
     

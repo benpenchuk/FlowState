@@ -24,11 +24,6 @@ struct LabelPickerSheet: View {
                             onSelect(label)
                         } label: {
                             HStack {
-                                // Label indicator
-                                Circle()
-                                    .fill(labelColor(for: label))
-                                    .frame(width: 12, height: 12)
-                                
                                 Text(label.rawValue)
                                     .foregroundStyle(.primary)
                                 
@@ -47,21 +42,6 @@ struct LabelPickerSheet: View {
                 .listStyle(.plain)
             }
             .navigationBarTitleDisplayMode(.inline)
-        }
-    }
-    
-    private func labelColor(for label: SetLabel) -> Color {
-        switch label {
-        case .none:
-            return .gray.opacity(0.5)
-        case .warmup:
-            return .cyan
-        case .failure:
-            return .red
-        case .dropSet:
-            return .purple
-        case .prAttempt:
-            return .yellow
         }
     }
 }

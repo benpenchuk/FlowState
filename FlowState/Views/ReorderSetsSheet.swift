@@ -75,9 +75,10 @@ struct ReorderSetsSheet: View {
             Spacer()
 
             if set.label != .none {
-                Circle()
-                    .fill(labelColor(for: set.label))
-                    .frame(width: 8, height: 8)
+                Text(labelText(for: set.label))
+                    .font(.system(size: 12, weight: .semibold, design: .rounded))
+                    .foregroundStyle(.secondary)
+                    .frame(width: 16, alignment: .center)
             }
 
             Image(systemName: set.isCompleted ? "checkmark.circle.fill" : "circle")
@@ -112,18 +113,14 @@ struct ReorderSetsSheet: View {
         return parts.joined(separator: " · ")
     }
 
-    private func labelColor(for label: SetLabel) -> Color {
+    private func labelText(for label: SetLabel) -> String {
         switch label {
         case .none:
-            return .gray.opacity(0.5)
+            return ""
         case .warmup:
-            return .cyan
-        case .failure:
-            return .red
+            return "W"
         case .dropSet:
-            return .purple
-        case .prAttempt:
-            return .yellow
+            return "D"
         }
     }
 }

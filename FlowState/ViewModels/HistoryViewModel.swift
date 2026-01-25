@@ -164,7 +164,12 @@ final class HistoryViewModel: ObservableObject {
             let sets = entry.getSets().sorted { $0.setNumber < $1.setNumber }
             for set in sets {
                 if set.isCompleted {
-                    var setText = "  Set \(set.setNumber): "
+                    // Add label if present
+                    var setText = "  Set \(set.setNumber)"
+                    if set.label != .none {
+                        setText += " (\(set.label.rawValue))"
+                    }
+                    setText += ": "
                     
                     if let weight = set.weight, let reps = set.reps {
                         let displayWeight = preferredUnits == .kg ? weight / 2.20462 : weight

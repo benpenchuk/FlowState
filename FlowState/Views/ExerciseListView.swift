@@ -12,40 +12,52 @@ struct ExerciseListView: View {
     @Environment(\.modelContext) private var modelContext
     @StateObject private var viewModel = ExerciseLibraryViewModel()
     @State private var showingAddExercise = false
-    @State private var selectedExerciseType: ExerciseType = .strength
-    @State private var showingEquipmentFilter = false
+    @State private var showingMoreFilters = false
     @State private var selectedEquipment: Set<Equipment> = []
+    @State private var selectedMuscleGroups: Set<MuscleGroupFilter> = []
+    @State private var favoritesOnly: Bool = false
+    @State private var customOnly: Bool = false
+    @State private var editingExercise: Exercise? = nil
     
-    // Strength categories
-    private let strengthCategories = ["Chest", "Back", "Shoulders", "Arms", "Legs", "Core"]
-    
-    // Cardio categories
-    private let cardioCategories = ["Running", "Cycling", "Rowing", "Stair Climber", "Jump Rope", "Swimming", "Walking", "HIIT"]
+    private var secondaryActiveFilterCount: Int {
+        selectedEquipment.count
+        + (favoritesOnly ? 1 : 0)
+        + (customOnly ? 1 : 0)
+    }
     
     var filteredExercises: [Exercise] {
-        var exercises = viewModel.filteredExercises.filter { $0.exerciseType == selectedExerciseType }
+        // Single pipeline: search -> muscle -> equipment -> favorites/custom
+        var exercises = viewModel.exercises
         
-        // Filter by equipment if any selected
+        let trimmedSearch = viewModel.searchText.trimmingCharacters(in: .whitespacesAndNewlines)
+        if !trimmedSearch.isEmpty {
+            exercises = exercises.filter { $0.name.localizedCaseInsensitiveContains(trimmedSearch) }
+        }
+        
+        if !selectedMuscleGroups.isEmpty {
+            let selectedCategories = Set(selectedMuscleGroups.map(\.title))
+            exercises = exercises.filter { selectedCategories.contains($0.category) }
+        }
+        
         if !selectedEquipment.isEmpty {
             exercises = exercises.filter { exercise in
                 !Set(exercise.equipment).isDisjoint(with: selectedEquipment)
             }
         }
         
+        if favoritesOnly {
+            exercises = exercises.filter { $0.isFavorite }
+        }
+        
+        if customOnly {
+            exercises = exercises.filter { $0.isCustom }
+        }
+        
         return exercises
     }
     
-    var favoriteExercises: [Exercise] {
-        filteredExercises.filter { $0.isFavorite }
-    }
-    
-    var exercisesByCategory: [String: [Exercise]] {
-        Dictionary(grouping: filteredExercises.filter { !$0.isFavorite }) { $0.category }
-    }
-    
-    var sortedCategories: [String] {
-        let categories = selectedExerciseType == .strength ? strengthCategories : cardioCategories
-        return categories.filter { exercisesByCategory[$0] != nil && !exercisesByCategory[$0]!.isEmpty }
+    var displayedExercises: [Exercise] {
+        filteredExercises.sorted { $0.name.localizedCaseInsensitiveCompare($1.name) == .orderedAscending }
     }
     
     var body: some View {
@@ -57,6 +69,7 @@ struct ExerciseListView: View {
             }
         }
         .navigationTitle("Exercises")
+        .navigationBarTitleDisplayMode(.inline)
         .searchable(text: $viewModel.searchText, prompt: "Search exercises")
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
@@ -66,21 +79,19 @@ struct ExerciseListView: View {
                     Image(systemName: "plus")
                 }
             }
-            
-            ToolbarItem(placement: .navigationBarTrailing) {
-                Button {
-                    showingEquipmentFilter.toggle()
-                } label: {
-                    Image(systemName: selectedEquipment.isEmpty ? "line.3.horizontal.decrease.circle" : "line.3.horizontal.decrease.circle.fill")
-                        .foregroundStyle(selectedEquipment.isEmpty ? .primary : Color.accentColor)
-                }
-            }
         }
         .sheet(isPresented: $showingAddExercise) {
             AddExerciseSheet(viewModel: viewModel)
         }
-        .sheet(isPresented: $showingEquipmentFilter) {
-            EquipmentFilterSheet(selectedEquipment: $selectedEquipment, exerciseType: selectedExerciseType)
+        .sheet(isPresented: $showingMoreFilters) {
+            MoreFiltersSheet(
+                selectedEquipment: $selectedEquipment,
+                favoritesOnly: $favoritesOnly,
+                customOnly: $customOnly
+            )
+        }
+        .sheet(item: $editingExercise) { exercise in
+            EditExerciseSheet(viewModel: viewModel, exercise: exercise)
         }
         .onAppear {
             viewModel.setModelContext(modelContext)
@@ -97,193 +108,109 @@ struct ExerciseListView: View {
     
     private var exerciseList: some View {
         List {
-            // Favorites section
-            if !favoriteExercises.isEmpty {
-                Section {
-                    ForEach(favoriteExercises) { exercise in
-                        NavigationLink {
-                            ExerciseDetailView(exercise: exercise)
+            ForEach(displayedExercises) { exercise in
+                NavigationLink {
+                    ExerciseDetailView(exercise: exercise)
+                } label: {
+                    ExerciseRowCard(exercise: exercise) {
+                        viewModel.toggleFavorite(exercise)
+                    }
+                }
+                .listRowInsets(EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16))
+                .listRowSeparator(.hidden)
+                .swipeActions(edge: .leading, allowsFullSwipe: true) {
+                    Button {
+                        viewModel.toggleFavorite(exercise)
+                    } label: {
+                        Label(exercise.isFavorite ? "Unfavorite" : "Favorite", systemImage: exercise.isFavorite ? "star.slash" : "star")
+                    }
+                    .tint(.yellow)
+                }
+                .swipeActions(edge: .trailing, allowsFullSwipe: true) {
+                    if exercise.isCustom {
+                        Button {
+                            editingExercise = exercise
                         } label: {
-                            ExerciseRowView(exercise: exercise, viewModel: viewModel)
+                            Label("Edit", systemImage: "pencil")
                         }
-                    }
-                } header: {
-                    HStack {
-                        Image(systemName: "star.fill")
-                            .foregroundStyle(.yellow)
-                        Text("Favorites")
-                    }
-                }
-            }
-            
-            // Exercises by category
-            ForEach(sortedCategories, id: \.self) { category in
-                if let exercises = exercisesByCategory[category], !exercises.isEmpty {
-                    Section {
-                        let defaultExercises = exercises.filter { !$0.isCustom }
-                        let customExercises = exercises.filter { $0.isCustom }
+                        .tint(.blue)
                         
-                        ForEach(defaultExercises) { exercise in
-                            NavigationLink {
-                                ExerciseDetailView(exercise: exercise)
-                            } label: {
-                                ExerciseRowView(exercise: exercise, viewModel: viewModel)
-                            }
+                        Button(role: .destructive) {
+                            viewModel.deleteCustomExercise(exercise)
+                        } label: {
+                            Label("Delete", systemImage: "trash")
                         }
-                        
-                        ForEach(customExercises) { exercise in
-                            NavigationLink {
-                                ExerciseDetailView(exercise: exercise)
-                            } label: {
-                                ExerciseRowView(exercise: exercise, viewModel: viewModel)
-                            }
-                        }
-                        .onDelete { indexSet in
-                            deleteExercises(at: indexSet, in: customExercises)
-                        }
-                    } header: {
-                        Text(category)
                     }
                 }
             }
         }
-        .safeAreaInset(edge: .top) {
-            Picker("Exercise Type", selection: $selectedExerciseType) {
-                Text("Strength").tag(ExerciseType.strength)
-                Text("Cardio").tag(ExerciseType.cardio)
-            }
-            .pickerStyle(.segmented)
-            .padding()
+        .listStyle(.plain)
+        .safeAreaInset(edge: .top, spacing: 0) {
+            ExerciseFilterBar(
+                selectedMuscleGroups: $selectedMuscleGroups,
+                secondaryActiveFilterCount: secondaryActiveFilterCount,
+                onTapMoreFilters: { showingMoreFilters = true }
+            )
+            .padding(.top, 8)
+            .padding(.bottom, 6)
             .background(Color(.systemBackground))
-        }
-    }
-    
-    private func deleteExercises(at offsets: IndexSet, in exercises: [Exercise]) {
-        for index in offsets {
-            let exercise = exercises[index]
-            viewModel.deleteCustomExercise(exercise)
+            .overlay(Divider(), alignment: .bottom)
         }
     }
 }
 
-struct ExerciseRowView: View {
-    let exercise: Exercise
-    @ObservedObject var viewModel: ExerciseLibraryViewModel
-    
-    var body: some View {
-        HStack(spacing: 12) {
-            // Favorite button
-            Button {
-                toggleFavorite()
-            } label: {
-                Image(systemName: exercise.isFavorite ? "star.fill" : "star")
-                    .foregroundStyle(exercise.isFavorite ? .yellow : .secondary)
-            }
-            .buttonStyle(.plain)
-            
-            VStack(alignment: .leading, spacing: 4) {
-                Text(exercise.name)
-                    .font(.body)
-                
-                // Equipment tags
-                if !exercise.equipment.isEmpty {
-                    HStack(spacing: 4) {
-                        ForEach(exercise.equipment.prefix(3), id: \.self) { equipment in
-                            Text(equipmentDisplayName(equipment))
-                                .font(.caption2)
-                                .padding(.horizontal, 6)
-                                .padding(.vertical, 2)
-                                .background(Color(.systemGray5))
-                                .cornerRadius(4)
-                        }
-                        if exercise.equipment.count > 3 {
-                            Text("+\(exercise.equipment.count - 3)")
-                                .font(.caption2)
-                                .foregroundStyle(.secondary)
-                        }
-                    }
-                }
-            }
-            
-            Spacer()
-            
-            if exercise.isCustom {
-                Label("Custom", systemImage: "star.fill")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-            }
-        }
-    }
-    
-    private func toggleFavorite() {
-        viewModel.toggleFavorite(exercise)
-    }
-    
-    private func equipmentDisplayName(_ equipment: Equipment) -> String {
-        switch equipment {
-        case .barbell: return "BB"
-        case .dumbbell: return "DB"
-        case .cable: return "Cable"
-        case .machine: return "Machine"
-        case .bodyweight: return "BW"
-        case .kettlebell: return "KB"
-        case .resistanceBand: return "Band"
-        case .ezBar: return "EZ"
-        case .trapBar: return "Trap"
-        case .smithMachine: return "Smith"
-        case .pullupBar: return "Bar"
-        case .dipBars: return "Dips"
-        case .bench: return "Bench"
-        case .inclineBench: return "Incline"
-        case .declineBench: return "Decline"
-        case .treadmill: return "Treadmill"
-        case .bike: return "Bike"
-        case .rowingMachine: return "Rower"
-        case .elliptical: return "Elliptical"
-        case .stairClimber: return "Stairs"
-        case .jumpRope: return "Rope"
-        case .none: return "None"
-        }
-    }
-}
-
-struct EquipmentFilterSheet: View {
+struct MoreFiltersSheet: View {
     @Environment(\.dismiss) private var dismiss
     @Binding var selectedEquipment: Set<Equipment>
-    let exerciseType: ExerciseType
+    @Binding var favoritesOnly: Bool
+    @Binding var customOnly: Bool
     
     var availableEquipment: [Equipment] {
-        switch exerciseType {
-        case .strength:
-            return [.barbell, .dumbbell, .cable, .machine, .bodyweight, .kettlebell, .resistanceBand, .ezBar, .trapBar, .smithMachine, .pullupBar, .dipBars, .bench, .inclineBench, .declineBench]
-        case .cardio:
-            return [.treadmill, .bike, .rowingMachine, .elliptical, .stairClimber, .jumpRope, .none]
-        }
+        [
+            // Strength
+            .barbell, .dumbbell, .cable, .machine, .bodyweight,
+            .kettlebell, .resistanceBand, .ezBar, .trapBar, .smithMachine,
+            .pullupBar, .dipBars, .bench, .inclineBench, .declineBench,
+            // Cardio
+            .treadmill, .bike, .rowingMachine, .elliptical, .stairClimber, .jumpRope, .none
+        ]
     }
     
     var body: some View {
         NavigationStack {
             List {
-                ForEach(availableEquipment, id: \.self) { equipment in
-                    Button {
-                        if selectedEquipment.contains(equipment) {
-                            selectedEquipment.remove(equipment)
-                        } else {
-                            selectedEquipment.insert(equipment)
-                        }
-                    } label: {
-                        HStack {
-                            Text(equipmentDisplayName(equipment))
-                            Spacer()
+                Section("Equipment") {
+                    ForEach(availableEquipment, id: \.self) { equipment in
+                        Button {
                             if selectedEquipment.contains(equipment) {
-                                Image(systemName: "checkmark")
-                                    .foregroundStyle(Color.flowStateOrange)
+                                selectedEquipment.remove(equipment)
+                            } else {
+                                selectedEquipment.insert(equipment)
+                            }
+                        } label: {
+                            HStack {
+                                Text(equipmentDisplayName(equipment))
+                                Spacer()
+                                if selectedEquipment.contains(equipment) {
+                                    Image(systemName: "checkmark")
+                                        .foregroundStyle(Color.flowStateOrange)
+                                }
                             }
                         }
                     }
                 }
+                
+                Section("Other") {
+                    Toggle(isOn: $favoritesOnly) {
+                        Label("Favorites", systemImage: favoritesOnly ? "star.fill" : "star")
+                    }
+                    
+                    Toggle(isOn: $customOnly) {
+                        Label("Custom", systemImage: customOnly ? "pencil.circle.fill" : "pencil.circle")
+                    }
+                }
             }
-            .navigationTitle("Filter by Equipment")
+            .navigationTitle("More Filters")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
@@ -294,8 +221,10 @@ struct EquipmentFilterSheet: View {
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Clear") {
                         selectedEquipment.removeAll()
+                        favoritesOnly = false
+                        customOnly = false
                     }
-                    .disabled(selectedEquipment.isEmpty)
+                    .disabled(selectedEquipment.isEmpty && !favoritesOnly && !customOnly)
                 }
             }
         }

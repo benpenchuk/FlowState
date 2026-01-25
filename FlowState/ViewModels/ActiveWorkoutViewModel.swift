@@ -141,12 +141,18 @@ final class ActiveWorkoutViewModel: ObservableObject {
                 
                 // Pre-populate with default sets from template
                 var defaultSets: [SetRecord] = []
+                let templateLabels = templateExercise.getDefaultLabels()
+                
                 for setNum in 1...templateExercise.defaultSets {
+                    // Apply label from template if available
+                    let label = (setNum - 1 < templateLabels.count) ? templateLabels[setNum - 1] : .none
+                    
                     let setRecord = SetRecord(
                         setNumber: setNum,
                         reps: templateExercise.defaultReps,
                         weight: templateExercise.defaultWeight,
-                        isCompleted: false
+                        isCompleted: false,
+                        label: label
                     )
                     defaultSets.append(setRecord)
                 }
@@ -224,6 +230,10 @@ final class ActiveWorkoutViewModel: ObservableObject {
             sets: [],
             workout: workout
         )
+        
+        // Create smart default sets (from history or empty)
+        let defaultSets = createSmartDefaultSets(for: exercise)
+        entry.setSets(defaultSets)
         
         entry.workout = workout
         
@@ -376,6 +386,34 @@ final class ActiveWorkoutViewModel: ObservableObject {
         }
         
         return []
+    }
+    
+    /// Creates smart default sets for an exercise based on workout history.
+    /// Returns pre-filled sets from last session if available, otherwise creates 3 empty sets.
+    private func createSmartDefaultSets(for exercise: Exercise) -> [SetRecord] {
+        // Priority 1: Use last session data
+        let lastSets = getLastSessionSets(for: exercise)
+        if !lastSets.isEmpty {
+            // Create new sets based on last session
+            return lastSets.enumerated().map { index, lastSet in
+                SetRecord(
+                    setNumber: index + 1,
+                    reps: lastSet.reps,
+                    weight: lastSet.weight,
+                    isCompleted: false
+                )
+            }
+        }
+        
+        // Priority 2: No history - create 3 empty sets
+        return (1...3).map { setNum in
+            SetRecord(
+                setNumber: setNum,
+                reps: nil,
+                weight: nil,
+                isCompleted: false
+            )
+        }
     }
     
     func removeSet(from entry: WorkoutEntry, set: SetRecord) {

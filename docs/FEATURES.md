@@ -83,19 +83,27 @@
 **Description:**
 - Start empty workout or from template
 - Full-screen workout mode
-- Add exercises to active workout
+- Add exercises to active workout with smart default sets
 - Log sets with weight and reps
 - Mark sets as complete
 - Add/remove sets dynamically
 - Edit workout name
 - Timer shows elapsed time
 
+**Smart Default Sets:**
+When adding an exercise to an active workout, the app automatically creates pre-filled sets:
+- If exercise exists in workout history: Creates sets with weight/reps from most recent session
+- If no history: Creates 3 empty sets ready for input
+- Maintains set count from history (if you did 5 sets last time, creates 5 this time)
+- All sets start as not completed, user can edit all values before completing
+- Eliminates repetitive "Add Set" button tapping and data entry
+
 **Implementation:**
 - `Views/ActiveWorkoutFullScreenView.swift` - Full-screen mode
 - `Views/ActiveWorkoutView.swift` - Workout UI
 - `Views/SetRowView.swift` - Individual set input
 - `Views/AddExerciseToWorkoutSheet.swift` - Add exercise to workout
-- `ViewModels/ActiveWorkoutViewModel.swift` - Workout operations
+- `ViewModels/ActiveWorkoutViewModel.swift` - Workout operations, smart defaults
 - `ViewModels/WorkoutStateManager.swift` - App-wide state
 
 **User Flow:**
@@ -103,8 +111,9 @@
 2. Full-screen workout view appears
 3. Edit set: tap weight/reps fields, enter values
 4. Mark set complete: tap checkmark (automatically captures timestamp)
-5. Add set: tap "Add Set" button
+5. Add set: tap "Add Set" button (rarely needed - sets auto-created)
 6. Add exercise: tap "Add Exercise", select from library
+   - Exercise added with smart default sets (from history or 3 empty)
 7. Finish workout: tap "Finish Workout" button
 8. Workout completion screen appears with optional feedback:
    - Rate effort (1-10 scale, optional)

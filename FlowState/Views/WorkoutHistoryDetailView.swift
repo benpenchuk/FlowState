@@ -438,9 +438,7 @@ struct HistoricalSetRowView: View {
     private func labelInitial(for label: SetLabel) -> String {
         switch label {
         case .warmup: return "W"
-        case .failure: return "F"
         case .dropSet: return "D"
-        case .prAttempt: return "PR"
         case .none: return ""
         }
     }
@@ -448,9 +446,7 @@ struct HistoricalSetRowView: View {
     private func labelColor(for label: SetLabel) -> Color {
         switch label {
         case .warmup: return .cyan
-        case .failure: return .red
         case .dropSet: return .purple
-        case .prAttempt: return .yellow
         case .none: return .gray
         }
     }

@@ -1,0 +1,65 @@
+{
+  "buildCommand" : {
+    "command" : "build",
+    "skipDependencies" : false,
+    "style" : "buildOnly"
+  },
+  "configuredTargets" : [
+    {
+      "guid" : "56573f09bf36876f325f727c53876cfec78c5c0f4d0e9fec22507eb2385c77b7"
+    }
+  ],
+  "containerPath" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/FlowState.xcodeproj",
+  "continueBuildingAfterErrors" : false,
+  "dependencyScope" : "workspace",
+  "enableIndexBuildArena" : false,
+  "hideShellScriptEnvironment" : false,
+  "parameters" : {
+    "action" : "build",
+    "activeArchitecture" : "undefined_arch",
+    "activeRunDestination" : {
+      "disableOnlyActiveArch" : true,
+      "platform" : "iphonesimulator",
+      "sdk" : "iphonesimulator26.2",
+      "sdkVariant" : "iphonesimulator",
+      "supportedArchitectures" : [
+        "i386",
+        "x86_64"
+      ],
+      "targetArchitecture" : "undefined_arch"
+    },
+    "arenaInfo" : {
+      "buildIntermediatesPath" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex",
+      "buildProductsPath" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Products",
+      "derivedDataPath" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData",
+      "indexDataStoreFolderPath" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Index.noindex/DataStore",
+      "indexEnableDataStore" : true,
+      "indexPCHPath" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Index.noindex/PrecompiledHeaders",
+      "pchPath" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/Intermediates.noindex/PrecompiledHeaders"
+    },
+    "configurationName" : "Debug",
+    "overrides" : {
+      "commandLine" : {
+        "table" : {
+          "SDKROOT" : "iphonesimulator26.2"
+        }
+      },
+      "synthesized" : {
+        "table" : {
+          "ACTION" : "build",
+          "CLANG_COVERAGE_MAPPING" : "YES",
+          "CLANG_PROFILE_DATA_DIRECTORY" : "/Users/benpenchuk/Documents/Learning/FlowState/FlowState/.derivedData/Build/ProfileData",
+          "ENABLE_PREVIEWS" : "NO",
+          "ENABLE_XOJIT_PREVIEWS" : "YES",
+          "ONLY_ACTIVE_ARCH" : "YES"
+        }
+      }
+    }
+  },
+  "schemeCommand" : "launch",
+  "showNonLoggedProgress" : true,
+  "useDryRun" : false,
+  "useImplicitDependencies" : true,
+  "useLegacyBuildLocations" : false,
+  "useParallelTargets" : true
+}

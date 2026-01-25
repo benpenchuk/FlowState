@@ -10,9 +10,7 @@ import Foundation
 enum SetLabel: String, Codable, CaseIterable {
     case none = "None"
     case warmup = "Warmup"
-    case failure = "Failure"
     case dropSet = "Drop Set"
-    case prAttempt = "PR Attempt"
 }
 
 struct SetRecord: Codable, Identifiable {
@@ -25,7 +23,7 @@ struct SetRecord: Codable, Identifiable {
     var equipment: String? // Optional: which equipment was used this set
     var isCompleted: Bool
     var completedAt: Date? // When this set was marked complete
-    var label: SetLabel // Label for the set (Warmup, Failure, etc.)
+    var label: SetLabel // Label for the set (Warmup, Drop Set, or None)
     
     init(id: UUID = UUID(), setNumber: Int, reps: Int? = nil, weight: Double? = nil, duration: TimeInterval? = nil, distance: Double? = nil, equipment: String? = nil, isCompleted: Bool = false, completedAt: Date? = nil, label: SetLabel = .none) {
         self.id = id
